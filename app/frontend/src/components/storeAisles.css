@@ -1,0 +1,9 @@
+.AislesNav {
+    padding: auto auto auto 10px;
+    color:red;
+}
+
+li {
+    color:#010101;
+    margin: 2pt 0 4pt 0;
+}

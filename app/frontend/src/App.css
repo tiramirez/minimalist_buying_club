@@ -1,0 +1,34 @@
+.App {
+  align-self: center;
+  text-align: center;
+  padding: 0 30pt 0 30pt;
+  width: 800px;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 20vh;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  font-size: calc(30px + 2vmin);
+  padding: 0pt 0pt 0pt 10pt;
+  color: white;
+}
+
+.App-body {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+}
+
+.left-column {
+  max-width: 300px;
+  padding: 0pt 0pt 0pt 10pt;
+
+}
+
+.main-column {
+  max-width: 500px;
+  width: 100%;
+}
