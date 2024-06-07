@@ -1,0 +1,72 @@
+{"Items":[
+    {
+        "product_category": "1-A",
+        "unit_price": 4.25,
+        "product_name": "Asparagus"
+    },
+    {
+        "product_category": "1-A",
+        "unit_price": 4.45,
+        "product_name": "Organic Broccoli"
+    },
+    {
+        "product_category": "1-A",
+        "unit_price": 5.25,
+        "product_name": "Mixed Cherry Tomatoes"
+    },
+    {
+        "product_category": "1-A",
+        "unit_price": 4.75,
+        "product_name": "Shiitake Mushrooms"
+    },
+    {
+        "product_category": "2-Bread",
+        "unit_price": 6.50,
+        "product_name": "Mighty Bread Country Sourdough (vegan)"
+    },
+    {
+        "product_category": "3.1-We Pick",
+        "unit_price": 7.95,
+        "product_name": "Strawberries"
+    },
+    {
+        "product_category": "4-Eggs",
+        "unit_price": 4.90,
+        "product_name": "Pasture raised Eggs"
+    },
+    {
+        "product_category": "5-Fridge",
+        "unit_price": 5.65,
+        "product_name": "Plain Yogurt, Pequea Valley Farm"
+    },
+    {
+        "product_category": "5-Fridge",
+        "unit_price": 4.25,
+        "product_name": "(VEGAN) Lemon Pepper Organic Baked Tofu"
+    },
+    {
+        "product_category": "5-Fridge",
+        "unit_price": 21.00,
+        "product_name": "Baba's Kombucha, Bees Knees (NA)"
+    },
+    {
+        "product_category": "7-G Aisle",
+        "unit_price": 4.25,
+        "product_name": "Organic Chocolate Chips, 45% Dark Chocolate"
+    },
+    {
+        "product_category": "8-Frzr",
+        "unit_price": 15.00,
+        "product_name": "(CHICKEN) Chicken Sausage, Broccoli Raab"
+    },
+    {
+        "product_category": "8-Fizr",
+        "unit_price": 20.00,
+        "product_name": "(FISH) Shrimp Sui Mai (frozen)"
+    },
+    {
+        "product_category": "9-Pantry",
+        "unit_price": 8.85,
+        "product_name": "Mighty Bread Granola"
+    }
+]}
