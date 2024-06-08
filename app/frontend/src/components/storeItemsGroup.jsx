@@ -5,7 +5,7 @@ import './storeItemsGroup.css';
 import Items from "../static/sample_products.json";
 
 // https://react.dev/learn/state-a-components-memory
-const items_fallback = Items.Items
+const items = Items.Items
 
 // const handleClickAdd = (comment_id, user_id) => {
 //     setButtonLikes((prevValue) => prevValue + 1)
@@ -35,18 +35,18 @@ function  ItemBox({ Item }) {
 
 
 function ItemsGroup() {
-    const [items, setUsers] = useState([]);
-    useEffect(() => {
-        axios.get('/users/')
-        .then((response) => {setUsers(response.data);})
-        .catch((error) => {
-            if (error.response.status===500){
-                setUsers(items_fallback);
-            } else {
-                console.log(error.stack);
-                console.error('Error fetching data:', error);}
-            });
-    }, []);
+    // const [items, setUsers] = useState([]);
+    // useEffect(() => {
+    //     axios.get('/users/')
+    //     .then((response) => {setUsers(response.data);})
+    //     .catch((error) => {
+    //         if (error.response.status===500){
+    //             setUsers(items_fallback);
+    //         } else {
+    //             console.log(error.stack);
+    //             console.error('Error fetching data:', error);}
+    //         });
+    // }, []);
 
     return (
         <div className="itemsGroup">
