@@ -15,7 +15,7 @@ const items_fallback = Items.Items
 //     setButtonLikes((prevValue) => prevValue - 1)
 //     LikeComment(comment_id, user_id)
 // }
-const ItemBox = ({ Item }) => {
+function  ItemBox({ Item }) {
     return (
         <div className="itemBlock">
             <div className="selectedAmount">
@@ -34,7 +34,7 @@ const ItemBox = ({ Item }) => {
 };
 
 
-const ItemsGroup = () => {
+function ItemsGroup() {
     const [items, setUsers] = useState([]);
     useEffect(() => {
         axios.get('/users/')

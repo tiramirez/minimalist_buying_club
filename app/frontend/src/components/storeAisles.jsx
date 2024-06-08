@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './storeAisles.css';
 
 // https://react.dev/learn/rendering-lists 
@@ -22,7 +21,7 @@ const aisleList = [
     },
 ]
 
-const AislesNav = () => {
+function AislesNav() {
     return (
         <div>
             <h2>Aisles</h2>
