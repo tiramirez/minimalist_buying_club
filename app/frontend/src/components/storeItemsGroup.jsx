@@ -2,10 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { NumericFormat } from 'react-number-format';
 import './storeItemsGroup.css';
-import Items from "../static/sample_products.json";
-
-// https://react.dev/learn/state-a-components-memory
-const items = Items.Items
 
 // const handleClickAdd = (comment_id, user_id) => {
 //     setButtonLikes((prevValue) => prevValue + 1)
@@ -15,9 +11,9 @@ const items = Items.Items
 //     setButtonLikes((prevValue) => prevValue - 1)
 //     LikeComment(comment_id, user_id)
 // }
-function  ItemBox({ Item }) {
+function ItemBox({ Item }) {
     return (
-        <div className="itemBlock">
+        <div className="itemBlock" key={Item.id}>
             <div className="selectedAmount">
                 {/* onClick={handleClickRemove(comment_id, user_id)} */}
                 <button className="circleBtn BtnLeft">-</button>
@@ -35,24 +31,25 @@ function  ItemBox({ Item }) {
 
 
 function ItemsGroup() {
-    // const [items, setUsers] = useState([]);
-    // useEffect(() => {
-    //     axios.get('/users/')
-    //     .then((response) => {setUsers(response.data);})
-    //     .catch((error) => {
-    //         if (error.response.status===500){
-    //             setUsers(items_fallback);
-    //         } else {
-    //             console.log(error.stack);
-    //             console.error('Error fetching data:', error);}
-    //         });
-    // }, []);
+    const [items, setUsers] = useState([]);
+    useEffect(() => {
+        axios.get('https://43stikgs9h.execute-api.us-east-1.amazonaws.com/dev/cdk-hnb659fds-assets-894357734648-us-east-1/sample_products.json')
+        .then((response) => {setUsers(response.data.Items);})
+        .catch((error) => {
+            if (error.response.status===500){
+                setUsers(items);
+            } else {
+                console.log(error.stack);
+                console.error('Error fetching data:', error);}
+            });
+    }, []);
 
+    console.log(items);
     return (
         <div className="itemsGroup">
             <h2>Items List</h2>
             <div>
-                {items.map((singleItem) => (<ItemBox Item={singleItem}/>))}
+                {items.map((singleItem) => (<ItemBox Item={singleItem} />))}
             </div>
         </div>
     );
