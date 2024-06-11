@@ -35,4 +35,4 @@ sqlalchemy
 ## Warnings
 ### Error with `npm start`
 Solution
-Solution ((stackoverflow)[https://stackoverflow.com/questions/69692842/]) mention to include `export NODE_OPTIONS=--openssl-legacy-provider` in `.env`
+Solution (see [StackOverflow](https://stackoverflow.com/questions/69692842/)) mention to include `export NODE_OPTIONS=--openssl-legacy-provider` in `.env`
