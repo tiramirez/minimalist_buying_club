@@ -33,7 +33,7 @@ class ItemBox extends Component {
                 </div>
                 <div className="productName">{this.props.Item.product_name}</div>
                 <div className="productUnitPrice"><NumericFormat value={this.props.Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
-                <div className="productTotal">$0.00</div>
+                <div className="productTotal"><NumericFormat value={(this.props.Item.unit_price * this.state.quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
             </div>
         );
     }
