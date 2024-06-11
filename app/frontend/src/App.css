@@ -1,7 +1,8 @@
 .App {
   align-self: center;
   text-align: center;
-  padding: 0 30pt 0 30pt;
+  margin-left: auto;
+  margin-right: auto;
   width: 800px;
 }
 

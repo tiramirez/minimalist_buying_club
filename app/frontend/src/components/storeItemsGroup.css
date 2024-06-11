@@ -3,23 +3,30 @@
     padding: 0pt 0pt 0pt 5pt;
 }
 .itemsList {
-    padding: 10pt;
+    padding: 5pt;
     width: 600pt;
 }
 
-.itemBlock {
+.itemBlock{
+    display: flex;
+    max-width: 430px;
+}
+
+.itemDetails {
     display: flex;
     flex-direction: row;
+    min-width: 430px;
     background-color: #F6F4F3;
     border: 2px solid #4b4b4b;
     border-radius: 8px;
     margin-bottom: 4pt;
+    margin: 0pt;
 }
 
 .selectedAmount {
     text-align: center;
     font-weight: bolder;
-    padding: 10pt;
+    padding: 5pt;
     max-width: 200pt;
     display: flex;
     flex-direction: row;
@@ -28,25 +35,23 @@
 
 .productName {
     text-align: left;
-    padding: 10pt;
+    width: 290px;
+    padding: 5pt;
     margin: auto auto auto 0;
-    width: 100%;
 }
 
 .productUnitPrice {
     text-align: center;
-    padding: 10pt;
-    /* max-width: 100pt; */
+    padding: 5pt;
     font-weight: bolder;
     margin: auto 0 auto auto;
 }
 
 .productTotal {
     text-align: center;
-    padding: 10pt;
-    /* max-width: 100pt; */
+    padding: 5pt;
     font-weight: bolder;
-    margin: auto 0 auto 0;
+    margin: auto 0pt auto 0pt;
 }
 
 .circleBtn {
@@ -56,6 +61,9 @@
     font-weight: bolder;
     background-color: #245595;
     border-radius: 50px;
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .BtnLeft {
