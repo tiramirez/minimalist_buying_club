@@ -1,0 +1,12 @@
+.Summary {
+    width: 300pt;
+    height: 100%;
+    background-color: beige;
+    color: black;
+    font-size: 14pt;
+    padding: 5pt 0pt 5pt 5pt;
+}
+
+.Summary-table{
+    width: 100%;
+}
