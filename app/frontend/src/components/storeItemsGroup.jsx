@@ -35,12 +35,12 @@ function ItemBox(props) {
 };
 
 function ItemsGroup(props) {
-    console.log('ITEMS GROUP', props.items);
+    console.log('ITEMS GROUP', props.Items);
     return (
         <div className="itemsGroup">
             <h2>Items List</h2>
             <div>
-                {props.items.map((singleItem) => (<ItemBox Item={singleItem} />))}
+                {props.Items.map((singleItem) => (<ItemBox Item={singleItem} />))}
             </div>
         </div>
     );
