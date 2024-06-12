@@ -1,68 +1,32 @@
-import axios from 'axios';
-import React, { Component, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NumericFormat } from 'react-number-format';
 import './storeItemsGroup.css';
 
-class ItemBox extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { quantity: 0 };
-    }
+function ItemBox({ Item, onIncrement, onReduction }) {
 
-    handleIncrement = () => {
-        this.setState({
-            quantity: this.state.quantity + 1
-        });
-    };
-
-    handleReduction = () => {
-        if (this.state.quantity > 0) {
-            this.setState({
-                quantity: this.state.quantity - 1
-            });
-        }
-    };
-
-    render() {
-        return (
-            <div className="itemBlock" >
-                <div className="itemDetails" key={this.props.Item.id}>
-                    <div className="selectedAmount">
-                        <button className="circleBtn BtnLeft" onClick={this.handleReduction}>-</button>
-                        <p className="productQuantity">{this.state.quantity}</p>
-                        <button className="circleBtn BtnRight" onClick={this.handleIncrement}>+</button>
-                    </div>
-                    <div className="productName">{this.props.Item.product_name}</div>
-                    <div className="productUnitPrice"><NumericFormat value={this.props.Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
+    // console.log('SINGLE ITEM', Item.product_name);
+    return (
+        <div className="itemBlock" key={Item.id} >
+            <div className="itemDetails" >
+                <div className="selectedAmount">
+                    <button className="circleBtn BtnLeft" onClick={() => onReduction(Item.product_name)}>-</button>
+                    <p className="productQuantity">{Item.product_quantity}</p>
+                    <button className="circleBtn BtnRight" onClick={() => onIncrement(Item.product_name)}>+</button>
                 </div>
-                <div className='productTotal'><NumericFormat value={(this.props.Item.unit_price * this.state.quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
+                <div className="productName">{Item.product_name}</div>
+                <div className="productUnitPrice"><NumericFormat value={Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
             </div>
-        );
-    }
-}
+            <div className='productTotal'><NumericFormat value={(Item.unit_price * Item.product_quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
+        </div>
+    );
+};
 
-function ItemsGroup() {
-    const [items, setUsers] = useState([]);
-    useEffect(() => {
-        axios.get('https://43stikgs9h.execute-api.us-east-1.amazonaws.com/dev/cdk-hnb659fds-assets-894357734648-us-east-1/sample_products.json')
-            .then((response) => { setUsers(response.data.Items); })
-            .catch((error) => {
-                if (error.response.status === 500) {
-                    setUsers(items);
-                } else {
-                    console.log(error.stack);
-                    console.error('Error fetching data:', error);
-                }
-            });
-    }, []);
-
-    console.log(items);
+function ItemsGroup({ Items, handleIncrement, handleReduction }) {
+    console.log('ITEMS GROUP', Items);
     return (
         <div className="itemsGroup">
             <h2>Items List</h2>
-            <div>
-                {items.map((singleItem) => (<ItemBox Item={singleItem} />))}
-            </div>
+                {Items.map((singleItem) => (<ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement}  onReduction={handleReduction} />))}
         </div>
     );
 };
