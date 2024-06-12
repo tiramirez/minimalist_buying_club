@@ -17,6 +17,7 @@ export default function Summary(props) {
         <div className='Summary'>
             <div className="Summary-table'">
                 <table>
+                    <tbody>
                     <tr>
                         <th>Subtotal</th>
                         <th>
@@ -35,6 +36,7 @@ export default function Summary(props) {
                             <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                         </th>
                     </tr>
+                    </tbody>
                 </table>
             </div>
             <PlaceOrderBtn />

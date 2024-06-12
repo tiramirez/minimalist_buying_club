@@ -5,32 +5,32 @@ import './storeAisles.css';
 
 const aisleList = [
     {
-        "id":'',
+        "id":'1',
         name: '🍎 Fresh Produce'
     },
     {
-        "id":'',
+        "id":'2',
         name: '🥪 Deli and Prepared Foods'
     },
     {
-        "id":'',
+        "id":'3',
         name: '🍞 Bakery and Bread Aisle'
     },
     {
-        "id":'',
+        "id":'4',
         name: '🐄 Dairy and Refrigerated'
     },
     {
-        "id":'',
+        "id":'5',
         name: '❄️ Frozen Foods'
     },
 ]
 
 function AislesNav() {
     return (
-        <div>
+        <div key='navMenuContainer'>
             <h2>Aisles</h2>
-            <ul>
+            <ul key='navMenu'>
                 {aisleList.map((aisle) => (<li key={aisle.id}>{aisle.name}</li>))}
             </ul>
         </div>
