@@ -11,15 +11,17 @@ function App() {
   // const items = myItems;
   console.log('APP', myItems);
   const [products, setProducts] = useState(myItems);
-
+  
   // function updateQuantity(value) {
-  //   this.product_quantity = value;
-  //   // setProducts();
-  // }
-
-  function updateQuantityIncrease(productId) {
-    console.log("TRY TO REDUCE", productId)
-    // this.product_quantity = this.product_quantity + 1;
+    //   this.product_quantity = value;
+    //   // setProducts();
+    // }
+    
+    function updateQuantityIncrease(productId) {
+      console.log("TRY TO REDUCE", productId)
+      // items.filter(item => item.id === productId));
+      // item.updateQuantityIncrease();
+      // this.product_quantity = this.product_quantity + 1;
     // setProducts();
   }
 
