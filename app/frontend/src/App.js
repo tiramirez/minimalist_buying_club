@@ -1,10 +1,14 @@
 import './App.css';
-import React, { Component }  from 'react';
+import React  from 'react';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
 
+import myItems from './api/fetchITems';
+
 function App() {
+  // console.log('APP',myItems);
+
   return (
     <div className="App">
       <div className="App-header">
@@ -16,7 +20,7 @@ function App() {
             <AislesNav />
           </div>
           <div className='main-column'>
-            <ItemsGroup />
+            <ItemsGroup  items={myItems}/>
           </div>
         </div>
     </div>
