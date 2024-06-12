@@ -1,5 +1,5 @@
 import './App.css';
-import React  from 'react';
+import React, { useEffect, useState } from 'react';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
@@ -7,22 +7,44 @@ import Summary from './components/orderSummary';
 import myItems from './api/fetchITems';
 
 function App() {
-  // console.log('APP',myItems);
+  // const [items] = useProductList();
+  // const items = myItems;
+  console.log('APP', myItems);
+  const [products, setProducts] = useState(myItems);
+
+  // function updateQuantity(value) {
+  //   this.product_quantity = value;
+  //   // setProducts();
+  // }
+
+  function updateQuantityIncrease(productId) {
+    console.log("TRY TO REDUCE", productId)
+    // this.product_quantity = this.product_quantity + 1;
+    // setProducts();
+  }
+
+  function updateQuantityReduce(productId) {
+    console.log("TRY TO INCREASE", productId)
+    // if (this.product_quantity > 0) {
+    //   this.product_quantity = this.product_quantity - 1;
+    //   // setProducts();
+    // }
+  }
 
   return (
     <div className="App">
       <div className="App-header">
         <h2>PanPan</h2>
-        <Summary />
+        <Summary Items={myItems} />
       </div>
-        <div className="App-body">
-          <div className='left-column'>
-            <AislesNav />
-          </div>
-          <div className='main-column'>
-            <ItemsGroup  items={myItems}/>
-          </div>
+      <div className="App-body">
+        <div className='left-column'>
+          <AislesNav />
         </div>
+        <div className='main-column'>
+          <ItemsGroup Items={myItems} handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce}/> //  onUpdate=updateQuantity
+        </div>
+      </div>
     </div>
   );
 }
