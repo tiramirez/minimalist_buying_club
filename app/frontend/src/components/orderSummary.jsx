@@ -3,39 +3,41 @@ import { NumericFormat } from 'react-number-format';
 import PlaceOrderBtn from './placeOrderBtn';
 import './orderSummary.css';
 
-export default function Summary(props) {
-    const [orderSubtotal,setOrderTotal] = useState(0.00);
+export default function Summary({productsList}) {
+    const [products] = useState(productsList);
+
+    // console.log('SUMMARY ', products);
+    let orderSubtotal = 0;
+    products.forEach(x => {
+        orderSubtotal += (x.product_quantity * x.unit_price);
+    });
+
     const serviceFee = 4.00;
     const orderTotal = orderSubtotal + serviceFee;
-
-    // Need to move this to a parent Component https://react.dev/learn#using-hooks
-    useEffect(()=>{
-        setOrderTotal(props.Items.reduce((acc, o) => acc + parseInt(o.unit_price * o.product_quantity), 0))
-    },[]);
 
     return (
         <div className='Summary'>
             <div className="Summary-table'">
                 <table>
                     <tbody>
-                    <tr>
-                        <th>Subtotal</th>
-                        <th>
-                            <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Service fee</th>
-                        <th>
-                            <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Estimated Total__</th>
-                        <th>
-                            <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                        </th>
-                    </tr>
+                        <tr>
+                            <td className="col1">Subtotal</td>
+                            <td className="col2">
+                                <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="col1">Service fee</td>
+                            <td className="col2">
+                                <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                            </td>
+                        </tr>
+                        <tr className="lastRow">
+                            <td className="col1">Estimated Total</td>
+                            <td className="col2">
+                                <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

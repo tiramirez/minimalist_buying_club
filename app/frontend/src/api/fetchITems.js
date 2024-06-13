@@ -26,21 +26,13 @@ class ItemObject {
     }
 }
 
-const myItems = Items.Items.map((item)=> {return new ItemObject(item)});
-// console.log(myItems);
-
-export default myItems;
-
-// export const useProductList = () => {
-    // const items = Items.map((item)=> {return new ItemObject(item)});
-    // console.log(items);
-    // return [items];
-// };
-
+const ItemsList = Items.Items.map((item)=> {return new ItemObject(item)});
+console.log(ItemsList);
+export default ItemsList;
 
 // https://www.geeksforgeeks.org/how-to-use-the-javascript-fetch-api-to-get-data/
 
-// export const useProductList = () => {
+// export const ItemsList = () => {
 //     const [items, setItems] = useState([]);
 //     const api_url = 'https://43stikgs9h.execute-api.us-east-1.amazonaws.com/dev/cdk-hnb659fds-assets-894357734648-us-east-1/sample_products.json';
     
@@ -71,7 +63,7 @@ export default myItems;
 // };
 
 
-// export const ProductList = () => {
+// export const ItemsList = () => {
 //     const [items, setUsers] = useState([]);
 //     const api_url = 'https://43stikgs9h.execute-api.us-east-1.amazonaws.com/dev/cdk-hnb659fds-assets-894357734648-us-east-1/sample_products.json';
 
