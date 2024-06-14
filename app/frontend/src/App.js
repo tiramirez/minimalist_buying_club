@@ -9,10 +9,12 @@ function App() {
   // console.log('APP', ItemsList);
   const [products, setProducts] = useState(ItemsList);
 
-  // function updateQuantity(value) {
-  //   this.product_quantity = value;
-  //   // setProducts();
-  // }
+  function updateQuantity(value,productId) {
+    console.log("TRY TO UPDATE", productId)
+    const newProducts = [...products]
+    newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
+    setProducts(newProducts);
+  }
       
   function updateQuantityIncrease(productId) {
     // console.log("TRY TO INCREASE", productId)
