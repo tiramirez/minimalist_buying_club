@@ -4,17 +4,17 @@ import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
 
-import myItems from './api/fetchITems';
+import ItemsList from './api/fetchITems';
 
 function App() {
-  const [products, setProducts] = useState(myItems);
+  const [products, setProducts] = useState(ItemsList);
   
-  function updateQuantity(value,productId) {
-    console.log("TRY TO UPDATE", productId)
-    const newProducts = [...products]
-    newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
-    setProducts(newProducts);
-  }
+  // function updateQuantity(value,productId) {
+  //   console.log("TRY TO UPDATE", productId)
+  //   const newProducts = [...products]
+  //   newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
+  //   setProducts(newProducts);
+  // }
       
   function updateQuantityIncrease(productId) {
     // console.log("TRY TO INCREASE", productId)
@@ -34,14 +34,14 @@ function App() {
     <div className="App">
       <div className="App-header">
         <h2>PanPan</h2>
-        <Summary Items={myItems} />
+        <Summary productsList={products} />
       </div>
       <div className="App-body">
         <div className='left-column'>
           <AislesNav />
         </div>
         <div className='main-column'>
-          <ItemsGroup Items={myItems} handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce}/> //  onUpdate=updateQuantity
+          <ItemsGroup Items={products} handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce}/> //  onUpdate=updateQuantity
         </div>
       </div>
     </div>

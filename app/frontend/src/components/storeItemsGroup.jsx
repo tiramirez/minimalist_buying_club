@@ -9,9 +9,9 @@ function ItemBox({ Item, onIncrement, onReduction }) {
         <div className="itemBlock" key={Item.id} >
             <div className="itemDetails" >
                 <div className="selectedAmount">
-                    <button className="circleBtn BtnLeft" onClick={() => onReduction(Item.product_name)}>-</button>
+                    <button className="circleBtn BtnLeft" onClick={() => onReduction(Item.id)}>-</button>
                     <p className="productQuantity">{Item.product_quantity}</p>
-                    <button className="circleBtn BtnRight" onClick={() => onIncrement(Item.product_name)}>+</button>
+                    <button className="circleBtn BtnRight" onClick={() => onIncrement(Item.id)}>+</button>
                 </div>
                 <div className="productName">{Item.product_name}</div>
                 <div className="productUnitPrice"><NumericFormat value={Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>

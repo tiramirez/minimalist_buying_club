@@ -26,10 +26,10 @@ class ItemObject {
     }
 }
 
-const myItems = Items.Items.map((item)=> {return new ItemObject(item)});
+const ItemsList = Items.Items.map((item)=> {return new ItemObject(item)});
 // console.log(myItems);
 
-export default myItems;
+export default ItemsList;
 
 // export const useProductList = () => {
     // const items = Items.map((item)=> {return new ItemObject(item)});
