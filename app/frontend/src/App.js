@@ -7,30 +7,27 @@ import Summary from './components/orderSummary';
 import myItems from './api/fetchITems';
 
 function App() {
-  // const [items] = useProductList();
-  // const items = myItems;
-  console.log('APP', myItems);
   const [products, setProducts] = useState(myItems);
   
-  // function updateQuantity(value) {
-    //   this.product_quantity = value;
-    //   // setProducts();
-    // }
-    
-    function updateQuantityIncrease(productId) {
-      console.log("TRY TO REDUCE", productId)
-      // items.filter(item => item.id === productId));
-      // item.updateQuantityIncrease();
-      // this.product_quantity = this.product_quantity + 1;
-    // setProducts();
+  function updateQuantity(value,productId) {
+    console.log("TRY TO UPDATE", productId)
+    const newProducts = [...products]
+    newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
+    setProducts(newProducts);
   }
-
+      
+  function updateQuantityIncrease(productId) {
+    // console.log("TRY TO INCREASE", productId)
+    const newProducts = [...products]
+    newProducts.filter(item => item.id === productId)[0].updateQuantityIncrease();
+    setProducts(newProducts);
+    }
+    
   function updateQuantityReduce(productId) {
-    console.log("TRY TO INCREASE", productId)
-    // if (this.product_quantity > 0) {
-    //   this.product_quantity = this.product_quantity - 1;
-    //   // setProducts();
-    // }
+    console.log("TRY TO REDUCE", productId)
+    const newProducts = [...products]
+    newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
+    setProducts(newProducts);
   }
 
   return (
