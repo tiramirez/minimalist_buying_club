@@ -7,9 +7,8 @@ import Summary from './components/orderSummary';
 import myItems from './api/fetchITems';
 
 function App() {
-  // console.log('APP', ItemsList);
-  const [products, setProducts] = useState(ItemsList);
-
+  const [products, setProducts] = useState(myItems);
+  
   function updateQuantity(value,productId) {
     console.log("TRY TO UPDATE", productId)
     const newProducts = [...products]
@@ -24,12 +23,11 @@ function App() {
     setProducts(newProducts);
     }
     
-    function updateQuantityReduce(productId) {
-      console.log("TRY TO REDUCE", productId)
-      const newProducts = [...products]
-      newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
-      setProducts(newProducts);
-
+  function updateQuantityReduce(productId) {
+    console.log("TRY TO REDUCE", productId)
+    const newProducts = [...products]
+    newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
+    setProducts(newProducts);
   }
 
   return (
