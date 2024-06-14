@@ -1,28 +1,12 @@
 .Summary {
-    width: 500px;
+    width: 300pt;
     height: 100%;
     background-color: beige;
     color: black;
     font-size: 14pt;
     padding: 5pt 0pt 5pt 5pt;
-    border-radius: 5pt;
 }
 
 .Summary-table{
     width: 100%;
-}
-
-.col1 {
-    width: 240px;
-    text-align: left;
-}
-
-.col2 {
-    width: 240px;
-    text-align: right;
-}
-
-.lastRow {
-    font-weight: bolder;
-    border: 1pt solid black;
 }
