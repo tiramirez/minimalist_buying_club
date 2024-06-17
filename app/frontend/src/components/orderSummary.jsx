@@ -3,20 +3,19 @@ import { NumericFormat } from 'react-number-format';
 import PlaceOrderBtn from './placeOrderBtn';
 import './orderSummary.css';
 
-export default function Summary({productsList}) {
-    const [products] = useState(productsList);
-    
-    console.log('SUMMARY ', products);
+export default function Summary({ productsList }) {
+    const [orderSubtotal, updateSubtotal] = useState(0.00);
 
-    let orderSubtotal = 0.00;
-    products.forEach(x => {
-        orderSubtotal += (x.product_quantity * x.unit_price);
-    });
+    useEffect(() => {
+        var newSubtotal = 0.00;
+        productsList.forEach(x => {
+            newSubtotal += (x.product_quantity * x.unit_price);
+        });
+        updateSubtotal(newSubtotal);
+    }, [productsList]);
 
     const serviceFee = 4.00;
     const orderTotal = orderSubtotal + serviceFee;
-
-
 
     return (
         <div className='Summary'>

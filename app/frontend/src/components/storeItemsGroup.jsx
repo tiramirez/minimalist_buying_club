@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NumericFormat } from 'react-number-format';
 import './storeItemsGroup.css';
 
@@ -21,12 +21,12 @@ function ItemBox({ Item, onIncrement, onReduction }) {
     );
 };
 
-function ItemsGroup({ Items, handleIncrement, handleReduction }) {
-    console.log('ITEMS GROUP', Items);
+function ItemsGroup({ productsList, handleIncrement, handleReduction }) {
+    console.log('ITEMS GROUP', productsList);
     return (
         <div className="itemsGroup">
             <h2>Items List</h2>
-                {Items.map((singleItem) => (<ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement}  onReduction={handleReduction} />))}
+                {productsList.map((singleItem) => (<ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement}  onReduction={handleReduction} />))}
         </div>
     );
 };
