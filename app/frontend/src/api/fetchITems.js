@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
-// import axios from 'axios';
-import Items from '../static/sample_products.json'
 
-class ItemObject {
+export class ItemObject {
     constructor(props) {
         this.id = props.id;
         this.product_category = props.product_category;
@@ -26,69 +23,45 @@ class ItemObject {
     }
 }
 
-const ItemsList = Items.Items.map((item)=> {return new ItemObject(item)});
-// console.log(myItems);
-
-export default ItemsList;
-
-// export const useProductList = () => {
-    // const items = Items.map((item)=> {return new ItemObject(item)});
-    // console.log(items);
-    // return [items];
-// };
-
-
 // https://www.geeksforgeeks.org/how-to-use-the-javascript-fetch-api-to-get-data/
+// https://stackoverflow.com/questions/49684217/how-to-use-fetch-api-in-react-to-setstate/
 
-// export const useProductList = () => {
-//     const [items, setItems] = useState([]);
-//     const api_url = 'https://43stikgs9h.execute-api.us-east-1.amazonaws.com/dev/cdk-hnb659fds-assets-894357734648-us-east-1/sample_products.json';
-    
-//     useEffect(() => {
-//         fetchPromise()
-//     }, []);
+function fetchData() {
+    const promise = new Promise((resolve, reject) => {
+        // console.log('CHECKPOINT: myFunc')
+        const api = process.env.REACT_APP_API_ITEMS
+        const endpoint = 'sample_products.json';
 
-//     const fetchPromise = async () => {
-//         const res = await fetch(api_url, { method: 'GET' })
-//             .then(response => {
-//                 if (!response.ok) {
-//                     // do something
-//                     console.log('There was a problem with the fetch operation:', response);
-//                 } else {
-//                     return response.json();
-//                 }
-//             })
-//             .catch(error => {
-//                 console.error("There was an error", error);
-//             })
-//             ;
-//         setItems(res);
-//         console.log(res);
-//     };
-//     console.log('PRODUCT LIST', items);
+        const api_url = api + endpoint;
+        fetch(api_url, { method: 'GET' })
+            .then(response => {
+                if (!response.ok) {
+                    // do something
+                    console.log('There was a problem with the fetch operation:', response);
+                } else {
+                    // console.log("RES", response);
+                    return response.json();
+                }
+                console.log('CHECKPOINT: fetch')
+            })
+            .then((data) => {
+                return resolve(JSON.stringify(data));
+            })
+            .catch((error) => {
+                console.error("There was an error", error);
+                return reject(error);
+            })
+            ;
 
-//     return [items];
-// };
+    }
 
+    );
+    return promise;
+};
 
-// export const ProductList = () => {
-//     const [items, setUsers] = useState([]);
-//     const api_url = 'https://43stikgs9h.execute-api.us-east-1.amazonaws.com/dev/cdk-hnb659fds-assets-894357734648-us-east-1/sample_products.json';
+const getData = async () => {
+    const data = await fetchData();
+    return data;
+}
 
-//     useEffect(() => {
-//         axios.get(api_url)
-//             .then((response) => { setUsers(response.data.Items); })
-//             .catch((error) => {
-//                 if (error.response.status === 500) {
-//                     setUsers(items);
-//                 } else {
-//                     console.log(error.stack);
-//                     console.error('Error fetching data:', error);
-//                 }
-//             });
-//     }, []);
-
-//     console.log('PRODUCT LIST', items);
-
-//     return (items.Items);
-// };
+export default getData;
