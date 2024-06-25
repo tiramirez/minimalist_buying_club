@@ -8,6 +8,8 @@ import fetchData, { ItemObject } from './api/fetchITems';
 
 function App() {
   const [products, setProducts] = useState([]);
+  const [filterOption, setfilterOption] = useState('all');
+
   useEffect(() => {
     fetchDataApp()
   }, []);
@@ -24,7 +26,7 @@ function App() {
         console.log("DATA_App", data);
         data && setProducts(JSON.parse(data).Items.map((item) => { return new ItemObject(item) }));
         // console.log(products);
-      })
+        })
   }
 
   function updateQuantityIncrease(productId) {
@@ -41,6 +43,10 @@ function App() {
     setProducts(newProducts);
   }
 
+  function selectFilter(aisleId) {
+    setfilterOption(aisleId);
+  }
+
   return (
     <div className="App">
       <div className="App-header">
@@ -49,10 +55,13 @@ function App() {
       </div>
       <div className="App-body">
         <div className='left-column'>
-          <AislesNav />
+          <AislesNav handleFilter={selectFilter}/>
         </div>
         <div className='main-column'>
-          <ItemsGroup productsList={products} handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
+          <h2>Items List > {filterOption}</h2>
+          <ItemsGroup 
+            productsList={products.filter((singleProduct)=>singleProduct.product_category === filterOption | filterOption === 'all')}
+            handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
           {/* //  onUpdate=updateQuantity */}
         </div>
       </div>

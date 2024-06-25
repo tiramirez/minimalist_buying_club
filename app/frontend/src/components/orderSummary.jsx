@@ -5,6 +5,7 @@ import './orderSummary.css';
 
 export default function Summary({ productsList }) {
     const [orderSubtotal, updateSubtotal] = useState(0.00);
+    const [products] = useState(productsList);
 
     useEffect(() => {
         var newSubtotal = 0.00;
@@ -43,7 +44,7 @@ export default function Summary({ productsList }) {
                     </tbody>
                 </table>
             </div>
-            <PlaceOrderBtn />
+            <PlaceOrderBtn productsList={productsList} />
         </div>
     )
 };

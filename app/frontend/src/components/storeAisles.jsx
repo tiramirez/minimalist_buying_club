@@ -26,13 +26,20 @@ const aisleList = [
     },
 ]
 
-function AislesNav() {
+function AislesNav({ handleFilter }) {
     return (
         <div key='navMenuContainer'>
             <h2>Aisles</h2>
             <ul key='navMenu'>
-                {aisleList.map((aisle) => (<li key={aisle.id}>{aisle.name}</li>))}
+                {aisleList.map((aisle) => (<li key={aisle.id} id={aisle.id}>
+                    <a href="#" value={aisle.name} key={aisle.name} onClick={(e)=>{
+                        handleFilter(e.target.attributes.value.value);
+                        }}>
+                        {aisle.name}
+                    </a>
+                </li>))}
             </ul>
+            {/* <h2>{filterOption}</h2> */}
         </div>
     )
 };
