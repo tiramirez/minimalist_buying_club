@@ -25,7 +25,6 @@ function ItemsGroup({ productsList, handleIncrement, handleReduction }) {
     console.log('ITEMS GROUP', productsList);
     return (
         <div className="itemsGroup">
-            <h2>Items List</h2>
                 {productsList.map((singleItem) => (<ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement}  onReduction={handleReduction} />))}
         </div>
     );
