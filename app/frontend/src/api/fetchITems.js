@@ -1,10 +1,10 @@
 
 export class ItemObject {
     constructor(props) {
-        this.id = props.id;
-        this.product_category = props.product_category;
-        this.unit_price = props.unit_price;
-        this.product_name = props.product_name;
+        this.id = props.name;
+        this.product_category = props.category;
+        this.unit_price = props.price;
+        this.product_name = props.name;
         this.product_quantity = 0;
     }
 
@@ -30,7 +30,7 @@ function fetchData() {
     const promise = new Promise((resolve, reject) => {
         // console.log('CHECKPOINT: myFunc')
         const api = process.env.REACT_APP_API_ITEMS
-        const endpoint = 'sample_products.json';
+        const endpoint = 'sample_productsV2.json';
 
         const api_url = api + endpoint;
         fetch(api_url, { method: 'GET' })

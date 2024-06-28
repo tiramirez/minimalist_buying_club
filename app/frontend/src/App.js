@@ -8,11 +8,16 @@ import fetchData, { ItemObject } from './api/fetchITems';
 
 function App() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
 
   useEffect(() => {
     fetchDataApp()
   }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [products]);
 
   // function updateQuantity(value,productId) {
   //   console.log("TRY TO UPDATE", productId)
@@ -26,7 +31,16 @@ function App() {
         console.log("DATA_App", data);
         data && setProducts(JSON.parse(data).Items.map((item) => { return new ItemObject(item) }));
         // console.log(products);
-        })
+      });
+  }
+
+  function fetchCategories() {
+    const categoriesArray = [];
+    products.forEach((item) => {
+      let aux_category = item.product_category;
+      if (!categoriesArray.includes(aux_category)) {categoriesArray.push(aux_category)};
+      setCategories(categoriesArray.map((item, index) => ({ id: index + 1, name: item })));
+    });
   }
 
   function updateQuantityIncrease(productId) {
@@ -55,12 +69,12 @@ function App() {
       </div>
       <div className="App-body">
         <div className='left-column'>
-          <AislesNav handleFilter={selectFilter}/>
+          <AislesNav Categories={categories} handleFilter={selectFilter} />
         </div>
         <div className='main-column'>
           <h2>Items List > {filterOption}</h2>
-          <ItemsGroup 
-            productsList={products.filter((singleProduct)=>singleProduct.product_category === filterOption | filterOption === 'all')}
+          <ItemsGroup
+            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'all')}
             handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
           {/* //  onUpdate=updateQuantity */}
         </div>
