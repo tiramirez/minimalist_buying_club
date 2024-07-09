@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
@@ -10,6 +11,10 @@ function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
+  const [cookies, setCookie] = useCookies('active-cart');
+
+  var refDate = new Date();
+  refDate.setDate(refDate.getDate() + 7);
 
   useEffect(() => {
     fetchDataApp()
@@ -28,9 +33,17 @@ function App() {
   function fetchDataApp() {
     fetchData()
       .then((data) => {
-        console.log("DATA_App", data);
-        data && setProducts(JSON.parse(data).Items.map((item) => { return new ItemObject(item) }));
-        // console.log(products);
+        // console.log("DATA_App", data);
+        data && setProducts(JSON.parse(data).Items
+        .map((item) => {return new ItemObject(item)})
+      );
+      data && cookies['active-cart'] && setProducts([
+        ...cookies['active-cart'],
+        ...JSON.parse(data).Items
+          .map((item) => {return new ItemObject(item)})
+          .filter((item) => !cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) 
+        ]
+        );
       });
   }
 
@@ -48,6 +61,11 @@ function App() {
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityIncrease();
     setProducts(newProducts);
+    setCookie(
+        'active-cart',
+        JSON.stringify(newProducts.filter(item => item.product_quantity > 0)),
+        {'expires': refDate}
+    );
   }
 
   function updateQuantityReduce(productId) {
@@ -55,6 +73,11 @@ function App() {
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
     setProducts(newProducts);
+    setCookie(
+      'active-cart',
+      JSON.stringify(newProducts.filter(item => item.product_quantity > 0)),
+      {'expires': refDate}
+    );
   }
 
   function selectFilter(aisleId) {
