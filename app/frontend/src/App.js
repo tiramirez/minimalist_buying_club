@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
+import Newsletter from './components/newsletterModal';
 
 import fetchData, { ItemObject } from './api/fetchITems';
 
@@ -10,6 +11,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
+  const [showNewsletter, setShowNewsletter] = useState(true);
 
   useEffect(() => {
     fetchDataApp()
@@ -43,6 +45,10 @@ function App() {
     });
   }
 
+  function handleClickNewsletter() {
+    setShowNewsletter(!showNewsletter);
+  };
+
   function updateQuantityIncrease(productId) {
     // console.log("TRY TO INCREASE", productId)
     const newProducts = [...products]
@@ -63,6 +69,7 @@ function App() {
 
   return (
     <div className="App">
+      <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
       <div className="App-header">
         <h2>PanPan</h2>
         <Summary productsList={products} />
@@ -70,6 +77,7 @@ function App() {
       <div className="App-body">
         <div className='left-column'>
           <AislesNav Categories={categories} handleFilter={selectFilter} />
+          <button onClick={handleClickNewsletter}>Open Newsletter</button>
         </div>
         <div className='main-column'>
           <h2>Items List > {filterOption}</h2>
