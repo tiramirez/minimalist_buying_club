@@ -1,10 +1,10 @@
 
 export class ItemObject {
     constructor(props) {
-        this.id = props.id;
-        this.product_category = props.product_category;
-        this.unit_price = props.unit_price;
-        this.product_name = props.product_name;
+        this.id = props.name;
+        this.product_category = props.category;
+        this.unit_price = props.price;
+        this.product_name = props.name;
         this.product_quantity = 0;
     }
 
