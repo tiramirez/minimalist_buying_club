@@ -11,7 +11,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
-  const [cookies, setCookie] = useCookies('active-cart');
+  const [cookies, setCookie, removeCookie] = useCookies('active-cart');
 
   var refDate = new Date();
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
@@ -85,6 +85,12 @@ function App() {
     );
   }
 
+  function deleteCart() {
+    const newProducts = [...products]
+    newProducts.map(item => item.updateQuantityReset());
+    setProducts(newProducts);
+  }
+
   function selectFilter(aisleId) {
     setfilterOption(aisleId);
   }
@@ -93,7 +99,7 @@ function App() {
     <div className="App">
       <div className="App-header">
         <h2>PanPan</h2>
-        <Summary productsList={products} />
+        <Summary productsList={products} handleDeleteCart={deleteCart} />
       </div>
       <div className="App-body">
         <div className='left-column'>
