@@ -24,19 +24,22 @@ export default function PlaceOrderBtn({ productsList }) {
   }
 
   function submitOrder() {
-    const api = process.env.REACT_APP_API_ITEMS
-    const endpoint = 'test_fast_api/';
+    const api = process.env.REACT_APP_API
+    const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
     const api_url = api + endpoint
 
-    const content = {
+    const content = JSON.stringify({
       'email': answerEmail,
-      'products': JSON.stringify(productsList.filter(item => item.product_quantity !== 0))
-    }
+      'products': productsList.filter(item => item.product_quantity !== 0)
+    })
     console.log(content)
-    // axios.post(api_url, content )
-    //   .then((response) => {
-    //     console.log(response);
-    //   });
+    axios.post(api_url, {
+      method: 'POST',
+      contentType: 'application/json',
+      body: content})
+      .then((response) => {
+        console.log(response['data']);
+      });
   };
 
 
