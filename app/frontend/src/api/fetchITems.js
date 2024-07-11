@@ -23,12 +23,12 @@ export class ItemObject {
     }
 }
 
-function fetchData() {
+function fetchData(item) {
     const promise = new Promise((resolve, reject) => {
         const api = process.env.REACT_APP_API
         const endpoint = process.env.REACT_APP_ENDPOINT_PRODUCTS;
 
-        const api_url = api + endpoint;
+        const api_url = api + endpoint + item;
         fetch(api_url, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
@@ -54,8 +54,8 @@ function fetchData() {
     return promise;
 };
 
-const getData = async () => {
-    const data = await fetchData();
+const getData = async (item) => {
+    const data = await fetchData(item);
     return data;
 }
 
