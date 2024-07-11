@@ -14,7 +14,8 @@ function App() {
   const [cookies, setCookie] = useCookies('active-cart');
 
   var refDate = new Date();
-  refDate.setDate(refDate.getDate() + 7);
+  refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
+  // Sunday - Saturday : 0 - 6;
 
   useEffect(() => {
     fetchDataApp()
