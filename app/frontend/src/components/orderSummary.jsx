@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useCookies } from 'react-cookie';
 import { NumericFormat } from 'react-number-format';
 import PlaceOrderBtn from './placeOrderBtn';
 import './orderSummary.css';
 
-export default function Summary({ productsList }) {
+export default function Summary({ productsList, handleDeleteCart }) {
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [products] = useState(productsList);
+    const [cookies, setCookie, removeCookie] = useCookies('active-cart');
 
     useEffect(() => {
         var newSubtotal = 0.00;
@@ -14,6 +16,11 @@ export default function Summary({ productsList }) {
         });
         updateSubtotal(newSubtotal);
     }, [productsList]);
+
+    function clickOnDeleteCart() {
+        removeCookie('active-cart');
+        handleDeleteCart();
+      }
 
     const serviceFee = 4.00;
     const orderTotal = orderSubtotal + serviceFee;
@@ -45,6 +52,7 @@ export default function Summary({ productsList }) {
                 </table>
             </div>
             <PlaceOrderBtn productsList={productsList} />
+            <button onClick={clickOnDeleteCart}>Reset Cart</button>
         </div>
     )
 };

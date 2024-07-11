@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
@@ -12,6 +13,11 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
   const [showNewsletter, setShowNewsletter] = useState(true);
+  const [cookies, setCookie, removeCookie] = useCookies('active-cart');
+
+  var refDate = new Date();
+  refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
+  // Sunday - Saturday : 0 - 6;
 
   useEffect(() => {
     fetchDataApp()
@@ -31,8 +37,20 @@ function App() {
     fetchData('sample_productsV2.json')
       .then((data) => {
         // console.log("DATA_App", data);
-        data && setProducts(JSON.parse(data).Items.map((item) => { return new ItemObject(item) }));
-        // console.log(products);
+        data && setProducts(JSON.parse(data).Items
+          .map((item) => {return new ItemObject(item)})
+          );
+
+        data && cookies['active-cart'] && setProducts(
+          JSON.parse(data).Items
+            .map((item) => {return new ItemObject(item)})
+            .map((item) => {
+              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+              }
+              return item;
+            })
+          );
       });
   }
 
@@ -54,12 +72,28 @@ function App() {
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityIncrease();
     setProducts(newProducts);
+    setCookie(
+        'active-cart',
+        JSON.stringify(newProducts.filter(item => item.product_quantity > 0)),
+        {'expires': refDate}
+    );
   }
 
   function updateQuantityReduce(productId) {
     console.log("TRY TO REDUCE", productId)
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
+    setProducts(newProducts);
+    setCookie(
+      'active-cart',
+      JSON.stringify(newProducts.filter(item => item.product_quantity > 0)),
+      {'expires': refDate}
+    );
+  }
+
+  function deleteCart() {
+    const newProducts = [...products]
+    newProducts.map(item => item.updateQuantityReset());
     setProducts(newProducts);
   }
 
@@ -72,7 +106,7 @@ function App() {
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
       <div className="App-header">
         <h2>PanPan</h2>
-        <Summary productsList={products} />
+        <Summary productsList={products} handleDeleteCart={deleteCart} />
       </div>
       <div className="App-body">
         <div className='left-column'>

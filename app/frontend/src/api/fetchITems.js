@@ -21,6 +21,10 @@ export class ItemObject {
             this.product_quantity = this.product_quantity - 1;
         }
     }
+    
+    updateQuantityReset() {
+        this.product_quantity = 0;
+    }
 }
 
 function fetchData(item) {
