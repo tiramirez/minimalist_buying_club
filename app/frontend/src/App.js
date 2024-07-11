@@ -35,15 +35,19 @@ function App() {
       .then((data) => {
         // console.log("DATA_App", data);
         data && setProducts(JSON.parse(data).Items
-        .map((item) => {return new ItemObject(item)})
-      );
-      data && cookies['active-cart'] && setProducts([
-        ...cookies['active-cart'],
-        ...JSON.parse(data).Items
           .map((item) => {return new ItemObject(item)})
-          .filter((item) => !cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) 
-        ]
-        );
+          );
+
+        data && cookies['active-cart'] && setProducts(
+          JSON.parse(data).Items
+            .map((item) => {return new ItemObject(item)})
+            .map((item) => {
+              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+              }
+              return item;
+            })
+          );
       });
   }
 
