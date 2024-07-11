@@ -16,11 +16,13 @@ function Newsletter({ show, onCloseButtonClick }) {
     
     return (
         <div className="Modal-Box">
-            <h2>{ title }</h2>
-            <p>{ body }</p>
-            <ul>{products.map((item)=> <li>{item}</li>)}</ul>
-            <p>{ footer }</p>
-            <button onClick={onCloseButtonClick}>Close Newsletter</button>
+            <div className="Modal-Content">
+                <h2>{ title }</h2>
+                <p>{ body }</p>
+                <ul>{products.map((item)=> <li>{item}</li>)}</ul>
+                <p>{ footer }</p>
+                <button onClick={onCloseButtonClick}>Close Newsletter</button>
+            </div>
         </div>
     );
 };
