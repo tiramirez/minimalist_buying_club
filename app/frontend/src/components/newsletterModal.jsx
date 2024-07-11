@@ -1,14 +1,25 @@
-import React, { useState } from "react";
-import newsletterContent from './../static/sample_newsletter.json';
+import React, { useEffect, useState } from "react";
 import './newsletterModal.css';
+import fetchData, { ItemObject } from '../api/fetchITems';
 
 
 
 
 function Newsletter({ show, onCloseButtonClick }) {
-    const { title, body, products, footer } = newsletterContent['content'];
-    console.log(newsletterContent);
-    console.log( newsletterContent['content   ']);
+    const [newsletterContent, setContent] = useState({});
+
+    useEffect(() => {
+        fetchNewsletter()
+      }, []);
+
+    function fetchNewsletter() {
+        fetchData('sample_newsletter.json')
+          .then((data) => {
+            console.log("FETCH NEWSLETTER", data);
+            data && setContent(JSON.parse(data));
+            // console.log(products);
+          });
+      }        
 
     if (!show) {
         return null;
@@ -17,10 +28,10 @@ function Newsletter({ show, onCloseButtonClick }) {
     return (
         <div className="Modal-Box">
             <div className="Modal-Content">
-                <h2>{ title }</h2>
-                <p>{ body }</p>
-                <ul>{products.map((item)=> <li>{item}</li>)}</ul>
-                <p>{ footer }</p>
+                <h2>{ newsletterContent.content.title }</h2>
+                <p>{ newsletterContent.content.body }</p>
+                <ul>{newsletterContent.content.products.map((item)=> <li>{item}</li>)}</ul>
+                <p>{ newsletterContent.content.footer }</p>
                 <button onClick={onCloseButtonClick}>Close Newsletter</button>
             </div>
         </div>

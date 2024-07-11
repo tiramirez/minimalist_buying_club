@@ -28,9 +28,9 @@ function App() {
   //   setProducts(newProducts);
   // }
   function fetchDataApp() {
-    fetchData()
+    fetchData('sample_productsV2.json')
       .then((data) => {
-        console.log("DATA_App", data);
+        // console.log("DATA_App", data);
         data && setProducts(JSON.parse(data).Items.map((item) => { return new ItemObject(item) }));
         // console.log(products);
       });

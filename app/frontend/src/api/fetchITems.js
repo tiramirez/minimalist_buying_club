@@ -26,13 +26,13 @@ export class ItemObject {
 // https://www.geeksforgeeks.org/how-to-use-the-javascript-fetch-api-to-get-data/
 // https://stackoverflow.com/questions/49684217/how-to-use-fetch-api-in-react-to-setstate/
 
-function fetchData() {
+function fetchData(item) {
     const promise = new Promise((resolve, reject) => {
         // console.log('CHECKPOINT: myFunc')
         const api = process.env.REACT_APP_API_ITEMS
         const endpoint = 'sample_productsV2.json';
 
-        const api_url = api + endpoint;
+        const api_url = api + endpoint + item;
         fetch(api_url, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
@@ -59,8 +59,8 @@ function fetchData() {
     return promise;
 };
 
-const getData = async () => {
-    const data = await fetchData();
+const getData = async (item) => {
+    const data = await fetchData(item);
     return data;
 }
 
