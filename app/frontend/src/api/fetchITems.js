@@ -21,18 +21,18 @@ export class ItemObject {
             this.product_quantity = this.product_quantity - 1;
         }
     }
+    
+    updateQuantityReset() {
+        this.product_quantity = 0;
+    }
 }
 
-// https://www.geeksforgeeks.org/how-to-use-the-javascript-fetch-api-to-get-data/
-// https://stackoverflow.com/questions/49684217/how-to-use-fetch-api-in-react-to-setstate/
-
-function fetchData() {
+function fetchData(file_name) {
     const promise = new Promise((resolve, reject) => {
-        // console.log('CHECKPOINT: myFunc')
-        const api = process.env.REACT_APP_API_ITEMS
-        const endpoint = 'sample_productsV2.json';
+        const api = process.env.REACT_APP_API
+        const endpoint = process.env.REACT_APP_ENDPOINT_S3;
 
-        const api_url = api + endpoint;
+        const api_url = api + endpoint + file_name;
         fetch(api_url, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
@@ -42,7 +42,6 @@ function fetchData() {
                     // console.log("RES", response);
                     return response.json();
                 }
-                console.log('CHECKPOINT: fetch')
             })
             .then((data) => {
                 return resolve(JSON.stringify(data));
@@ -52,15 +51,14 @@ function fetchData() {
                 return reject(error);
             })
             ;
-
     }
 
     );
     return promise;
 };
 
-const getData = async () => {
-    const data = await fetchData();
+const getData = async (item) => {
+    const data = await fetchData(item);
     return data;
 }
 

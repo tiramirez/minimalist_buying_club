@@ -3,8 +3,6 @@ import { NumericFormat } from 'react-number-format';
 import './storeItemsGroup.css';
 
 function ItemBox({ Item, onIncrement, onReduction }) {
-
-    // console.log('SINGLE ITEM', Item.product_name);
     return (
         <div className="itemBlock" key={Item.id} >
             <div className="itemDetails" >
@@ -22,7 +20,6 @@ function ItemBox({ Item, onIncrement, onReduction }) {
 };
 
 function ItemsGroup({ productsList, handleIncrement, handleReduction }) {
-    console.log('ITEMS GROUP', productsList);
     return (
         <div className="itemsGroup">
                 {productsList.map((singleItem) => (<ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement}  onReduction={handleReduction} />))}

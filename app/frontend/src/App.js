@@ -1,8 +1,10 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
+import Newsletter from './components/newsletterModal';
 
 import fetchData, { ItemObject } from './api/fetchITems';
 
@@ -10,6 +12,12 @@ function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
+  const [showNewsletter, setShowNewsletter] = useState(true);
+  const [cookies, setCookie] = useCookies('active-cart');
+
+  var refDate = new Date();
+  refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
+  // Sunday - Saturday : 0 - 6;
 
   useEffect(() => {
     fetchDataApp()
@@ -26,11 +34,23 @@ function App() {
   //   setProducts(newProducts);
   // }
   function fetchDataApp() {
-    fetchData()
+    fetchData('sample_productsV2.json')
       .then((data) => {
-        console.log("DATA_App", data);
-        data && setProducts(JSON.parse(data).Items.map((item) => { return new ItemObject(item) }));
-        // console.log(products);
+        // console.log("DATA_App", data);
+        data && setProducts(JSON.parse(data).Items
+          .map((item) => {return new ItemObject(item)})
+          );
+
+        data && cookies['active-cart'] && setProducts(
+          JSON.parse(data).Items
+            .map((item) => {return new ItemObject(item)})
+            .map((item) => {
+              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+              }
+              return item;
+            })
+          );
       });
   }
 
@@ -43,17 +63,37 @@ function App() {
     });
   }
 
+  function handleClickNewsletter() {
+    setShowNewsletter(!showNewsletter);
+  };
+
   function updateQuantityIncrease(productId) {
     // console.log("TRY TO INCREASE", productId)
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityIncrease();
     setProducts(newProducts);
+    setCookie(
+        'active-cart',
+        JSON.stringify(newProducts.filter(item => item.product_quantity > 0)),
+        {'expires': refDate}
+    );
   }
 
   function updateQuantityReduce(productId) {
-    console.log("TRY TO REDUCE", productId)
+    // console.log("TRY TO REDUCE", productId)
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
+    setProducts(newProducts);
+    setCookie(
+      'active-cart',
+      JSON.stringify(newProducts.filter(item => item.product_quantity > 0)),
+      {'expires': refDate}
+    );
+  }
+
+  function deleteCart() {
+    const newProducts = [...products]
+    newProducts.map(item => item.updateQuantityReset());
     setProducts(newProducts);
   }
 
@@ -63,13 +103,15 @@ function App() {
 
   return (
     <div className="App">
+      <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
       <div className="App-header">
         <h2>PanPan</h2>
-        <Summary productsList={products} />
+        <Summary productsList={products} handleDeleteCart={deleteCart} />
       </div>
       <div className="App-body">
         <div className='left-column'>
           <AislesNav Categories={categories} handleFilter={selectFilter} />
+          <button onClick={handleClickNewsletter}>Open Newsletter</button>
         </div>
         <div className='main-column'>
           <h2>Items List > {filterOption}</h2>
