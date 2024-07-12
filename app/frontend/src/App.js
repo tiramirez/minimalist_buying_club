@@ -13,7 +13,7 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
   const [showNewsletter, setShowNewsletter] = useState(true);
-  const [cookies, setCookie, removeCookie] = useCookies('active-cart');
+  const [cookies, setCookie] = useCookies('active-cart');
 
   var refDate = new Date();
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));

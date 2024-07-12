@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from "react";
 import './newsletterModal.css';
-import fetchData, { ItemObject } from '../api/fetchITems';
+import fetchData from '../api/fetchITems';
 
 
 
 
 function Newsletter({ show, onCloseButtonClick }) {
     const [newsletterContent, setContent] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchNewsletter()
       }, []);
 
     function fetchNewsletter() {
+        setIsLoading(true);
         fetchData('sample_newsletter.json')
-          .then((data) => {
-            console.log("FETCH NEWSLETTER", data);
-            data && setContent(JSON.parse(data));
-            // console.log(products);
-          });
-      }        
+            .then((data) => {
+                data && setContent(JSON.parse(data).content);
+                setIsLoading(false);
+            });
+    }
 
     if (!show) {
         return null;
@@ -28,11 +29,19 @@ function Newsletter({ show, onCloseButtonClick }) {
     return (
         <div className="Modal-Box">
             <div className="Modal-Content">
-                <h2>{ newsletterContent.content.title }</h2>
-                <p>{ newsletterContent.content.body }</p>
-                <ul>{newsletterContent.content.products.map((item)=> <li>{item}</li>)}</ul>
-                <p>{ newsletterContent.content.footer }</p>
-                <button onClick={onCloseButtonClick}>Close Newsletter</button>
+            {isLoading ? (
+                <h2>Loading ...</h2>
+            ) : (
+                <div>
+
+                    <h2>{newsletterContent.title}</h2>
+                    <p>{newsletterContent.body}</p>
+                    <ul>{newsletterContent.products?.map((item) => { return <li key={item}>{item}</li> })}</ul>
+                    <p>{newsletterContent.footer}</p>
+                    <button onClick={onCloseButtonClick}>Close Newsletter</button>
+                </div>
+                )
+            } 
             </div>
         </div>
     );

@@ -27,12 +27,12 @@ export class ItemObject {
     }
 }
 
-function fetchData(item) {
+function fetchData(file_name) {
     const promise = new Promise((resolve, reject) => {
         const api = process.env.REACT_APP_API
-        const endpoint = process.env.REACT_APP_ENDPOINT_PRODUCTS;
+        const endpoint = process.env.REACT_APP_ENDPOINT_S3;
 
-        const api_url = api + endpoint + item;
+        const api_url = api + endpoint + file_name;
         fetch(api_url, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
