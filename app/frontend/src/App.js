@@ -80,7 +80,7 @@ function App() {
   }
 
   function updateQuantityReduce(productId) {
-    console.log("TRY TO REDUCE", productId)
+    // console.log("TRY TO REDUCE", productId)
     const newProducts = [...products]
     newProducts.filter(item => item.id === productId)[0].updateQuantityReduce();
     setProducts(newProducts);

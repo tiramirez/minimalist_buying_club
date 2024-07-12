@@ -42,7 +42,6 @@ function fetchData(file_name) {
                     // console.log("RES", response);
                     return response.json();
                 }
-                console.log('CHECKPOINT: fetch')
             })
             .then((data) => {
                 return resolve(JSON.stringify(data));
