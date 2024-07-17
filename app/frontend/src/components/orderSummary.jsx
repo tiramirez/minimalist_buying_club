@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from 'react-cookie';
 import { NumericFormat } from 'react-number-format';
-import PlaceOrderBtn from './placeOrderBtn';
 import './orderSummary.css';
 
-export default function Summary({ productsList, handleDeleteCart }) {
+export default function Summary({ productsList, handleDeleteCart, clickOnCheckout }) {
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [products] = useState(productsList);
     const [cookies, setCookie, removeCookie] = useCookies('active-cart');
@@ -51,8 +50,10 @@ export default function Summary({ productsList, handleDeleteCart }) {
                     </tbody>
                 </table>
             </div>
-            <PlaceOrderBtn productsList={productsList} />
-            <button onClick={clickOnDeleteCart}>Reset Cart</button>
+            <div className="Display-buttons">
+                <button className="myButton Secondary-button" onClick={clickOnDeleteCart}>Reset Cart</button>
+                <button className="myButton" onClick={clickOnCheckout}>Checkout</button>
+            </div>
         </div>
     )
 };

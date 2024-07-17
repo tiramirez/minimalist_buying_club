@@ -1,0 +1,43 @@
+h4{
+    margin: 0pt 0pt 4pt 0pt;
+}
+.Checkout-placeholder{
+    border-radius: 10pt;
+    background-color: #e6e6e6;
+    min-height: 100px;
+    margin-bottom: 10pt;
+    padding: 5pt;
+}
+
+.Modal-Content {
+    background-color: #c0c0c0;
+    width: 500px;
+    min-width: 300px;
+    margin: 15vh auto;
+    padding: 20px;
+    border-radius: 5pt;
+    text-align: left;
+    white-space: break-spaces;
+}
+
+.section-description{
+    padding: 0pt 0pt 5pt 0pt;
+}
+
+.donation-button{
+    border: 1pt solid black;
+    border-radius: 5pt;
+    background-color: antiquewhite;
+    padding: 5pt;
+}
+
+.donation-options{
+    display: flex;
+    width: 300px;
+    justify-content: space-between;
+    margin: 0pt 5pt;
+}
+
+.donation-button:hover {
+    background-color: yellow;
+  }
