@@ -4,7 +4,7 @@
     background-color: beige;
     color: black;
     font-size: 14pt;
-    padding: 5pt 0pt 5pt 5pt;
+    padding: 5pt 5pt 5pt 5pt;
     border-radius: 5pt;
 }
 
@@ -25,4 +25,19 @@
 .lastRow {
     font-weight: bolder;
     border: 1pt solid black;
+}
+
+.Display-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.myButton{
+    border-radius: 5pt;
+}
+
+.Secondary-button{
+    background-color: gray;
 }
