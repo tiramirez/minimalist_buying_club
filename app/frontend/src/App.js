@@ -6,6 +6,8 @@ import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
 import Newsletter from './components/newsletterModal';
 
+
+import logo250 from './static/panpan_logo250.svg';
 import fetchData, { ItemObject } from './api/fetchITems';
 import Checkout from './components/checkoutModal';
 
@@ -36,7 +38,7 @@ function App() {
   //   setProducts(newProducts);
   // }
   function fetchDataApp() {
-    fetchData('sample_productsV2.json')
+    fetchData('products_list.json')
       .then((data) => {
         // console.log("DATA_App", data);
         data && setProducts(JSON.parse(data).Items
@@ -111,7 +113,10 @@ function App() {
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
       <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart}onCloseButtonClick={handleClickCheckout}/>
       <div className="App-header">
-        <h2>PanPan</h2>
+        <div>
+          <img src={logo250}/>
+          {/* <p>Pick up a Pantry Share at Third Wheel Cheese and Pantry (705 S. 50th Street)</p> */}
+        </div>
         <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
       </div>
       <div className="App-body">
