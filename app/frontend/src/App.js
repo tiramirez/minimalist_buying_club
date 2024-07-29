@@ -14,7 +14,7 @@ import Checkout from './components/checkoutModal';
 function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filterOption, setfilterOption] = useState('all');
+  const [filterOption, setfilterOption] = useState('All');
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie] = useCookies('active-cart');
@@ -59,7 +59,7 @@ function App() {
   }
 
   function fetchCategories() {
-    const categoriesArray = [];
+    const categoriesArray = ['All'];
     products.forEach((item) => {
       let aux_category = item.product_category;
       if (!categoriesArray.includes(aux_category)) {categoriesArray.push(aux_category)};
@@ -127,7 +127,7 @@ function App() {
         <div className='main-column'>
           <h2>Items List > {filterOption}</h2>
           <ItemsGroup
-            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'all')}
+            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'All')}
             handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
           {/* //  onUpdate=updateQuantity */}
         </div>

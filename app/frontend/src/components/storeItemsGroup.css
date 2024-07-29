@@ -30,12 +30,12 @@
     max-width: 200pt;
     display: flex;
     flex-direction: row;
-    margin: auto auto auto 0;
+    margin: auto 0 auto 0;
 }
 
 .productName {
     text-align: left;
-    width: 290px;
+    width: 150px;
     padding: 5pt;
     margin: auto auto auto 0;
 }
@@ -64,6 +64,7 @@
     display: block;
     margin-top: auto;
     margin-bottom: auto;
+    margin-right: 0pt;
 }
 
 .BtnLeft {

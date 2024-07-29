@@ -4,6 +4,7 @@ export class ItemObject {
         this.id = props.name;
         this.product_category = props.category;
         this.unit_price = props.price;
+        this.product_unit = props.unit;
         this.product_name = props.name;
         this.product_quantity = 0;
     }
