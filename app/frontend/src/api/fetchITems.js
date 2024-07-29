@@ -33,7 +33,8 @@ function fetchData(file_name) {
         const endpoint = process.env.REACT_APP_ENDPOINT_S3;
 
         const api_url = api + endpoint + file_name;
-        fetch(api_url, { method: 'GET' })
+        if ( file_name.endsWith('.json')) {
+            fetch(api_url, { method: 'GET' })
             .then(response => {
                 if (!response.ok) {
                     // do something
@@ -51,6 +52,23 @@ function fetchData(file_name) {
                 return reject(error);
             })
             ;
+        
+        } else {
+            fetch(api_url, { method: 'GET', responseType: 'document'})
+            .then(response => {
+                if (!response.ok) {
+                    // do something
+                    console.log('There was a problem with the fetch operation:', response);
+                } else {
+                    return response.text();
+                }
+            })
+            .catch((error) => {
+                console.error("There was an error", error);
+                return reject(error);
+            })
+            ; 
+        }
     }
 
     );

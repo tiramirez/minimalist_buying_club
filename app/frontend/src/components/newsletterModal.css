@@ -18,4 +18,31 @@
     border-radius: 5pt;
     text-align: left;
     white-space: break-spaces;
+    display: flex;
 }
+
+h3{
+    margin: 10pt 0pt 0pt 0pt;
+    
+}
+
+p{
+    margin: 0pt;
+    display:inline;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+ul {
+    margin: 0pt;
+    padding: 0pt 0pt 0pt 10pt;
+}
+
+li{
+    display: inline;
+}
+
+li:before {
+    content: '\ffed';
+    margin-right: 0.5em;
+  }
