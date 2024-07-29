@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PlaceOrderBtn from './placeOrderBtn';
+import axios from 'axios';
 import { NumericFormat } from 'react-number-format';
 import './newsletterModal.css';
 import './checkoutModal.css';
@@ -35,6 +35,41 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
     function handleClickDonation (value) {
         updateDonation(value)
     }
+
+    
+    function submitOrder() {
+        const api = process.env.REACT_APP_API
+        const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
+        const api_url = api + endpoint
+
+        const content = JSON.stringify({
+        ...customerInfo,
+        'donation': donations,
+        'products': productsList.filter(item => item.product_quantity !== 0)
+        })
+
+        console.log(content)
+        axios.post(api_url, {
+        method: 'POST',
+        contentType: 'application/json',
+        body: content})
+        .then((response) => {
+            console.log(response['data']);
+        });
+
+        handleDeleteCart();
+        onCloseButtonClick();
+  };
+
+  function clickPlaceOrder () {
+
+      if (customerInfo.validEmail && customerInfo.validPhone) {
+          submitOrder()
+      } else{
+          console.log('Missing Info')
+      }
+  }
+  
 
     const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     
