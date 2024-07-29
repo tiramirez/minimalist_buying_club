@@ -7,12 +7,14 @@ import Summary from './components/orderSummary';
 import Newsletter from './components/newsletterModal';
 
 import fetchData, { ItemObject } from './api/fetchITems';
+import Checkout from './components/checkoutModal';
 
 function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterOption, setfilterOption] = useState('all');
   const [showNewsletter, setShowNewsletter] = useState(true);
+  const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie] = useCookies('active-cart');
 
   var refDate = new Date();
@@ -66,6 +68,9 @@ function App() {
   function handleClickNewsletter() {
     setShowNewsletter(!showNewsletter);
   };
+  function handleClickCheckout() {
+    setShowCheckout(!showCheckout);
+  };
 
   function updateQuantityIncrease(productId) {
     // console.log("TRY TO INCREASE", productId)
@@ -104,9 +109,10 @@ function App() {
   return (
     <div className="App">
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
+      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart}onCloseButtonClick={handleClickCheckout}/>
       <div className="App-header">
         <h2>PanPan</h2>
-        <Summary productsList={products} handleDeleteCart={deleteCart} />
+        <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
       </div>
       <div className="App-body">
         <div className='left-column'>
