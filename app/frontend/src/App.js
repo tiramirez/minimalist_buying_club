@@ -109,7 +109,7 @@ function App() {
   return (
     <div className="App">
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
-      <Checkout show={showCheckout} productsList={products} onCloseButtonClick={handleClickCheckout}/>
+      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart}onCloseButtonClick={handleClickCheckout}/>
       <div className="App-header">
         <h2>PanPan</h2>
         <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />

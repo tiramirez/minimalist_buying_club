@@ -5,11 +5,20 @@ import './newsletterModal.css';
 import './checkoutModal.css';
 import './orderSummary';
 
-function Checkout({ show, productsList, onCloseButtonClick }) {
+function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) {
     // const [newsletterContent, setContent] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [donations, updateDonation] = useState(0.00);
+    const [customerInfo, updatecustomerInfo] = useState({
+        firstName: "",
+        lastName: "",
+        phone: "",
+        validPhone: false,
+        email: "",
+        validEmail: false,
+    });
+    const [answerEmail, updateEmail] = useState("");
     const [products] = useState(productsList);
 
     useEffect(() => {
@@ -24,9 +33,43 @@ function Checkout({ show, productsList, onCloseButtonClick }) {
     const orderTotal = orderSubtotal + serviceFee + donations;
 
     function handleClickDonation (value) {
-        
+        updateDonation(value)
     }
 
+    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    
+    function handleEmailChange(event) {
+        if(event.target?.value && event.target.value.match(isValidEmail)){
+            // showNoValidEmail(false);
+            updateEmail(event.target.value);
+            updatecustomerInfo({...customerInfo, email:event.target.value, validEmail: true})
+            console.log('Email IS valid')
+            console.log(customerInfo)
+        }else{
+            // showNoValidEmail(true);
+            console.log('Email is not valid')
+        }
+        // console.log(event.target.value);
+        // updateEmail(event.target.value);
+    }
+    
+    const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
+    function handlePhoneChange(event) {
+        if(event.target?.value && event.target.value.match(isValidPhone)){
+            // showNoValidEmail(false);
+            updateEmail(event.target.value);
+            console.log('Phone IS valid')
+            updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
+            console.log(customerInfo)
+          }else{
+            // showNoValidEmail(true);
+            console.log('Phone is not valid')
+          }
+        // console.log(event.target.value);
+        // updateEmail(event.target.value);
+      }
+
+    
     if (!show) {
         return null;
     }
@@ -90,11 +133,27 @@ function Checkout({ show, productsList, onCloseButtonClick }) {
                                 </tbody>
                             </table>
                         </div>
+                            <table className="User-Form">
+                                <tr>
+                                    <td className="col1">Fist Name:</td>
+                                    <td className="col2"><textarea key="fisrtName" onChange={(e)=>{updatecustomerInfo({...customerInfo, firstName:e.target.value})}} required/></td>
+                                </tr>
+                                <tr>
+                                    <td className="col1">Last Name:</td>
+                                    <td className="col2"><textarea key="lastName" onChange={(e)=>{updatecustomerInfo({...customerInfo, lastName:e.target.value})}} required/></td>
+                                </tr>
+                                <tr>
+                                    <td className="col1">Email:</td>
+                                    <td className="col2"><textarea key="textareaEmail" onChange={handleEmailChange}  placeholder="your@email.com" required/></td>
+                                </tr>
+                                <tr>
+                                    <td className="col1">Phone:</td>
+                                    <td className="col2"><textarea key="textareaPhone" onChange={handlePhoneChange}  placeholder="+1 (123) 456 7890" required/></td>
+                                </tr>
+                            </table>
                         <div className="Display-buttons">
-
-                            {/* <PlaceOrderBtn productsList={productsList} /> */}
                             <button className="myButton Secondary-button" onClick={onCloseButtonClick}>Add more Products</button>
-                            <button className="myButton" onClick={onCloseButtonClick}>Place Order</button>
+                            <button className="myButton" onClick={clickPlaceOrder}>Place Order</button>
                         </div>
                     </div>
                 )

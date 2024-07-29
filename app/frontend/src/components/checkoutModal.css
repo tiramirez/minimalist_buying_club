@@ -41,3 +41,27 @@ h4{
 .donation-button:hover {
     background-color: yellow;
   }
+
+  .myButton{
+      background-color: rgb(88, 159, 88);
+  }
+  
+  .Secondary-button{
+      background-color: rgb(139, 139, 139);
+  }
+  .myButton:hover{
+      background-color: rgb(184, 239, 184);
+  }
+  
+  .Secondary-button:hover{
+      background-color: rgb(243, 199, 199);
+  }
+  
+.User-Form {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    resize: none;
+ }
