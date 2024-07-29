@@ -3,6 +3,8 @@ import { NumericFormat } from 'react-number-format';
 import './storeItemsGroup.css';
 
 function ItemBox({ Item, onIncrement, onReduction }) {
+
+    const unitFormatted = Item.product_unit === 'each' ? ' ' : ' per '
     return (
         <div className="itemBlock" key={Item.id} >
             <div className="itemDetails" >
@@ -12,7 +14,7 @@ function ItemBox({ Item, onIncrement, onReduction }) {
                     <button className="circleBtn BtnRight" onClick={() => onIncrement(Item.id)}>+</button>
                 </div>
                 <div className="productName">{Item.product_name}</div>
-                <div className="productUnitPrice"><NumericFormat value={Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
+                <div className="productUnitPrice"><NumericFormat value={Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />{unitFormatted}{Item.product_unit}</div>
             </div>
             <div className='productTotal'><NumericFormat value={(Item.unit_price * Item.product_quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div>
         </div>

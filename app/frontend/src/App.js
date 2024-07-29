@@ -6,13 +6,17 @@ import AislesNav from './components/storeAisles';
 import Summary from './components/orderSummary';
 import Newsletter from './components/newsletterModal';
 
+
+import logo250 from './static/panpan_logo250.svg';
 import fetchData, { ItemObject } from './api/fetchITems';
+import Checkout from './components/checkoutModal';
 
 function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filterOption, setfilterOption] = useState('all');
+  const [filterOption, setfilterOption] = useState('All');
   const [showNewsletter, setShowNewsletter] = useState(true);
+  const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie] = useCookies('active-cart');
 
   var refDate = new Date();
@@ -34,7 +38,7 @@ function App() {
   //   setProducts(newProducts);
   // }
   function fetchDataApp() {
-    fetchData('sample_productsV2.json')
+    fetchData('products_list.json')
       .then((data) => {
         // console.log("DATA_App", data);
         data && setProducts(JSON.parse(data).Items
@@ -55,7 +59,7 @@ function App() {
   }
 
   function fetchCategories() {
-    const categoriesArray = [];
+    const categoriesArray = ['All'];
     products.forEach((item) => {
       let aux_category = item.product_category;
       if (!categoriesArray.includes(aux_category)) {categoriesArray.push(aux_category)};
@@ -65,6 +69,9 @@ function App() {
 
   function handleClickNewsletter() {
     setShowNewsletter(!showNewsletter);
+  };
+  function handleClickCheckout() {
+    setShowCheckout(!showCheckout);
   };
 
   function updateQuantityIncrease(productId) {
@@ -104,9 +111,13 @@ function App() {
   return (
     <div className="App">
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
+      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart}onCloseButtonClick={handleClickCheckout}/>
       <div className="App-header">
-        <h2>PanPan</h2>
-        <Summary productsList={products} handleDeleteCart={deleteCart} />
+        <div>
+          <img src={logo250}/>
+          {/* <p>Pick up a Pantry Share at Third Wheel Cheese and Pantry (705 S. 50th Street)</p> */}
+        </div>
+        <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
       </div>
       <div className="App-body">
         <div className='left-column'>
@@ -116,7 +127,7 @@ function App() {
         <div className='main-column'>
           <h2>Items List > {filterOption}</h2>
           <ItemsGroup
-            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'all')}
+            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'All')}
             handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
           {/* //  onUpdate=updateQuantity */}
         </div>

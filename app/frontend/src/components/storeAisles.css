@@ -2,6 +2,10 @@
     padding: auto auto auto 10px;
     color:red;
 }
+ul {
+    display: flex;
+    flex-direction: column;
+}
 
 li {
     color:#010101;

@@ -3,29 +3,6 @@ import './storeAisles.css';
 
 // https://react.dev/learn/rendering-lists 
 
-const aisleList = [
-    {
-        "id":'1',
-        name: '🍎 Fresh Produce'
-    },
-    {
-        "id":'2',
-        name: '🥪 Deli and Prepared Foods'
-    },
-    {
-        "id":'3',
-        name: '🍞 Bakery and Bread Aisle'
-    },
-    {
-        "id":'4',
-        name: '🐄 Dairy and Refrigerated'
-    },
-    {
-        "id":'5',
-        name: '❄️ Frozen Foods'
-    },
-]
-
 function AislesNav({ Categories, handleFilter }) {
     return (
         <div key='navMenuContainer'>
