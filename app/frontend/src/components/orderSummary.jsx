@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from 'react-cookie';
 import { NumericFormat } from 'react-number-format';
-import './orderSummary.css';
+// import './orderSummary.css';
+import '../output.css';
 
 export default function Summary({ productsList, handleDeleteCart, clickOnCheckout }) {
     const [orderSubtotal, updateSubtotal] = useState(0.00);
@@ -25,35 +26,37 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
     const orderTotal = orderSubtotal + serviceFee;
 
     return (
-        <div className='Summary'>
-            <div className="Summary-table'">
-                <table>
-                    <tbody>
-                        <tr>
-                            <td className="col1">Subtotal</td>
-                            <td className="col2">
-                                <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="col1">Service fee</td>
-                            <td className="col2">
-                                <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                        </tr>
-                        <tr className="lastRow">
-                            <td className="col1">Estimated Total</td>
-                            <td className="col2">
-                                <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div className="Display-buttons">
-                <button className="myButton Secondary-button" onClick={clickOnDeleteCart}>Reset Cart</button>
-                <button className="myButton" onClick={clickOnCheckout}>Checkout</button>
-            </div>
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-gray-500">
+              <tbody>
+                <tr className="border-b">
+                  <td className="py-2 px-4 font-medium text-gray-900">Subtotal</td>
+                  <td className="py-2 px-4 text-right">
+                    <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-4 font-medium text-gray-900">Service fee</td>
+                  <td className="py-2 px-4 text-right">
+                    <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  </td>
+                </tr>
+                <tr className="border-b font-bold text-gray-900">
+                  <td className="py-2 px-4">Estimated Total</td>
+                  <td className="py-2 px-4 text-right">
+                    <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 flex space-x-4">
+          <div className="mt-4 flex space-x-4">
+        <button className="px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-700" onClick={clickOnDeleteCart}>Reset Cart</button>
+        <button className="px-2 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-700" onClick={clickOnCheckout}>Checkout</button>
+      </div>
+          </div>
         </div>
-    )
+      );
 };

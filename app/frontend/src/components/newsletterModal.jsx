@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './newsletterModal.css';
+// import './newsletterModal.css';
 import fetchData from '../api/fetchITems';
 import parse from 'html-react-parser';
 
