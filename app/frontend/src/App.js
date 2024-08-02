@@ -109,28 +109,31 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
-      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart}onCloseButtonClick={handleClickCheckout}/>
-      <div className="App-header">
-        <div>
-          <img src={logo250}/>
-          {/* <p>Pick up a Pantry Share at Third Wheel Cheese and Pantry (705 S. 50th Street)</p> */}
+    <div className="min-h-screen bg-gray-100">
+      <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter} />
+      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} />
+      
+      <header className="bg-white shadow p-4">
+        <div className="container w-3/4 mx-auto flex justify-between items-center">
+          <img src={logo250} alt="Logo" className="h-40"/>
+          <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
         </div>
-        <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
-      </div>
-      <div className="App-body">
-        <div className='left-column'>
+      </header>
+      
+      <div className="App-body w-3/4 mx-auto">
+        <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md left-column">
           <AislesNav Categories={categories} handleFilter={selectFilter} />
-          <button onClick={handleClickNewsletter}>Open Newsletter</button>
-        </div>
-        <div className='main-column'>
-          <h2>Items List > {filterOption}</h2>
+          <button onClick={handleClickNewsletter} className="mt-4 w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
+        </aside>
+        
+        <main className="flex-1 p-4">
+          <h2 className="text-xl font-semibold mb-4">Items List &gt; {filterOption}</h2>
           <ItemsGroup
-            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'All')}
-            handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
-          {/* //  onUpdate=updateQuantity */}
-        </div>
+            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption || filterOption === 'All')}
+            handleIncrement={updateQuantityIncrease} 
+            handleReduction={updateQuantityReduce} 
+          />
+        </main>
       </div>
     </div>
   );

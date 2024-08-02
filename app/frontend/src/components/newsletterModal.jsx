@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './newsletterModal.css';
+// import './newsletterModal.css';
 import fetchData from '../api/fetchITems';
 import parse from 'html-react-parser';
 
@@ -34,7 +34,7 @@ function Newsletter({ show, onCloseButtonClick }) {
                 <h2>Loading ...</h2>
             ) : (
                 <div>
-                    <button onClick={onCloseButtonClick}>Close Newsletter</button>
+                    <button className="px-2 py-1 text-sm bg-blue-500 text-white rounded hover:bg-green-700" onClick={onCloseButtonClick}>Close Newsletter</button>
                     {parse(newsletterContent)}
                 </div>
                 )
