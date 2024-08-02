@@ -110,8 +110,8 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
     }
 
     return (
-        <div className="inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
+        <div className="Modal-Box inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="Modal-Content bg-white p-6 rounded-lg shadow-lg w-full relative">
             {isLoading ? (
               <h2 className="text-xl font-bold text-center">Loading ...</h2>
             ) : (
@@ -131,10 +131,10 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
                       The People’s Fridge is a community fridge located at 125 S 52nd Street that is open 24/7 and free to all. Your donations will allow Pan Pan to purchase high quality food from our suppliers to donate to the fridge and the community members it serves. Each dollar donated will allow us to donate a dollar’s worth of local produce, baked goods, dairy products, and pantry goods to the fridge every week.
                     </p>
                     <div className="flex space-x-2 mt-4">
-                      <div className="bg-gray-200 text-gray-700 py-2 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(1)}>$1</div>
-                      <div className="bg-gray-200 text-gray-700 py-2 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(2)}>$2</div>
-                      <div className="bg-gray-200 text-gray-700 py-2 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(5)}>$5</div>
-                      <div className="bg-gray-200 text-gray-700 py-2 px-4 rounded cursor-pointer hover:bg-gray-300">Other</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(1)}>$1</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(2)}>$2</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(5)}>$5</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300">Other</div>
                     </div>
                   </div>
                 </div>
@@ -142,26 +142,26 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
                   <table className="w-full text-left border-collapse">
                     <tbody>
                       <tr>
-                        <td className="border-b py-2 px-4 font-semibold">Subtotal</td>
-                        <td className="border-b py-2 px-4">
+                        <td className="border-b py-1 px-4 font-semibold">Subtotal</td>
+                        <td className="border-b py-1 px-4 text-right">
                           <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                         </td>
                       </tr>
                       <tr>
-                        <td className="border-b py-2 px-4 font-semibold">Service fee</td>
-                        <td className="border-b py-2 px-4">
+                        <td className="border-b py-1 px-4 font-semibold">Service fee</td>
+                        <td className="border-b py-1 px-4 text-right">
                           <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                         </td>
                       </tr>
                       <tr>
-                        <td className="border-b py-2 px-4 font-semibold">Donation</td>
-                        <td className="border-b py-2 px-4">
+                        <td className="border-b py-1 px-4 font-semibold">Donation</td>
+                        <td className="border-b py-1 px-4 text-right">
                           <NumericFormat value={donations.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-2 px-4 font-semibold">Estimated Total</td>
-                        <td className="py-2 px-4">
+                        <td className="py-1 px-4 font-semibold">Estimated Total</td>
+                        <td className="px-4 font-bold text-right">
                           <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                         </td>
                       </tr>
@@ -171,34 +171,34 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
                 <table className="w-full mb-6">
                   <tbody>
                     <tr>
-                      <td className="py-2 px-4 font-semibold">First Name:</td>
-                      <td className="py-2 px-4">
-                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                      <td className="py-1 px-4 font-semibold">First Name:</td>
+                      <td className="px-4">
+                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 px-4 font-semibold">Last Name:</td>
-                      <td className="py-2 px-4">
-                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                      <td className="py-1 px-4 font-semibold">Last Name:</td>
+                      <td className="px-4">
+                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 px-4 font-semibold">Email:</td>
-                      <td className="py-2 px-4">
-                        <textarea onChange={handleEmailChange} placeholder="your@email.com" required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                      <td className="py-1 px-4 font-semibold">Email:</td>
+                      <td className="px-4">
+                        <textarea onChange={handleEmailChange} placeholder="your@email.com" rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 px-4 font-semibold">Phone:</td>
-                      <td className="py-2 px-4">
-                        <textarea onChange={handlePhoneChange} placeholder="+1 (123) 456 7890" required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                      <td className="py-1 px-4 font-semibold">Phone:</td>
+                      <td className="px-4">
+                        <textarea onChange={handlePhoneChange} placeholder="+1 (123) 456 7890" rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <div className="flex justify-end space-x-4">
-                  <button className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={clickPlaceOrder}>Place Order</button>
+                  <button className="bg-gray-500 text-white py-1 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
+                  <button className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-700" onClick={clickPlaceOrder}>Place Order</button>
                 </div>
               </div>
             )}

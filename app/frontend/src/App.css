@@ -21,12 +21,14 @@
 
 .App-body {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
+  /* flex-direction: row; */
   text-align: left;
 }
 
 .left-column {
   max-width: 300px;
+  min-width: 290px;
   padding: 0pt 0pt 0pt 10pt;
 
 }
@@ -34,4 +36,10 @@
 .main-column {
   max-width: 500px;
   width: 100%;
+}
+
+header{
+  background-image: url('./static/radishes+adobe+stock.jpg');
+  background-size: 100% auto;
+  background-position: center;
 }

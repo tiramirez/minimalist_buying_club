@@ -114,14 +114,14 @@ function App() {
       <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} />
       
       <header className="bg-white shadow p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <img src={logo250} alt="Logo" className="h-16"/>
+        <div className="container w-3/4 mx-auto flex justify-between items-center">
+          <img src={logo250} alt="Logo" className="h-40"/>
           <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
         </div>
       </header>
       
-      <div className="container mx-auto p-4 flex">
-        <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md">
+      <div className="App-body w-3/4 mx-auto">
+        <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md left-column">
           <AislesNav Categories={categories} handleFilter={selectFilter} />
           <button onClick={handleClickNewsletter} className="mt-4 w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
         </aside>
