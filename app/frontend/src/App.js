@@ -66,7 +66,7 @@ function App() {
   }
 
   function fetchCategories() {
-    const categoriesArray = ['All'];
+    const categoriesArray = ['📦 All Products', '🧺 My Cart'];
     products.forEach((item) => {
       let aux_category = item.product_category;
       if (!categoriesArray.includes(aux_category)) {categoriesArray.push(aux_category)};
@@ -144,7 +144,7 @@ function App() {
         <main className="flex-1 p-4">
           <h2 className="text-xl font-semibold mb-4">Items List &gt; {filterOption}</h2>
           <ItemsGroup
-            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption || filterOption === 'All')}
+            productsList={products.filter((singleProduct) => filterOption === '📦 All Products' || (filterOption === '🧺 My Cart' && singleProduct.product_quantity > 0 ) || singleProduct.product_category === filterOption)}
             handleIncrement={updateQuantityIncrease} 
             handleReduction={updateQuantityReduce} 
           />
