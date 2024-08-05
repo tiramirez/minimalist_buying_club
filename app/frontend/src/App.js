@@ -44,23 +44,25 @@ function App() {
   // }
   function fetchDataApp() {
     fetchData('products_list.json')
-      .then((data) => {
-        // console.log("DATA_App", data);
-        data && setProducts(JSON.parse(data).Items
-          .map((item) => {return new ItemObject(item)})
-          );
+    .then((data) => {
+      data && setProducts(JSON.parse(data).Items
+        .map((item) => {return new ItemObject(item)})
+        );
 
-        data && cookies['active-cart'] && setProducts(
-          JSON.parse(data).Items
-            .map((item) => {return new ItemObject(item)})
-            .map((item) => {
-              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
-                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
-              }
-              return item;
-            })
-          );
-      });
+      data && cookies['active-cart'] && setProducts(
+        JSON.parse(data).Items
+          .map((item) => {return new ItemObject(item)})
+          .map((item) => {
+            if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+              item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+            }
+            return item;
+          })
+        );
+    })
+    // .catch((error) => {
+    //   error && console.log(error.toJSON());
+    // });
   }
 
   function fetchCategories() {

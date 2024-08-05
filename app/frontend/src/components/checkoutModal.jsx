@@ -2,23 +2,21 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { NumericFormat } from 'react-number-format';
 import './newsletterModal.css';
-import './checkoutModal.css';
-import './orderSummary';
 
-function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) {
+function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , handleConfirmation, handleError, updateCheckoutResponse}) {
     // const [newsletterContent, setContent] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [showMissingInfo, setShowMissingInfo] = useState(false);
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [donations, updateDonation] = useState(0.00);
     const [customerInfo, updatecustomerInfo] = useState({
         firstName: "",
         lastName: "",
         phone: "",
-        validPhone: false,
+        validPhone: null,
         email: "",
-        validEmail: false,
+        validEmail: null,
     });
-    const [answerEmail, updateEmail] = useState("");
     const [products] = useState(productsList);
 
     useEffect(() => {
@@ -38,35 +36,51 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
 
     
     function submitOrder() {
-        const api = process.env.REACT_APP_API
-        const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
-        const api_url = api + endpoint
+      const api = process.env.REACT_APP_API
+      const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
+      const api_url = api + endpoint
 
-        const content = JSON.stringify({
+      const content = JSON.stringify({
         ...customerInfo,
         'donation': donations,
         'products': productsList.filter(item => item.product_quantity !== 0)
-        })
+      })
 
-        console.log(content)
-        axios.post(api_url, {
+      // console.log(content)
+      setIsLoading(true);
+      axios.post(api_url, {
         method: 'POST',
         contentType: 'application/json',
-        body: content})
-        .then((response) => {
-            console.log(response['data']);
-        });
+        body: content
+      })
+      .catch((error) => {
+        error && alert("There was an error with the order");
+        setIsLoading(false);
+      })
+      .then((response) => {
+        setIsLoading(false);
+        console.log(response);
+        if (response && response.data['statusCode'] == 200) {
+          const responseContent = JSON.parse(response.data.body)
+          console.log("Order received", responseContent);
+          updateCheckoutResponse(JSON.parse(response.data.body));
+          handleDeleteCart();
+          onCloseButtonClick();
+          handleConfirmation();
+        } else {
+          console.log('Error');
+          updateCheckoutResponse(JSON.parse(response.data.body));
+          handleError();
+        }
+      });
 
-        handleDeleteCart();
-        onCloseButtonClick();
   };
 
   function clickPlaceOrder () {
-
-      if (customerInfo.validEmail && customerInfo.validPhone) {
+      if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0) {
           submitOrder()
       } else{
-          console.log('Missing Info')
+        setShowMissingInfo(true)
       }
   }
   
@@ -76,32 +90,19 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
     function handleEmailChange(event) {
         if(event.target?.value && event.target.value.match(isValidEmail)){
             // showNoValidEmail(false);
-            updateEmail(event.target.value);
             updatecustomerInfo({...customerInfo, email:event.target.value, validEmail: true})
-            console.log('Email IS valid')
-            console.log(customerInfo)
         }else{
-            // showNoValidEmail(true);
-            console.log('Email is not valid')
+          updatecustomerInfo({...customerInfo, validEmail: false})
         }
-        // console.log(event.target.value);
-        // updateEmail(event.target.value);
     }
     
     const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
     function handlePhoneChange(event) {
-        if(event.target?.value && event.target.value.match(isValidPhone)){
-            // showNoValidEmail(false);
-            updateEmail(event.target.value);
-            console.log('Phone IS valid')
-            updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
-            console.log(customerInfo)
-          }else{
-            // showNoValidEmail(true);
-            console.log('Phone is not valid')
-          }
-        // console.log(event.target.value);
-        // updateEmail(event.target.value);
+      if(event.target?.value && event.target.value.match(isValidPhone)){
+          updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
+        }else{
+          updatecustomerInfo({...customerInfo, validPhone: false})
+        }
       }
 
     
@@ -173,25 +174,27 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
                     <tr>
                       <td className="py-1 px-4 font-semibold">First Name:</td>
                       <td className="px-4">
-                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"/>
                       </td>
                     </tr>
                     <tr>
                       <td className="py-1 px-4 font-semibold">Last Name:</td>
                       <td className="px-4">
-                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
+                    {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr>: <></>}
                     <tr>
                       <td className="py-1 px-4 font-semibold">Email:</td>
                       <td className="px-4">
-                        <textarea onChange={handleEmailChange} placeholder="your@email.com" rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={handleEmailChange} placeholder="your@email.com" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
+                    {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr>: <></>}
                     <tr>
                       <td className="py-1 px-4 font-semibold">Phone:</td>
                       <td className="px-4">
-                        <textarea onChange={handlePhoneChange} placeholder="+1 (123) 456 7890" rows="1" required className="w-full p-2 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={handlePhoneChange} placeholder="(123)4567890" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
                   </tbody>
