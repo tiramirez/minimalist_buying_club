@@ -10,6 +10,7 @@ import Newsletter from './components/newsletterModal';
 import logo250 from './static/panpan_logo250.svg';
 import fetchData, { ItemObject } from './api/fetchITems';
 import Checkout from './components/checkoutModal';
+import AlertModal from "./components/confirmationModal";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,10 @@ function App() {
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie] = useCookies('active-cart');
+  
+  const [checkoutResponse, setCheckoutResponse] = useState({'title':'','body':''});
+  const [showConfirmation, updateShowConfirmation] = useState(false);
+  const [showCheckoutError, updateShowCheckoutError] = useState(false);
 
   var refDate = new Date();
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
@@ -39,23 +44,25 @@ function App() {
   // }
   function fetchDataApp() {
     fetchData('products_list.json')
-      .then((data) => {
-        // console.log("DATA_App", data);
-        data && setProducts(JSON.parse(data).Items
-          .map((item) => {return new ItemObject(item)})
-          );
+    .then((data) => {
+      data && setProducts(JSON.parse(data).Items
+        .map((item) => {return new ItemObject(item)})
+        );
 
-        data && cookies['active-cart'] && setProducts(
-          JSON.parse(data).Items
-            .map((item) => {return new ItemObject(item)})
-            .map((item) => {
-              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
-                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
-              }
-              return item;
-            })
-          );
-      });
+      data && cookies['active-cart'] && setProducts(
+        JSON.parse(data).Items
+          .map((item) => {return new ItemObject(item)})
+          .map((item) => {
+            if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+              item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+            }
+            return item;
+          })
+        );
+    })
+    // .catch((error) => {
+    //   error && console.log(error.toJSON());
+    // });
   }
 
   function fetchCategories() {
@@ -69,6 +76,12 @@ function App() {
 
   function handleClickNewsletter() {
     setShowNewsletter(!showNewsletter);
+  };
+  function handleShowConfirmation() {
+    updateShowConfirmation(!showConfirmation);
+  };
+  function handleshowCheckoutError() {
+    updateShowCheckoutError(!showCheckoutError);
   };
   function handleClickCheckout() {
     setShowCheckout(!showCheckout);
@@ -111,7 +124,9 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter} />
-      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} />
+      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} handleConfirmation={handleShowConfirmation} handleError={handleshowCheckoutError} updateCheckoutResponse={setCheckoutResponse} />
+      <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse}/>
+      <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse}/>
       
       <header className="bg-white shadow p-4">
         <div className="container w-3/4 mx-auto flex justify-between items-center">
