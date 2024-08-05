@@ -40,7 +40,7 @@ function Newsletter({ show, onCloseButtonClick }) {
             ) : (
                 <div>
                     <button className="px-2 py-1 text-sm bg-blue-500 text-white rounded hover:bg-green-700" onClick={onCloseButtonClick}>Close Newsletter</button>
-                    {parse(newsletterContent)}
+                    <div className="py-2">{parse(newsletterContent)}</div>
                 </div>
                 )
             } 
