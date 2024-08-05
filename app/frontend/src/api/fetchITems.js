@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 export class ItemObject {
     constructor(props) {
@@ -34,42 +35,38 @@ function fetchData(file_name) {
         const endpoint = process.env.REACT_APP_ENDPOINT_S3;
 
         const api_url = api + endpoint + file_name;
-        if ( file_name.endsWith('.json')) {
-            fetch(api_url, { method: 'GET' })
-            .then(response => {
-                if (!response.ok) {
-                    // do something
-                    console.log('There was a problem with the fetch operation:', response);
+        axios.get(api_url, { method: 'GET', timeout: 1000})
+        .then((response) => {
+            if (response.status!==200) {
+                // do something
+                console.log('There was a problem with the fetch operation:', response);
+            } else {
+                // console.log("RES", response);
+                return response.data;
+            }
+        })
+        .catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                console.log(error.request);
                 } else {
-                    // console.log("RES", response);
-                    return response.json();
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
                 }
-            })
-            .then((data) => {
-                return resolve(JSON.stringify(data));
-            })
-            .catch((error) => {
-                console.error("There was an error", error);
-                return reject(error);
-            })
-            ;
-        
-        } else {
-            fetch(api_url, { method: 'GET', responseType: 'document'})
-            .then(response => {
-                if (!response.ok) {
-                    // do something
-                    console.log('There was a problem with the fetch operation:', response);
-                } else {
-                    return response.text();
-                }
-            })
-            .catch((error) => {
-                console.error("There was an error", error);
-                return reject(error);
-            })
-            ; 
-        }
+                console.log(error.config);
+        })
+        .then((data) => {
+            return resolve(JSON.stringify(data));
+        })
+        ;
     }
 
     );
