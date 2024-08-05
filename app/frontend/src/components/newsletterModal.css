@@ -10,7 +10,7 @@
 }
 
 .Modal-Content {
-    width: 60vh;
+    width: 60vw;
     min-width: 300px;
     margin: 5vh auto;
     display: flex;
