@@ -10,14 +10,9 @@
 }
 
 .Modal-Content {
-    background-color: #c0c0c0;
     width: 60vw;
     min-width: 300px;
     margin: 5vh auto;
-    padding: 20px;
-    border-radius: 5pt;
-    text-align: left;
-    white-space: break-spaces;
     display: flex;
 }
 

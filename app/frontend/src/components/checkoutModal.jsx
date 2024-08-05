@@ -2,23 +2,21 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { NumericFormat } from 'react-number-format';
 import './newsletterModal.css';
-import './checkoutModal.css';
-import './orderSummary';
 
-function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) {
+function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , handleConfirmation, handleError, updateCheckoutResponse}) {
     // const [newsletterContent, setContent] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [showMissingInfo, setShowMissingInfo] = useState(false);
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [donations, updateDonation] = useState(0.00);
     const [customerInfo, updatecustomerInfo] = useState({
         firstName: "",
         lastName: "",
         phone: "",
-        validPhone: false,
+        validPhone: null,
         email: "",
-        validEmail: false,
+        validEmail: null,
     });
-    const [answerEmail, updateEmail] = useState("");
     const [products] = useState(productsList);
 
     useEffect(() => {
@@ -38,35 +36,51 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
 
     
     function submitOrder() {
-        const api = process.env.REACT_APP_API
-        const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
-        const api_url = api + endpoint
+      const api = process.env.REACT_APP_API
+      const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
+      const api_url = api + endpoint
 
-        const content = JSON.stringify({
+      const content = JSON.stringify({
         ...customerInfo,
         'donation': donations,
         'products': productsList.filter(item => item.product_quantity !== 0)
-        })
+      })
 
-        console.log(content)
-        axios.post(api_url, {
+      // console.log(content)
+      setIsLoading(true);
+      axios.post(api_url, {
         method: 'POST',
         contentType: 'application/json',
-        body: content})
-        .then((response) => {
-            console.log(response['data']);
-        });
+        body: content
+      })
+      .catch((error) => {
+        error && alert("There was an error with the order");
+        setIsLoading(false);
+      })
+      .then((response) => {
+        setIsLoading(false);
+        console.log(response);
+        if (response && response.data['statusCode'] == 200) {
+          const responseContent = JSON.parse(response.data.body)
+          console.log("Order received", responseContent);
+          updateCheckoutResponse(JSON.parse(response.data.body));
+          handleDeleteCart();
+          onCloseButtonClick();
+          handleConfirmation();
+        } else {
+          console.log('Error');
+          updateCheckoutResponse(JSON.parse(response.data.body));
+          handleError();
+        }
+      });
 
-        handleDeleteCart();
-        onCloseButtonClick();
   };
 
   function clickPlaceOrder () {
-
-      if (customerInfo.validEmail && customerInfo.validPhone) {
+      if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0) {
           submitOrder()
       } else{
-          console.log('Missing Info')
+        setShowMissingInfo(true)
       }
   }
   
@@ -76,32 +90,19 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
     function handleEmailChange(event) {
         if(event.target?.value && event.target.value.match(isValidEmail)){
             // showNoValidEmail(false);
-            updateEmail(event.target.value);
             updatecustomerInfo({...customerInfo, email:event.target.value, validEmail: true})
-            console.log('Email IS valid')
-            console.log(customerInfo)
         }else{
-            // showNoValidEmail(true);
-            console.log('Email is not valid')
+          updatecustomerInfo({...customerInfo, validEmail: false})
         }
-        // console.log(event.target.value);
-        // updateEmail(event.target.value);
     }
     
     const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
     function handlePhoneChange(event) {
-        if(event.target?.value && event.target.value.match(isValidPhone)){
-            // showNoValidEmail(false);
-            updateEmail(event.target.value);
-            console.log('Phone IS valid')
-            updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
-            console.log(customerInfo)
-          }else{
-            // showNoValidEmail(true);
-            console.log('Phone is not valid')
-          }
-        // console.log(event.target.value);
-        // updateEmail(event.target.value);
+      if(event.target?.value && event.target.value.match(isValidPhone)){
+          updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
+        }else{
+          updatecustomerInfo({...customerInfo, validPhone: false})
+        }
       }
 
     
@@ -110,92 +111,102 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick }) 
     }
 
     return (
-        <div className="Modal-Box">
-            <div className="Modal-Content">
-                {isLoading ? (
-                    <h2>Loading ...</h2>
-                ) : (
-                    <div>
-                        <h2>Your order</h2>
-                        <div className="Checkout-placeholder">
-                            <div className="section-description">
-                                <h4>Wine from Camuna Cellars</h4>
-                                Purchase directly from the website and pick up at the PanPan. Use code PanPan5 for a 5% discount. 
-                                <a href="https://www.camunacellars.com/wine">camunacellars.com</a>
-                            </div>
-
-                        </div>
-                        <div className="Checkout-placeholder">
-                            <div className="section-description">
-                                <h4>People's Fridge Donation</h4>
-                                The People’s Fridge is a community fridge located at 125 S 52nd Street that is open 24/7 and free to all. Your donations will allow Pan Pan to purchase high quality food from our suppliers to donate to the fridge and the community members it serves. Each dollar donated will allow us to donate a dollar’s worth of local produce, baked goods, dairy products, and pantry goods to the fridge every week.
-                            </div>
-                            <div className="donation-options">
-                                <div className="donation-button" onClick={()=>{handleClickDonation(1)}}>$1</div>
-                                <div className="donation-button" onClick={()=>{handleClickDonation(2)}}>$2</div>
-                                <div className="donation-button" onClick={()=>{handleClickDonation(5)}}>$5</div>
-                                <div className="donation-button">Other</div>
-                            </div>
-
-                        </div>
-                        <div className="Summary-table'">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td className="col1">Subtotal</td>
-                                        <td className="col2">
-                                            <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="col1">Service fee</td>
-                                        <td className="col2">
-                                            <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="col1">Donation</td>
-                                        <td className="col2">
-                                            <NumericFormat value={donations.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                                        </td>
-                                    </tr>
-                                    <tr className="lastRow">
-                                        <td className="col1">Estimated Total</td>
-                                        <td className="col2">
-                                            <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                            <table className="User-Form">
-                                <tr>
-                                    <td className="col1">Fist Name:</td>
-                                    <td className="col2"><textarea key="fisrtName" onChange={(e)=>{updatecustomerInfo({...customerInfo, firstName:e.target.value})}} required/></td>
-                                </tr>
-                                <tr>
-                                    <td className="col1">Last Name:</td>
-                                    <td className="col2"><textarea key="lastName" onChange={(e)=>{updatecustomerInfo({...customerInfo, lastName:e.target.value})}} required/></td>
-                                </tr>
-                                <tr>
-                                    <td className="col1">Email:</td>
-                                    <td className="col2"><textarea key="textareaEmail" onChange={handleEmailChange}  placeholder="your@email.com" required/></td>
-                                </tr>
-                                <tr>
-                                    <td className="col1">Phone:</td>
-                                    <td className="col2"><textarea key="textareaPhone" onChange={handlePhoneChange}  placeholder="+1 (123) 456 7890" required/></td>
-                                </tr>
-                            </table>
-                        <div className="Display-buttons">
-                            <button className="myButton Secondary-button" onClick={onCloseButtonClick}>Add more Products</button>
-                            <button className="myButton" onClick={clickPlaceOrder}>Place Order</button>
-                        </div>
+        <div className="Modal-Box inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="Modal-Content bg-white p-6 rounded-lg shadow-lg w-full relative">
+            {isLoading ? (
+              <h2 className="text-xl font-bold text-center">Loading ...</h2>
+            ) : (
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Your order</h2>
+                <div className="mb-6">
+                  <div className="mb-4">
+                    <h4 className="text-lg font-semibold mb-2">Wine from Camuna Cellars</h4>
+                    <p>
+                      Purchase directly from the website and pick up at the PanPan. Use code PanPan5 for a 5% discount.
+                      <a href="https://www.camunacellars.com/wine" className="text-blue-500 hover:underline"> camunacellars.com</a>
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2">People's Fridge Donation</h4>
+                    <p>
+                      The People’s Fridge is a community fridge located at 125 S 52nd Street that is open 24/7 and free to all. Your donations will allow Pan Pan to purchase high quality food from our suppliers to donate to the fridge and the community members it serves. Each dollar donated will allow us to donate a dollar’s worth of local produce, baked goods, dairy products, and pantry goods to the fridge every week.
+                    </p>
+                    <div className="flex space-x-2 mt-4">
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(1)}>$1</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(2)}>$2</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(5)}>$5</div>
+                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300">Other</div>
                     </div>
-                )
-                }
-
-            </div>
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <table className="w-full text-left border-collapse">
+                    <tbody>
+                      <tr>
+                        <td className="border-b py-1 px-4 font-semibold">Subtotal</td>
+                        <td className="border-b py-1 px-4 text-right">
+                          <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border-b py-1 px-4 font-semibold">Service fee</td>
+                        <td className="border-b py-1 px-4 text-right">
+                          <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border-b py-1 px-4 font-semibold">Donation</td>
+                        <td className="border-b py-1 px-4 text-right">
+                          <NumericFormat value={donations.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-1 px-4 font-semibold">Estimated Total</td>
+                        <td className="px-4 font-bold text-right">
+                          <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <table className="w-full mb-6">
+                  <tbody>
+                    <tr>
+                      <td className="py-1 px-4 font-semibold">First Name:</td>
+                      <td className="px-4">
+                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-1 px-4 font-semibold">Last Name:</td>
+                      <td className="px-4">
+                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                      </td>
+                    </tr>
+                    {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr>: <></>}
+                    <tr>
+                      <td className="py-1 px-4 font-semibold">Email:</td>
+                      <td className="px-4">
+                        <textarea onChange={handleEmailChange} placeholder="your@email.com" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                      </td>
+                    </tr>
+                    {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr>: <></>}
+                    <tr>
+                      <td className="py-1 px-4 font-semibold">Phone:</td>
+                      <td className="px-4">
+                        <textarea onChange={handlePhoneChange} placeholder="(123)4567890" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="flex justify-end space-x-4">
+                  <button className="bg-gray-500 text-white py-1 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
+                  <button className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-700" onClick={clickPlaceOrder}>Place Order</button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-    );
-};
+      );
+    }
 export default Checkout;

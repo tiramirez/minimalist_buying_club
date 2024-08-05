@@ -10,6 +10,7 @@ import Newsletter from './components/newsletterModal';
 import logo250 from './static/panpan_logo250.svg';
 import fetchData, { ItemObject } from './api/fetchITems';
 import Checkout from './components/checkoutModal';
+import AlertModal from "./components/confirmationModal";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,10 @@ function App() {
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie] = useCookies('active-cart');
+  
+  const [checkoutResponse, setCheckoutResponse] = useState({'title':'','body':''});
+  const [showConfirmation, updateShowConfirmation] = useState(false);
+  const [showCheckoutError, updateShowCheckoutError] = useState(false);
 
   var refDate = new Date();
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
@@ -39,27 +44,29 @@ function App() {
   // }
   function fetchDataApp() {
     fetchData('products_list.json')
-      .then((data) => {
-        // console.log("DATA_App", data);
-        data && setProducts(JSON.parse(data).Items
-          .map((item) => {return new ItemObject(item)})
-          );
+    .then((data) => {
+      data && setProducts(JSON.parse(data).Items
+        .map((item) => {return new ItemObject(item)})
+        );
 
-        data && cookies['active-cart'] && setProducts(
-          JSON.parse(data).Items
-            .map((item) => {return new ItemObject(item)})
-            .map((item) => {
-              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
-                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
-              }
-              return item;
-            })
-          );
-      });
+      data && cookies['active-cart'] && setProducts(
+        JSON.parse(data).Items
+          .map((item) => {return new ItemObject(item)})
+          .map((item) => {
+            if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+              item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+            }
+            return item;
+          })
+        );
+    })
+    // .catch((error) => {
+    //   error && console.log(error.toJSON());
+    // });
   }
 
   function fetchCategories() {
-    const categoriesArray = ['All'];
+    const categoriesArray = ['📦 All Products', '🧺 My Cart'];
     products.forEach((item) => {
       let aux_category = item.product_category;
       if (!categoriesArray.includes(aux_category)) {categoriesArray.push(aux_category)};
@@ -69,6 +76,12 @@ function App() {
 
   function handleClickNewsletter() {
     setShowNewsletter(!showNewsletter);
+  };
+  function handleShowConfirmation() {
+    updateShowConfirmation(!showConfirmation);
+  };
+  function handleshowCheckoutError() {
+    updateShowCheckoutError(!showCheckoutError);
   };
   function handleClickCheckout() {
     setShowCheckout(!showCheckout);
@@ -109,28 +122,33 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter}/>
-      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart}onCloseButtonClick={handleClickCheckout}/>
-      <div className="App-header">
-        <div>
-          <img src={logo250}/>
-          {/* <p>Pick up a Pantry Share at Third Wheel Cheese and Pantry (705 S. 50th Street)</p> */}
+    <div className="min-h-screen bg-gray-100">
+      <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter} />
+      <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} handleConfirmation={handleShowConfirmation} handleError={handleshowCheckoutError} updateCheckoutResponse={setCheckoutResponse} />
+      <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse}/>
+      <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse}/>
+      
+      <header className="bg-white shadow p-4">
+        <div className="container w-3/4 mx-auto flex justify-between items-center">
+          <img src={logo250} alt="Logo" className="h-40"/>
+          <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
         </div>
-        <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
-      </div>
-      <div className="App-body">
-        <div className='left-column'>
+      </header>
+      
+      <div className="App-body w-3/4 mx-auto">
+        <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md left-column">
           <AislesNav Categories={categories} handleFilter={selectFilter} />
-          <button onClick={handleClickNewsletter}>Open Newsletter</button>
-        </div>
-        <div className='main-column'>
-          <h2>Items List > {filterOption}</h2>
+          <button onClick={handleClickNewsletter} className="mt-4 w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
+        </aside>
+        
+        <main className="flex-1 p-4">
+          <h2 className="text-xl font-semibold mb-4">Items List &gt; {filterOption}</h2>
           <ItemsGroup
-            productsList={products.filter((singleProduct) => singleProduct.product_category === filterOption | filterOption === 'All')}
-            handleIncrement={updateQuantityIncrease} handleReduction={updateQuantityReduce} />
-          {/* //  onUpdate=updateQuantity */}
-        </div>
+            productsList={products.filter((singleProduct) => filterOption === '📦 All Products' || (filterOption === '🧺 My Cart' && singleProduct.product_quantity > 0 ) || singleProduct.product_category === filterOption)}
+            handleIncrement={updateQuantityIncrease} 
+            handleReduction={updateQuantityReduce} 
+          />
+        </main>
       </div>
     </div>
   );

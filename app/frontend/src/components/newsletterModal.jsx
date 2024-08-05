@@ -17,25 +17,30 @@ function Newsletter({ show, onCloseButtonClick }) {
     function fetchNewsletter() {
         setIsLoading(true);
         fetchData('newsletter.json')
-            .then((data) => {
-                data && setContent(JSON.parse(data).Body);
-                setIsLoading(false);
-            });
+        .then((data) => {
+            data && setContent(JSON.parse(data).Body);
+            setIsLoading(false);
+        })
+        // .catch((error) => {
+        //     error && setContent("Place Holder");
+        //     setIsLoading(false);
+        // })
+        ;
     }
 
-    if (!show) {
+    if (!show | !newsletterContent) {
         return null;
     } 
     
     return (
-        <div className="Modal-Box">
-            <div className="Modal-Content">
+        <div className="Modal-Box inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="Modal-Content bg-white p-6 rounded-lg shadow-lg w-full relative">
             {isLoading ? (
                 <h2>Loading ...</h2>
             ) : (
                 <div>
-                    <button onClick={onCloseButtonClick}>Close Newsletter</button>
-                    {parse(newsletterContent)}
+                    <button className="px-2 py-1 text-sm bg-blue-500 text-white rounded hover:bg-green-700" onClick={onCloseButtonClick}>Close Newsletter</button>
+                    <div className="py-2">{parse(newsletterContent)}</div>
                 </div>
                 )
             } 
