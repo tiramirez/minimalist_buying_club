@@ -15,7 +15,7 @@ import AlertModal from "./components/confirmationModal";
 function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filterOption, setfilterOption] = useState('All');
+  const [filterOption, setfilterOption] = useState('📦 All Products');
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie] = useCookies('active-cart');

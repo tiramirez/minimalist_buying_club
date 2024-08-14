@@ -8,7 +8,10 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
     const [isLoading, setIsLoading] = useState(false);
     const [showMissingInfo, setShowMissingInfo] = useState(false);
     const [orderSubtotal, updateSubtotal] = useState(0.00);
-    const [donations, updateDonation] = useState(0.00);
+    const [selectedDonations, updateSelectedDonation] = useState(0.00);
+    const [customDonations, updateCustomDonation] = useState("0.00");
+    const [isCustomDonations, updateIsCustomDonations] = useState(false);
+    const [isValidCustomDonations, updateIsValidCustomDonations] = useState(false);
     const [customerInfo, updatecustomerInfo] = useState({
         firstName: "",
         lastName: "",
@@ -17,7 +20,7 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
         email: "",
         validEmail: null,
     });
-    const [products] = useState(productsList);
+    // const [products] = useState(productsList);
 
     useEffect(() => {
         var newSubtotal = 0.00;
@@ -28,12 +31,25 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
     }, [productsList]);
 
     const serviceFee = 4.00;
-    const orderTotal = orderSubtotal + serviceFee + donations;
+    const donation = isCustomDonations?parseFloat(customDonations):selectedDonations;
+    const orderTotal = orderSubtotal + serviceFee + donation;
 
     function handleClickDonation (value) {
-        updateDonation(value)
+      updateIsCustomDonations(false);
+      updateSelectedDonation(value);
     }
-
+    
+    
+    const isNumeric = /^\$?(100(\.00?)?|(\d{1,2})(\.\d{1,2})?)$/g;
+    const handleCustomDonationChange = (event) => {
+      if (event.target?.value  && event.target.value.match(isNumeric)) {
+        console.log("Valid number", event.target.value);
+        updateCustomDonation(event.target.value);
+        updateIsValidCustomDonations(true)
+      } else {
+        updateIsValidCustomDonations(false)
+      }
+    }
     
     function submitOrder() {
       const api = process.env.REACT_APP_API
@@ -42,7 +58,7 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
 
       const content = JSON.stringify({
         ...customerInfo,
-        'donation': donations,
+        'donation': donation,
         'products': productsList.filter(item => item.product_quantity !== 0)
       })
 
@@ -60,7 +76,7 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
       .then((response) => {
         setIsLoading(false);
         console.log(response);
-        if (response && response.data['statusCode'] == 200) {
+        if (response && response.data['statusCode'] === 200) {
           const responseContent = JSON.parse(response.data.body)
           console.log("Order received", responseContent);
           updateCheckoutResponse(JSON.parse(response.data.body));
@@ -77,33 +93,34 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
   };
 
   function clickPlaceOrder () {
-      if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0) {
+      if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0 && (isValidCustomDonations || !isCustomDonations)) {
           submitOrder()
       } else{
         setShowMissingInfo(true)
       }
   }
-  
 
-    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    
-    function handleEmailChange(event) {
-        if(event.target?.value && event.target.value.match(isValidEmail)){
-            // showNoValidEmail(false);
-            updatecustomerInfo({...customerInfo, email:event.target.value, validEmail: true})
-        }else{
-          updatecustomerInfo({...customerInfo, validEmail: false})
-        }
+  const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+  function handleEmailChange(event) {
+    if(event.target?.value && event.target.value.match(isValidEmail)){
+      console.log('VALID EMAIL')
+      updatecustomerInfo({...customerInfo, email:event.target.value, validEmail: true})
+    }else{
+      console.log('EMAIL NOT VALID')
+      updatecustomerInfo({...customerInfo, validEmail: false})
     }
-    
-    const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
-    function handlePhoneChange(event) {
-      if(event.target?.value && event.target.value.match(isValidPhone)){
-          updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
-        }else{
-          updatecustomerInfo({...customerInfo, validPhone: false})
-        }
-      }
+  }
+  
+  const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
+  function handlePhoneChange(event) {
+    if(event.target?.value && event.target.value.match(isValidPhone)){
+      updatecustomerInfo({...customerInfo, phone:event.target.value, validPhone:true})
+      console.log('VALID PHONE')
+    } else {
+      updatecustomerInfo({...customerInfo, validPhone: false})
+      console.log('PHONE NOT VALID')
+    }
+  }
 
     
     if (!show) {
@@ -132,11 +149,14 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
                       The People’s Fridge is a community fridge located at 125 S 52nd Street that is open 24/7 and free to all. Your donations will allow Pan Pan to purchase high quality food from our suppliers to donate to the fridge and the community members it serves. Each dollar donated will allow us to donate a dollar’s worth of local produce, baked goods, dairy products, and pantry goods to the fridge every week.
                     </p>
                     <div className="flex space-x-2 mt-4">
-                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(1)}>$1</div>
-                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(2)}>$2</div>
-                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300" onClick={() => handleClickDonation(5)}>$5</div>
-                      <div className="bg-gray-200 text-gray-700 py-1 px-4 rounded cursor-pointer hover:bg-gray-300">Other</div>
+                      <button id="donation-0" className={(donation===0 && !isCustomDonations?"ring bg-violet-300 ring-violet-700":"bg-gray-200 hover:bg-gray-300")+" text-gray-700 py-1 px-4 rounded cursor-pointer"} onClick={() => handleClickDonation(0)}>Remove donation</button>
+                      <button id="donation-1" className={(donation===1 && !isCustomDonations?"ring bg-violet-300 ring-violet-700":"bg-gray-200 hover:bg-gray-300")+" text-gray-700 py-1 px-4 rounded cursor-pointer"} onClick={() => handleClickDonation(1)}>$1</button>
+                      <button id="donation-2" className={(donation===2 && !isCustomDonations?"ring bg-violet-300 ring-violet-700":"bg-gray-200 hover:bg-gray-300")+" text-gray-700 py-1 px-4 rounded cursor-pointer"} onClick={() => handleClickDonation(2)}>$2</button>
+                      <button id="donation-5" className={(donation===5 && !isCustomDonations?"ring bg-violet-300 ring-violet-700":"bg-gray-200 hover:bg-gray-300")+" text-gray-700 py-1 px-4 rounded cursor-pointer"} onClick={() => handleClickDonation(5)}>$5</button>
+                      <button id="donation-other" className={(isCustomDonations?"ring bg-violet-300 ring-violet-700":"bg-gray-200 hover:bg-gray-300")+" text-gray-700 py-1 px-4 rounded cursor-pointer"} onClick={() => updateIsCustomDonations(true)}>Other</button>
+                      <input onChange={handleCustomDonationChange} placeholder="0.00" className="bg-white-200 w-15px px-1 py-3/4 border border-gray-300 rounded" row="1"  disabled={!isCustomDonations}></input>
                     </div>
+                    {!isValidCustomDonations && isCustomDonations && showMissingInfo ? <p className="font-bold text-red-500">You can donate up to $100</p>: <></>}
                   </div>
                 </div>
                 <div className="mb-6">
@@ -157,7 +177,7 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
                       <tr>
                         <td className="border-b py-1 px-4 font-semibold">Donation</td>
                         <td className="border-b py-1 px-4 text-right">
-                          <NumericFormat value={donations.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                          <NumericFormat value={donation.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                         </td>
                       </tr>
                       <tr>
@@ -174,27 +194,27 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
                     <tr>
                       <td className="py-1 px-4 font-semibold">First Name:</td>
                       <td className="px-4">
-                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"/>
+                        <textarea onChange={(e) => e.active?.value && updatecustomerInfo({ ...customerInfo, firstName: e.active.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"/>
                       </td>
                     </tr>
                     <tr>
                       <td className="py-1 px-4 font-semibold">Last Name:</td>
                       <td className="px-4">
-                        <textarea onChange={(e) => updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={(e) => e.active?.value && updatecustomerInfo({ ...customerInfo, lastName: e.active.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
-                    {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr>: <></>}
+                    {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr>: <tr><td></td></tr>}
                     <tr>
                       <td className="py-1 px-4 font-semibold">Email:</td>
                       <td className="px-4">
-                        <textarea onChange={handleEmailChange} placeholder="your@email.com" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={handleEmailChange} type="text" placeholder="your@email.com" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
-                    {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr>: <></>}
+                    {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr>: <tr><td></td></tr>}
                     <tr>
                       <td className="py-1 px-4 font-semibold">Phone:</td>
                       <td className="px-4">
-                        <textarea onChange={handlePhoneChange} placeholder="(123)4567890" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                        <textarea onChange={handlePhoneChange} type="number" placeholder="(123)4567890" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                       </td>
                     </tr>
                   </tbody>
