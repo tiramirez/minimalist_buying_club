@@ -26,11 +26,12 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
     const orderTotal = orderSubtotal + serviceFee;
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
+        <div className="p-4 md:shadow md:rounded-lg md:bg-white bg-gray-200 w-full md:w-80">
+          <h1 className="inline md:hidden text-3xl" >PanPan</h1>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-500">
+            <table className="w-full text-left text-sm text-gray-800">
               <tbody>
-                <tr className="border-b">
+                <tr className="border-b border-black-200">
                   <td className="py-1 px-4 font-medium text-gray-900">Subtotal</td>
                   <td className="py-1 px-4 text-right">
                     <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
