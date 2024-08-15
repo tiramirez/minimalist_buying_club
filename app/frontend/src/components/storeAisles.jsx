@@ -5,8 +5,24 @@ import './storeAisles.css';
 // https://react.dev/learn/rendering-lists 
 function AislesNav({ Categories, handleFilter }) {
     return (
-      <div key="navMenuContainer" className="p-4 bg-gray-100 rounded-lg shadow-md">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Aisles</h2>
+      <div key="navMenuContainer" className="bg-inherit md:bg-gray-100 md:rounded-lg">
+        <div className="inline md:hidden bg-inherit text-xl">
+          <select 
+            name="filterDropdown" id="filterDropdown"
+            className='w-full bg-inherit text-white'
+            onChange={(e) => {
+                console.log(e);
+                handleFilter(e.target.value);
+              }}>
+            {Categories.map((aisle) => (
+              <option key={aisle.id} id={aisle.id} className='bg-gray-100' value={aisle.name}>
+                  {aisle.name}
+                </option>
+            ))}
+          </select>
+        </div>
+        <div className="hidden md:inline">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4 p-4 pb-0">Aisles</h2>
         <ul key="navMenu" className="space-y-2">
           {Categories.map((aisle) => (
             <li key={aisle.id} id={aisle.id}>
@@ -24,7 +40,7 @@ function AislesNav({ Categories, handleFilter }) {
             </li>
           ))}
         </ul>
-        {/* <h2>{filterOption}</h2> */}
+        </div>
       </div>
     );
   }
