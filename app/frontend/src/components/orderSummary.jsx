@@ -22,7 +22,7 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
 
     return (
         <div className="p-4 md:shadow md:rounded-lg md:bg-white bg-gray-200 w-full md:w-80">
-          <h1 className="inline md:hidden text-3xl" >PanPan</h1>
+          <h1 className="inline md:hidden text-3xl font-sans" >PanPan Store</h1>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-gray-800">
               <tbody>
