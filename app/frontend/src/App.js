@@ -11,6 +11,7 @@ import logo250 from './static/panpan_logo250.svg';
 import fetchData, { ItemObject } from './api/fetchITems';
 import Checkout from './components/checkoutModal';
 import AlertModal from "./components/confirmationModal";
+import './output.css';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,7 +19,7 @@ function App() {
   const [filterOption, setfilterOption] = useState('📦 All Products');
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
-  const [cookies, setCookie] = useCookies('active-cart');
+  const [cookies, setCookie, removeCookie] = useCookies('active-cart');
   
   const [checkoutResponse, setCheckoutResponse] = useState({'title':'','body':''});
   const [showConfirmation, updateShowConfirmation] = useState(false);
@@ -115,6 +116,7 @@ function App() {
     const newProducts = [...products]
     newProducts.map(item => item.updateQuantityReset());
     setProducts(newProducts);
+    removeCookie('active-cart');
   }
 
   function selectFilter(aisleId) {

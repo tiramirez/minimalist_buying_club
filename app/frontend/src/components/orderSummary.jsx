@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from 'react-cookie';
 import { NumericFormat } from 'react-number-format';
-// import './orderSummary.css';
-import '../output.css';
 
 export default function Summary({ productsList, handleDeleteCart, clickOnCheckout }) {
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [products] = useState(productsList);
-    const [cookies, setCookie, removeCookie] = useCookies('active-cart');
 
     useEffect(() => {
         var newSubtotal = 0.00;
@@ -18,7 +14,6 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
     }, [productsList]);
 
     function clickOnDeleteCart() {
-        removeCookie('active-cart');
         handleDeleteCart();
       }
 
