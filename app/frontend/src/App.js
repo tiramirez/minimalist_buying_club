@@ -11,14 +11,15 @@ import logo250 from './static/panpan_logo250.svg';
 import fetchData, { ItemObject } from './api/fetchITems';
 import Checkout from './components/checkoutModal';
 import AlertModal from "./components/confirmationModal";
+import './output.css';
 
 function App() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filterOption, setfilterOption] = useState('All');
+  const [filterOption, setfilterOption] = useState('📦 All Products');
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
-  const [cookies, setCookie] = useCookies('active-cart');
+  const [cookies, setCookie, removeCookie] = useCookies('active-cart');
   
   const [checkoutResponse, setCheckoutResponse] = useState({'title':'','body':''});
   const [showConfirmation, updateShowConfirmation] = useState(false);
@@ -115,6 +116,7 @@ function App() {
     const newProducts = [...products]
     newProducts.map(item => item.updateQuantityReset());
     setProducts(newProducts);
+    removeCookie('active-cart');
   }
 
   function selectFilter(aisleId) {
@@ -128,21 +130,22 @@ function App() {
       <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse}/>
       <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse}/>
       
-      <header className="bg-white shadow p-4">
-        <div className="container w-3/4 mx-auto flex justify-between items-center">
-          <img src={logo250} alt="Logo" className="h-40"/>
+      <header className="bg-white p-0 md:p-4">
+        <div className="container mx-auto felx flex-col md:flex md:flex-row justify-between md:items-center w-full md:w-3/4">
+          <img src={logo250} alt="Logo" className="h-40 hidden md:inline"/>
           <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
+          <button onClick={handleClickNewsletter} className="inline md:hidden md:mt-4 w-full px-4 py-2 bg-blue-300 hover:bg-blue-700 text-left">Open Newsletter</button>
         </div>
       </header>
       
-      <div className="App-body w-3/4 mx-auto">
-        <aside className="w-1/4 p-4 bg-white rounded-lg shadow-md left-column">
+      <div className="flex flex-col w-screen mx-0 md:flex md:flex-row md:mx-auto md:w-3/4">
+        <aside className="p-2 w-screen bg-orange-400 md:w-80 md:p-4 md:bg-white md:rounded-lg shadow-md h-4/5">
           <AislesNav Categories={categories} handleFilter={selectFilter} />
-          <button onClick={handleClickNewsletter} className="mt-4 w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
+          <button onClick={handleClickNewsletter} className="md:inline hidden mt-4 w-full px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
         </aside>
         
-        <main className="flex-1 p-4">
-          <h2 className="text-xl font-semibold mb-4">Items List &gt; {filterOption}</h2>
+        <main className="w-full h-1/5 md:w-2/3 p-1 md:p-4">
+          <h2 className="text-xl font-semibold mb-4 md:inline hidden">Items List &gt; {filterOption}</h2>
           <ItemsGroup
             productsList={products.filter((singleProduct) => filterOption === '📦 All Products' || (filterOption === '🧺 My Cart' && singleProduct.product_quantity > 0 ) || singleProduct.product_category === filterOption)}
             handleIncrement={updateQuantityIncrease} 

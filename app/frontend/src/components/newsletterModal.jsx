@@ -34,7 +34,7 @@ function Newsletter({ show, onCloseButtonClick }) {
     
     return (
         <div className="Modal-Box inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="Modal-Content bg-white p-6 rounded-lg shadow-lg w-full relative">
+          <div className="w-full mx-auto my-5 bg-white p-6 rounded-lg shadow-lg relative lg:w-2/3">
             {isLoading ? (
                 <h2>Loading ...</h2>
             ) : (
