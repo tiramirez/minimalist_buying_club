@@ -35,7 +35,7 @@ function ItemBox({ Item, onIncrement, onReduction }) {
 
 function ItemsGroup({ productsList, handleIncrement, handleReduction }) {
   return (
-    <div className="space-y-4">
+    <div className="h-1/5 overflow-y-scroll">
       {productsList.map((singleItem) => (
         <ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement} onReduction={handleReduction} />
       ))}

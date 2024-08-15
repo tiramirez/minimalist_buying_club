@@ -27,20 +27,20 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
             <table className="w-full text-left text-sm text-gray-800">
               <tbody>
                 <tr className="border-b border-black-200">
-                  <td className="py-1 px-4 font-medium text-gray-900">Subtotal</td>
-                  <td className="py-1 px-4 text-right">
+                  <td className="md:py-1 px-4 font-medium text-gray-900">Subtotal</td>
+                  <td className="md:py-1 px-4 text-right">
                     <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                   </td>
                 </tr>
                 <tr className="border-b">
-                  <td className="py-1 px-4 font-medium text-gray-900">Service fee</td>
-                  <td className="py-1 px-4 text-right">
+                  <td className="md:py-1 px-4 font-medium text-gray-900">Service fee</td>
+                  <td className="md:py-1 px-4 text-right">
                     <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                   </td>
                 </tr>
                 <tr className="border-b font-bold text-gray-900">
-                  <td className="py-1 px-4">Estimated Total</td>
-                  <td className="py-1 px-4 text-right">
+                  <td className="md:py-1 px-4">Estimated Total</td>
+                  <td className="md:py-1 px-4 text-right">
                     <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                   </td>
                 </tr>
@@ -48,8 +48,8 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
             </table>
           </div>
             <div className="mt-1 flex w-full justify-between">
-                <button className="px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-700" onClick={clickOnDeleteCart}>Reset Cart</button>
-                <button className="px-2 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-700" onClick={clickOnCheckout}>Checkout</button>
+                <button className="px-2 md:py-1 text-md md:text-sm bg-red-500 text-white rounded hover:bg-red-700" onClick={clickOnDeleteCart}>Reset Cart</button>
+                <button className="px-2 md:py-1 text-md md:text-sm bg-green-500 text-white rounded hover:bg-green-700" onClick={clickOnCheckout}>Checkout</button>
           </div>
         </div>
       );
