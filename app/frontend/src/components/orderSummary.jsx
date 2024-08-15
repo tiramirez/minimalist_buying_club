@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from 'react-cookie';
 import { NumericFormat } from 'react-number-format';
-// import './orderSummary.css';
-import '../output.css';
 
 export default function Summary({ productsList, handleDeleteCart, clickOnCheckout }) {
     const [orderSubtotal, updateSubtotal] = useState(0.00);
     const [products] = useState(productsList);
-    const [cookies, setCookie, removeCookie] = useCookies('active-cart');
 
     useEffect(() => {
         var newSubtotal = 0.00;
@@ -18,7 +14,6 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
     }, [productsList]);
 
     function clickOnDeleteCart() {
-        removeCookie('active-cart');
         handleDeleteCart();
       }
 
@@ -26,25 +21,26 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
     const orderTotal = orderSubtotal + serviceFee;
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
+        <div className="p-4 md:shadow md:rounded-lg md:bg-white bg-gray-200 w-full md:w-80">
+          <h1 className="inline md:hidden text-3xl" >PanPan</h1>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-500">
+            <table className="w-full text-left text-sm text-gray-800">
               <tbody>
-                <tr className="border-b">
-                  <td className="py-1 px-4 font-medium text-gray-900">Subtotal</td>
-                  <td className="py-1 px-4 text-right">
+                <tr className="border-b border-black-200">
+                  <td className="md:py-1 px-4 font-medium text-gray-900">Subtotal</td>
+                  <td className="md:py-1 px-4 text-right">
                     <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                   </td>
                 </tr>
                 <tr className="border-b">
-                  <td className="py-1 px-4 font-medium text-gray-900">Service fee</td>
-                  <td className="py-1 px-4 text-right">
+                  <td className="md:py-1 px-4 font-medium text-gray-900">Service fee</td>
+                  <td className="md:py-1 px-4 text-right">
                     <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                   </td>
                 </tr>
                 <tr className="border-b font-bold text-gray-900">
-                  <td className="py-1 px-4">Estimated Total</td>
-                  <td className="py-1 px-4 text-right">
+                  <td className="md:py-1 px-4">Estimated Total</td>
+                  <td className="md:py-1 px-4 text-right">
                     <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
                   </td>
                 </tr>
@@ -52,8 +48,8 @@ export default function Summary({ productsList, handleDeleteCart, clickOnCheckou
             </table>
           </div>
             <div className="mt-1 flex w-full justify-between">
-                <button className="px-2 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-700" onClick={clickOnDeleteCart}>Reset Cart</button>
-                <button className="px-2 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-700" onClick={clickOnCheckout}>Checkout</button>
+                <button className="px-2 md:py-1 text-md md:text-sm bg-red-500 text-white rounded hover:bg-red-700" onClick={clickOnDeleteCart}>Reset Cart</button>
+                <button className="px-2 md:py-1 text-md md:text-sm bg-green-500 text-white rounded hover:bg-green-700" onClick={clickOnCheckout}>Checkout</button>
           </div>
         </div>
       );
