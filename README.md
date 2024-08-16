@@ -3,7 +3,7 @@
 This is a personal project to exercise using React.js, FastAPI, AWS.
 **Current version** hosted in AWS Amplify [here](https://main.d3560oa79oks88.amplifyapp.com/).
 
-<img src='https://github.com/tiramirez/minimalist_buying_club/assets/30816527/d3b91f85-0c6b-4512-bca3-27c805f504ba' width="800"/>
+<img src='https://github.com/user-attachments/assets/cadb7c00-e5aa-4da3-a150-72f18fc3b120' width="800"/>
 
 
 ## Project structure
