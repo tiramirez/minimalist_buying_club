@@ -128,8 +128,8 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick , h
     }
 
     return (
-        <div className="Modal-Box inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="w-full mx-auto my-5 bg-white p-6 rounded-lg shadow-lg relative lg:w-2/3 h-screen md:h-4/5 overflow-y-scroll">
+        <div className="Modal-Box inset-0 flex md:items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="w-full mx-auto md:my-5 bg-white p-6 rounded-lg shadow-lg lg:w-2/3 h-dhv md:h-4/5 overflow-y-scroll">
             {isLoading ? (
               <h2 className="text-xl font-bold text-center">Loading ...</h2>
             ) : (

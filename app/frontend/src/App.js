@@ -24,6 +24,7 @@ function App() {
   const [checkoutResponse, setCheckoutResponse] = useState({'title':'','body':''});
   const [showConfirmation, updateShowConfirmation] = useState(false);
   const [showCheckoutError, updateShowCheckoutError] = useState(false);
+  const [showMyCart, updateShowMyCart] = useState(false);
 
   var refDate = new Date();
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
@@ -67,7 +68,7 @@ function App() {
   }
 
   function fetchCategories() {
-    const categoriesArray = ['📦 All Products', '🧺 My Cart'];
+    const categoriesArray = ['📦 All Products'];
     products.forEach((item) => {
       let aux_category = item.product_category;
       if (!categoriesArray.includes(aux_category)) {categoriesArray.push(aux_category)};
@@ -117,10 +118,20 @@ function App() {
     newProducts.map(item => item.updateQuantityReset());
     setProducts(newProducts);
     removeCookie('active-cart');
+    if (showMyCart) {
+      updateShowMyCart(false);
+    }
   }
 
   function selectFilter(aisleId) {
-    setfilterOption(aisleId);
+    if (!showMyCart) {
+      setfilterOption(aisleId);
+    }
+  }
+
+  const filterMyCart = () => {
+    selectFilter('📦 All Products');
+    updateShowMyCart(!showMyCart);
   }
 
   return (
@@ -133,21 +144,30 @@ function App() {
       <header className="bg-white p-0 md:p-4">
         <div className="container mx-auto felx flex-col md:flex md:flex-row justify-between md:items-center w-full md:w-3/4">
           <img src={logo250} alt="Logo" className="h-40 hidden md:inline"/>
-          <Summary productsList={products} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
+          <Summary productsList={products} showMyCart={showMyCart} handleMyCart={filterMyCart} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
           <button onClick={handleClickNewsletter} className="inline md:hidden md:mt-4 w-full px-4 py-2 bg-blue-300 hover:bg-blue-700 text-left">Open Newsletter</button>
         </div>
       </header>
       
       <div className="flex flex-col w-screen mx-0 md:flex md:flex-row md:mx-auto md:w-3/4">
         <aside className="p-2 w-screen bg-orange-400 md:w-80 md:p-4 md:bg-white md:rounded-lg shadow-md h-4/5">
-          <AislesNav Categories={categories} handleFilter={selectFilter} />
+          <AislesNav Categories={categories} showMyCart={showMyCart} handleFilter={selectFilter} />
           <button onClick={handleClickNewsletter} className="md:inline hidden mt-4 w-full px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
         </aside>
         
-        <main className="w-full h-1/5 md:w-2/3 p-1 md:p-4">
-          <h2 className="text-xl font-semibold mb-4 md:inline hidden">Items List &gt; {filterOption}</h2>
+        <main className="w-full h-1/5 md:w-2/3 p-1 md:p-4 flex-col">
+          {showMyCart?
+            <h2 className="text-xl font-semibold py-2 md:inline-flex hidden">Order detail</h2>
+            :
+            <h2 className="text-xl font-semibold py-2 md:inline-flex hidden">Items List &gt; {filterOption}</h2>
+          }
           <ItemsGroup
-            productsList={products.filter((singleProduct) => filterOption === '📦 All Products' || (filterOption === '🧺 My Cart' && singleProduct.product_quantity > 0 ) || singleProduct.product_category === filterOption)}
+            productsList={
+              products
+              .filter((singleProduct) => filterOption === '📦 All Products' || singleProduct.product_category === filterOption)
+              .filter((singleProduct) => (!showMyCart ? true :singleProduct.product_quantity > 0) )
+            }
+            showMyCart={showMyCart}
             handleIncrement={updateQuantityIncrease} 
             handleReduction={updateQuantityReduce} 
           />
