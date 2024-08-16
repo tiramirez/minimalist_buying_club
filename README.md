@@ -1,4 +1,4 @@
-# Personal Best Survey
+# Minimalist Buying Club
 ## About
 This is a personal project to exercise using React.js, FastAPI, AWS.
 **Current version** hosted in AWS Amplify [here](https://main.d3560oa79oks88.amplifyapp.com/).
