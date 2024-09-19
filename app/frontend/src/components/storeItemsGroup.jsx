@@ -7,15 +7,6 @@ function ItemBox({ Item, showMyCart, onIncrement, onReduction }) {
       <div>
       {!showMyCart?
         <div className="flex bg-white p-2 mb-4 shadow-md justify-between rounded-lg" key={Item.id}>
-          {/* // BUTTONS */}
-          <div className="flex flex-col h-full items-center w-24">
-            <div className="flex flex-row items-center">
-              <button className="w-8 h-8 flex items-center justify-center bg-red-400 text-white text-xl font-bold rounded-xl md:rounded-full hover:bg-red-700" onClick={() => onReduction(Item.id)}>-</button>
-              <p className="mx-2 text-lg">{Item.product_quantity}</p>
-              <button className="w-8 h-8 flex justify-center bg-green-400 text-white text-xl font-black rounded-xl md:rounded-full hover:bg-green-700" onClick={() => onIncrement(Item.id)}>+</button>
-            </div>
-            <NumericFormat className="inline-flex md:hidden items-center text-lg text-gray-900" value={(Item.unit_price * Item.product_quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-          </div>
           {/* // ITEM NAME AND UNIT PRICE */}
           <div className='w-full pl-2'>
             <div className="font-medium text-gray-900">{Item.product_name}</div>
@@ -24,8 +15,16 @@ function ItemBox({ Item, showMyCart, onIncrement, onReduction }) {
               {unitFormatted}{Item.product_unit}
             </div>
           </div>
+          {/* // BUTTONS */}
+                    <div className="flex flex-col h-full items-center w-24">
+            <div className="flex flex-row items-center">
+              <button className="w-8 h-8 flex items-center justify-center bg-red-400 text-white text-xl font-bold rounded-xl md:rounded-full hover:bg-red-700" onClick={() => onReduction(Item.id)}>-</button>
+              <p className="mx-2 text-lg">{Item.product_quantity}</p>
+              <button className="w-8 h-8 flex justify-center bg-green-400 text-white text-xl font-black rounded-xl md:rounded-full hover:bg-green-700" onClick={() => onIncrement(Item.id)}>+</button>
+            </div>
           {/* // ITEM TOTAL */}
-          <NumericFormat className="md:inline hidden text-sm font-medium text-gray-900" value={(Item.unit_price * Item.product_quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+            <NumericFormat className="inline-flex items-center text-lg text-gray-900" value={(Item.unit_price * Item.product_quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          </div>
         </div>
         :
         <div className="flex h-auto w-wv border-t border-gray-500">
