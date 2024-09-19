@@ -19,7 +19,7 @@ function ItemBox({ Item, showMyCart, onIncrement, onReduction }) {
                     <div className="flex flex-col h-full items-center w-24">
             <div className="flex flex-row items-center">
               <button className="w-8 h-8 flex items-center justify-center bg-red-400 text-white text-xl font-bold rounded-xl md:rounded-full hover:bg-red-700" onClick={() => onReduction(Item.id)}>-</button>
-              <p className="mx-2 text-lg">{Item.product_quantity}</p>
+              <p className="w-4 mx-2 text-lg text-center ">{Item.product_quantity}</p>
               <button className="w-8 h-8 flex justify-center bg-green-400 text-white text-xl font-black rounded-xl md:rounded-full hover:bg-green-700" onClick={() => onIncrement(Item.id)}>+</button>
             </div>
           {/* // ITEM TOTAL */}
