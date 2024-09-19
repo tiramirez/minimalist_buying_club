@@ -159,7 +159,7 @@ function App() {
           {showMyCart?
             <h2 className="text-xl font-semibold py-2 md:inline-flex hidden">Order detail</h2>
             :
-            <h2 className="text-xl font-semibold py-2 md:inline-flex hidden">Items List &gt; {filterOption}</h2>
+            <h2 className="text-xl font-semibold py-2 md:inline-flex hidden">{filterOption}</h2>
           }
           <ItemsGroup
             productsList={
