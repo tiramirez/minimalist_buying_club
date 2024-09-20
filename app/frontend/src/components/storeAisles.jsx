@@ -7,7 +7,7 @@ function AislesNav({ Categories, handleFilter }) {
   return (
     <div className="hidden md:inline">
       <h2 className="text-lg font-semibold text-gray-700 m-2 px-4 pb-0">Aisles</h2>
-      <div key="navMenuContainer" className="bg-inherit p-2 h-80 overflow-y-auto">
+      <div key="navMenuContainer" className="bg-inherit p-2 h-80 overflow-scroll">
         <ul key="navMenu" className="space-y-2">
           {Categories.map((aisle) => (
             <div key={aisle.id} id={aisle.id} className="bg-gray-200 rounded-md p-2 hover:bg-blue-200">

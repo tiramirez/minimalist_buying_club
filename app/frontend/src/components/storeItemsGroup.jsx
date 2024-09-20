@@ -39,7 +39,7 @@ function ItemBox({ Item, showMyCart, onIncrement, onReduction }) {
 
 function ItemsGroup({ productsList, showMyCart, handleIncrement, handleReduction }) {
   return (
-    <div className="h-1/5 overflow-y-scroll">
+    <div>
       {!showMyCart?<div></div>:
         <div className="flex h-auto w-wv">
           <p className="w-20 pl-2 font-bold text-right">Total</p>

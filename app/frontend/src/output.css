@@ -776,6 +776,14 @@ video {
   max-height: 32px;
 }
 
+.max-h-\[400px\] {
+  max-height: 400px;
+}
+
+.max-h-\[600px\] {
+  max-height: 600px;
+}
+
 .min-h-full {
   min-height: 100%;
 }
@@ -826,6 +834,14 @@ video {
 
 .max-w-\[32px\] {
   max-width: 32px;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
 }
 
 .border-collapse {
@@ -916,6 +932,10 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-scroll {
+  overflow: scroll;
 }
 
 .overflow-x-auto {

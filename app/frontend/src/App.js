@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import { useCookies } from 'react-cookie';
 import ItemsGroup from './components/storeItemsGroup';
 import AislesNav from './components/storeAisles';
@@ -25,6 +25,7 @@ function App() {
   const [showConfirmation, updateShowConfirmation] = useState(false);
   const [showCheckoutError, updateShowCheckoutError] = useState(false);
   const [showMyCart, updateShowMyCart] = useState(false);
+  const divRef = useRef();
 
   var refDate = new Date();
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
@@ -127,6 +128,10 @@ function App() {
   function selectFilter(aisleId) {
     if (!showMyCart) {
       setfilterOption(aisleId);
+      // Scroll back to top
+      if (divRef.current) {
+        divRef.current.scrollTop = 0;
+      }
     }
   }
 
@@ -136,13 +141,13 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Newsletter show={showNewsletter} onCloseButtonClick={handleClickNewsletter} />
       <Checkout show={showCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} handleConfirmation={handleShowConfirmation} handleError={handleshowCheckoutError} updateCheckoutResponse={setCheckoutResponse} />
       <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse}/>
       <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse}/>
       
-      <header className="bg-white p-0 md:p-4 sticky top-0 z-2">
+      <header className="flex-1 bg-white p-0 md:p-4 sticky top-0">
         <div className="container mx-auto felx flex-col md:flex md:flex-row justify-between md:items-center w-full md:w-3/4">
           <img src={logo250} alt="Logo" className="h-40 hidden md:inline"/>
           <Summary productsList={products} showMyCart={showMyCart} handleMyCart={filterMyCart} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
@@ -167,28 +172,30 @@ function App() {
         </div>
       </header>
       
-      <div className="flex flex-col w-screen mx-0 md:flex md:flex-row md:mx-auto md:w-3/4">
-        <aside className="md:inline hidden w-80 p-4 my-2 bg-white rounded-lg shadow-md h-4/5 sticky top-48">
+      <div className="flex  flex-auto w-screen mx-0 md:mx-auto md:w-3/4 h-4/5">
+        <aside className="md:inline hidden w-80 p-4 bg-white rounded-lg shadow-md h-4/5 sticky top-48">
           <AislesNav Categories={categories} showMyCart={showMyCart} handleFilter={selectFilter} />
           <button onClick={handleClickNewsletter} className="md:inline hidden mt-4 w-full px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
         </aside>
         
-        <main className="w-full h-1/5 md:w-2/3 p-1 md:p-4 flex-col ">
+        <main className="flex-1 w-full md:w-2/3 p-1 md:px-4 flex-col">
           {showMyCart?
             <h2 className="text-xl font-semibold py-2 md:inline-flex hidden">Order detail</h2>
             :
-            <h2 className="text-xl font-semibold py-2 md:inline-flex hidden sticky top-48 bg-gray-100 w-full">{filterOption}</h2>
+            <h2 className="text-xl font-semibold py-2 md:inline-flex hidden bg-gray-100 w-full sticky top-0">{filterOption}</h2>
           }
-          <ItemsGroup
-            productsList={
-              products
-              .filter((singleProduct) => filterOption === '📦 All Products' || singleProduct.product_category === filterOption)
-              .filter((singleProduct) => (!showMyCart ? true :singleProduct.product_quantity > 0) )
-            }
-            showMyCart={showMyCart}
-            handleIncrement={updateQuantityIncrease} 
-            handleReduction={updateQuantityReduce} 
-          />
+          <div className="max-h-[600px] overflow-y-scroll" ref={divRef}>
+            <ItemsGroup
+              productsList={
+                products
+                .filter((singleProduct) => filterOption === '📦 All Products' || singleProduct.product_category === filterOption)
+                .filter((singleProduct) => (!showMyCart ? true :singleProduct.product_quantity > 0) )
+              }
+              showMyCart={showMyCart}
+              handleIncrement={updateQuantityIncrease} 
+              handleReduction={updateQuantityReduce} 
+            />
+          </div>
         </main>
       </div>
     </div>
