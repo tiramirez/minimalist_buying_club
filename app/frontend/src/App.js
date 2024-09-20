@@ -45,27 +45,29 @@ function App() {
   //   newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
   //   setProducts(newProducts);
   // }
-  function fetchDataApp() {
-    fetchData('products_list.json')
-    .then((data) => {
-      data && setProducts(JSON.parse(data).Items
-        .map((item) => {return new ItemObject(item)})
-        );
-
-      data && cookies['active-cart'] && setProducts(
-        JSON.parse(data).Items
+  async function fetchDataApp() {
+    try {
+      const resp = await fetchData('products_list.json')
+      if (resp) {
+        setProducts(JSON.parse(resp).Items
           .map((item) => {return new ItemObject(item)})
-          .map((item) => {
-            if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
-              item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
-            }
-            return item;
-          })
-        );
-    })
-    // .catch((error) => {
-    //   error && console.log(error.toJSON());
-    // });
+          );
+
+        cookies['active-cart'] && setProducts(
+          JSON.parse(resp).Items
+            .map((item) => {return new ItemObject(item)})
+            .map((item) => {
+              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+              }
+              return item;
+            })
+          );
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function fetchCategories() {
@@ -147,12 +149,12 @@ function App() {
       <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse}/>
       <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse}/>
       
-      <header className="flex-1 bg-white p-0 md:p-4 sticky top-0">
+      <header className="flex bg-white p-0 md:p-4 sticky top-0 md:relative">
         <div className="container mx-auto felx flex-col md:flex md:flex-row justify-between md:items-center w-full md:w-3/4">
           <img src={logo250} alt="Logo" className="h-40 hidden md:inline"/>
           <Summary productsList={products} showMyCart={showMyCart} handleMyCart={filterMyCart} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
           <button onClick={handleClickNewsletter} className="inline md:hidden md:mt-4 w-full px-4 py-2 bg-blue-300 hover:bg-blue-700 text-left">Open Newsletter</button>
-          <div className="inline md:hidden  bg-orange-400 text-x border-y-4 border-orange-400">
+          <div className="flex md:hidden  bg-orange-400 border-y-4 border-orange-400">
           {showMyCart?<>Order details</>:
             <select 
               name="filterDropdown" id="filterDropdown"
@@ -173,7 +175,7 @@ function App() {
       </header>
       
       <div className="flex  flex-auto w-screen mx-0 md:mx-auto md:w-3/4 h-4/5">
-        <aside className="md:inline hidden w-80 p-4 bg-white rounded-lg shadow-md h-4/5 sticky top-48">
+        <aside className="md:inline hidden w-80 p-4 bg-white rounded-lg shadow-md h-4/5 sticky top-0">
           <AislesNav Categories={categories} showMyCart={showMyCart} handleFilter={selectFilter} />
           <button onClick={handleClickNewsletter} className="md:inline hidden mt-4 w-full px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
         </aside>
