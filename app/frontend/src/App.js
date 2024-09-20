@@ -45,27 +45,29 @@ function App() {
   //   newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
   //   setProducts(newProducts);
   // }
-  function fetchDataApp() {
-    fetchData('products_list.json')
-    .then((data) => {
-      data && setProducts(JSON.parse(data).Items
-        .map((item) => {return new ItemObject(item)})
-        );
-
-      data && cookies['active-cart'] && setProducts(
-        JSON.parse(data).Items
+  async function fetchDataApp() {
+    try {
+      const resp = await fetchData('products_list.json')
+      if (resp) {
+        setProducts(JSON.parse(resp).Items
           .map((item) => {return new ItemObject(item)})
-          .map((item) => {
-            if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
-              item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
-            }
-            return item;
-          })
-        );
-    })
-    // .catch((error) => {
-    //   error && console.log(error.toJSON());
-    // });
+          );
+
+        cookies['active-cart'] && setProducts(
+          JSON.parse(resp).Items
+            .map((item) => {return new ItemObject(item)})
+            .map((item) => {
+              if (cookies['active-cart'].some((cItem) => item['id'] === cItem['id'])) {
+                item.product_quantity = cookies['active-cart'].filter(citem => citem.id ===item.id)[0].product_quantity;
+              }
+              return item;
+            })
+          );
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function fetchCategories() {
