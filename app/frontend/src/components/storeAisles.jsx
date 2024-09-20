@@ -10,15 +10,19 @@ function AislesNav({ Categories, handleFilter }) {
       <div key="navMenuContainer" className="bg-inherit p-2 h-80 overflow-scroll">
         <ul key="navMenu" className="space-y-2">
           {Categories.map((aisle) => (
-            <div key={aisle.id} id={aisle.id} className="bg-gray-200 rounded-md p-2 hover:bg-blue-200">
-              <p
-                href="#"
-                value={aisle.name}
-                key={aisle.name}
-                className="text-sm text-blue-600 hover:underline"
-                onClick={(e) => {
+            <div 
+              key={aisle.id} 
+              id={aisle.id}
+              value={aisle.name}
+              onClick={(e) => {
                   handleFilter(e.target.attributes.value.value);
                 }}
+              className="bg-gray-200 rounded-md p-2 hover:bg-blue-200"
+            >
+              <p
+                value={aisle.name}
+                key={aisle.name}
+                className="text-sm text-blue-600"
               >
                 {aisle.name}
               </p>
