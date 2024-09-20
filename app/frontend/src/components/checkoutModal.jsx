@@ -231,13 +231,13 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick, ha
                         <tr>
                           <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">First Name:</td>
                           <td className="px-1 md:px-4">
-                            <textarea onChange={(e) => e.active?.value && updatecustomerInfo({ ...customerInfo, firstName: e.active.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded" />
+                            <textarea onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded" />
                           </td>
                         </tr>
                         <tr>
                           <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Last Name:</td>
                           <td className="px-1 md:px-4">
-                            <textarea onChange={(e) => e.active?.value && updatecustomerInfo({ ...customerInfo, lastName: e.active.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
+                            <textarea onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                           </td>
                         </tr>
                         {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr> : <tr><td></td></tr>}
