@@ -20,6 +20,8 @@ function App() {
   const [showNewsletter, setShowNewsletter] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies('active-cart');
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 3; // Maximum number of retries
   
   const [checkoutResponse, setCheckoutResponse] = useState({'title':'','body':''});
   const [showConfirmation, updateShowConfirmation] = useState(false);
@@ -45,9 +47,21 @@ function App() {
   //   newProducts.filter(item => item.id === productId)[0].updateQuantityReduce(value);
   //   setProducts(newProducts);
   // }
+  const retryFetch = () => {
+    if (retryCount < maxRetries) {
+      setTimeout(() => {
+        setRetryCount(retryCount + 1);
+        fetchDataApp();
+      }, 2000); // Retry after 2 seconds
+    } else {
+      console.log('Max retries reached. Failed to fetch items.');
+    }
+  };
+
   async function fetchDataApp() {
     try {
       const resp = await fetchData('products_list.json')
+      // if (resp.data && resp.data.length > 0) {
       if (resp) {
         setProducts(JSON.parse(resp).Items
           .map((item) => {return new ItemObject(item)})
@@ -64,6 +78,8 @@ function App() {
             })
           );
 
+      } else {
+        retryFetch();
       }
     } catch (error) {
       console.log(error);
