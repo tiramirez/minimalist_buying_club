@@ -11,7 +11,7 @@ function ItemBox({ Item, showMyCart, onIncrement, onReduction }) {
           <div className='w-full pl-2'>
             <div className="font-medium text-gray-900">{Item.product_name}</div>
             <div className="text-sm text-gray-500">
-              <NumericFormat value={Item.unit_price.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+              <NumericFormat value={Number(Item.unit_price).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               {unitFormatted}{Item.product_unit}
             </div>
           </div>
