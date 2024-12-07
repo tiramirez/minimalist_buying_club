@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { NumericFormat } from 'react-number-format';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import './newsletterModal.css';
+import { OrderDetailsTable } from './checkout/detailstable'
 
 function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick, handleConfirmation, handleError, updateCheckoutResponse }) {
   // const [newsletterContent, setContent] = useState({});
@@ -197,34 +197,16 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick, ha
                       </div>
                     </div>
                     <div className="mb-6">
-                      <table className="w-full text-left border-collapse">
-                        <tbody>
-                          <tr>
-                            <td className="border-b md:py-1 px-1 md:px-4 font-semibold">Subtotal</td>
-                            <td className="border-b md:py-1 px-1 md:px-4 text-right">
-                              <NumericFormat value={orderSubtotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="border-b md:py-1 px-1 md:px-4 font-semibold">Service fee</td>
-                            <td className="border-b md:py-1 px-1 md:px-4 text-right">
-                              <NumericFormat value={serviceFee.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="border-b md:py-1 px-1 md:px-4 font-semibold">Donation</td>
-                            <td className="border-b md:py-1 px-1 md:px-4 text-right">
-                              <NumericFormat value={donation.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="border-b md:py-1 px-1 md:px-4 font-semibold">Estimated Total</td>
-                            <td className="font-bold md:py-1 px-1 md:px-4 text-right">
-                              <NumericFormat value={orderTotal.toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <OrderDetailsTable
+                        orderDetails={
+                          [
+                            {"label":"Subtotal", "value":orderSubtotal},
+                            {"label":"Service fee", "value":serviceFee},
+                            {"label":"Donations", "value":donation},
+                            {"label":"Total", "value":orderTotal}
+                          ]
+                        }
+                      />
                     </div>
                     <table className="w-full mb-6">
                       <tbody>
