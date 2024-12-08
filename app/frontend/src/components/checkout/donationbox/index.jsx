@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react"
 
-const isNumeric = /^\$?(500(\.00?)?|[1-4]?\d{1,2}(\.\d{1,2})?)$/g;
+const isNumeric = /^\$?([1-9]?\d{1,4}(\.\d{1,2})?)$/g;
 
 export function DonationBox(props) {
     const { selectedDonation, updateSelectedDonation, donationProps } = props
     const [customDonation, updateCustomDonation] = useState(0.0);
     const [isCustomDonation, setIsCustomDonation] = useState(false)
-    const [isValidCustomDonation, updateIsValidCustomDonation] = useState(false);
+    const [isValidCustomDonation, updateIsValidCustomDonation] = useState(true);
 
     const donation = useMemo(()=>{
         return isCustomDonation ? customDonation : selectedDonation;
@@ -26,6 +26,10 @@ export function DonationBox(props) {
         if (event.target?.value && event.target.value.match(isNumeric)) {
             updateSelectedDonation(parseFloat(event.target.value));
             updateCustomDonation(parseFloat(event.target.value));
+            updateIsValidCustomDonation(true)
+        } else if (isNaN(parseFloat(event.target.value))) {
+            updateSelectedDonation(0.0);
+            updateCustomDonation(0.0);
             updateIsValidCustomDonation(true)
         } else {
             updateIsValidCustomDonation(false)
@@ -57,7 +61,8 @@ export function DonationBox(props) {
                     disabled={!isCustomDonation}
                 />
             </div>
-            {!isValidCustomDonation && isCustomDonation ? <p className="font-bold text-red-500">You can donate up to $500</p> : <></>}
+            {isCustomDonation && !isValidCustomDonation && !!customDonation ? <p className="font-bold text-red-500">You have to use a valid amount.</p> : <></>}
+            {isCustomDonation && isValidCustomDonation && customDonation > 500 ? <p className="font-bold text-red-500">You can donate up to $500</p> : <></>}
         </div>
     )
 }

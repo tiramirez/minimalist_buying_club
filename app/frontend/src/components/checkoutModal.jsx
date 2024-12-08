@@ -70,9 +70,8 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
       'products': productsList.filter(item => item.product_quantity !== 0)
     })
 
-      // console.log(content)
-      setIsLoading(true);
-      axios.post(api_url, {
+    setIsLoading(true);
+    axios.post(api_url, {
         method: 'POST',
         contentType: 'application/json',
         body: content
@@ -97,11 +96,11 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
           handleError();
         }
       });
-
+    setIsLoading(false);
   };
 
   function clickPlaceOrder() {
-    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0) {
+    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0 && selectedDonations <= 500 && endofYearDonation <= 500 ) {
       submitOrder()
     } else {
       setShowMissingInfo(true)
