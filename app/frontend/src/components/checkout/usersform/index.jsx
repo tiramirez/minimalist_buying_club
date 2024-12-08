@@ -30,28 +30,28 @@ export function UsersInfoForm(props) {
             <table className="w-full mb-6">
                 <tbody>
                     <tr>
-                        <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">First Name:</td>
-                        <td className="px-1 md:px-4">
+                        <td className="md:py-1 font-semibold text-sm md:text-base">First Name:</td>
+                        <td>
                             <textarea onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded" />
                         </td>
                     </tr>
                     <tr>
-                        <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Last Name:</td>
-                        <td className="px-1 md:px-4">
+                        <td className="md:py-1 font-semibold text-sm md:text-base">Last Name:</td>
+                        <td>
                             <textarea onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                         </td>
                     </tr>
-                    {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr> : <tr><td></td></tr>}
+                    {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="font-bold text-red-500">!! Missing or Invalid Email</p></td></tr> : <tr><td></td></tr>}
                     <tr>
-                        <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Email:</td>
-                        <td className="px-1 md:px-4">
+                        <td className="md:py-1 font-semibold text-sm md:text-base">Email:</td>
+                        <td>
                             <textarea onChange={handleEmailChange} type="text" placeholder="your@email.com" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                         </td>
                     </tr>
-                    {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr> : <tr><td></td></tr>}
+                    {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr> : <tr><td></td></tr>}
                     <tr>
-                        <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Phone:</td>
-                        <td className="px-1 md:px-4">
+                        <td className="md:py-1 font-semibold text-sm md:text-base">Phone:</td>
+                        <td>
                             <textarea onChange={handlePhoneChange} type="number" placeholder="(123)4567890" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
                         </td>
                     </tr>

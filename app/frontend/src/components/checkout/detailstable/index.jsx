@@ -5,15 +5,15 @@ export function OrderDetailsTable(props) {
     const { orderDetails } = props
 
     return (
-        <div>
+        <div className="pb-4">
             <table className="w-full text-left border-collapse">
                 <tbody>
                     {orderDetails.map((item) =>
                         <tr>
-                            <td className="border-b md:py-1 px-1 md:px-4 font-semibold">
+                            <td className="border-b md:py-1 font-semibold">
                                 {item.label}
                             </td>
-                            <td className="border-b md:py-1 px-1 md:px-4 text-right">
+                            <td className="border-b md:py-1 text-right">
                                 <NumericFormat
                                     value={item.value.toFixed(2)}
                                     displayType={'text'}
