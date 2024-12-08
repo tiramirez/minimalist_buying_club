@@ -96,7 +96,6 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
           handleError();
         }
       });
-    setIsLoading(false);
   };
 
   function clickPlaceOrder() {
