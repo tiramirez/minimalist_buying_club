@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from 'axios';
-import './newsletterModal.css';
+// import './newsletterModal.css';
 import { LayoutComponent } from './layout/modal'
 import { UsersInfoForm } from './checkout/usersform'
 import { OrderDetailsTable } from './checkout/detailstable'
@@ -63,11 +63,12 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
     const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
     const api_url = api + endpoint
 
-      const content = JSON.stringify({
-        ...customerInfo,
-        'donation': donation,
-        'products': productsList.filter(item => item.product_quantity !== 0)
-      })
+    const content = JSON.stringify({
+      ...customerInfo,
+      'donation': selectedDonations,
+      'tip': endofYearDonation,
+      'products': productsList.filter(item => item.product_quantity !== 0)
+    })
 
       // console.log(content)
       setIsLoading(true);
@@ -100,7 +101,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
   };
 
   function clickPlaceOrder() {
-    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0 && (isValidCustomDonations || !isCustomDonations)) {
+    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0) {
       submitOrder()
     } else {
       setShowMissingInfo(true)
@@ -118,30 +119,26 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
       ) : (
         <div>
           <h2 className="text-2xl font-bold mb-4">Your order</h2>
-          <div className="mb-6">
-            <DonationBox
-              selectedDonation={endofYearDonation}
-              updateSelectedDonation={updatEndofYearDonation}
-              donationProps={endofyearDonation}
-            />
-            <DonationBox
-              selectedDonation={selectedDonations}
-              updateSelectedDonation={updateSelectedDonation}
-              donationProps={peoplesFridgeDonation}
-            />
-          </div>
-          <div className="mb-6">
-            <OrderDetailsTable
-              orderDetails={
-                [
-                  { "label": "Subtotal", "value": orderSubtotal },
-                  { "label": "Service fee", "value": serviceFee },
-                  { "label": "Donations", "value": donation },
-                  { "label": "Total", "value": orderTotal }
-                ]
-              }
-            />
-          </div>
+          <DonationBox
+            selectedDonation={endofYearDonation}
+            updateSelectedDonation={updatEndofYearDonation}
+            donationProps={endofyearDonation}
+          />
+          <DonationBox
+            selectedDonation={selectedDonations}
+            updateSelectedDonation={updateSelectedDonation}
+            donationProps={peoplesFridgeDonation}
+          />
+          <OrderDetailsTable
+            orderDetails={
+              [
+                { "label": "Subtotal", "value": orderSubtotal },
+                { "label": "Service fee", "value": serviceFee },
+                { "label": "Donation + Tips", "value": donation },
+                { "label": "Total", "value": orderTotal }
+              ]
+            }
+          />
           <UsersInfoForm
             customerInfo={customerInfo}
             updatecustomerInfo={updatecustomerInfo}

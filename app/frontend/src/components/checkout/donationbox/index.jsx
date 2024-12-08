@@ -3,24 +3,28 @@ import { useState, useMemo } from "react"
 const isNumeric = /^\$?(500(\.00?)?|[1-4]?\d{1,2}(\.\d{1,2})?)$/g;
 
 export function DonationBox(props) {
-    const { selectedDonation, updateSelectedDonation, donationProps} = props
+    const { selectedDonation, updateSelectedDonation, donationProps } = props
     const [customDonation, updateCustomDonation] = useState(0.0);
     const [isCustomDonation, setIsCustomDonation] = useState(false)
     const [isValidCustomDonation, updateIsValidCustomDonation] = useState(false);
 
     const donation = useMemo(()=>{
-        updateSelectedDonation(isCustomDonation ? customDonation : selectedDonation);
         return isCustomDonation ? customDonation : selectedDonation;
     },[selectedDonation,customDonation,isCustomDonation])
 
-    function handleClickDonation(value) {
+    const handleClickDonation = (value) => {
         setIsCustomDonation(false);
         updateSelectedDonation(value);
+    }
+
+    const handleClickOther = () => {
+        setIsCustomDonation(true)
+        updateSelectedDonation(customDonation);
     }
     
     const handleCustomDonationChange = (event) => {
         if (event.target?.value && event.target.value.match(isNumeric)) {
-            console.log("Valid number", event.target.value);
+            updateSelectedDonation(parseFloat(event.target.value));
             updateCustomDonation(parseFloat(event.target.value));
             updateIsValidCustomDonation(true)
         } else {
@@ -43,7 +47,7 @@ export function DonationBox(props) {
                 <button
                     id="donation-other"
                     className={(isCustomDonation ? "ring bg-violet-300 ring-violet-700" : "bg-gray-200 hover:bg-gray-300") + " text-gray-700 md:py-1 px-4 rounded cursor-pointer"}
-                    onClick={() => {setIsCustomDonation(true)}}
+                    onClick={handleClickOther}
                 >Other</button>
                 <input
                     onChange={handleCustomDonationChange}
