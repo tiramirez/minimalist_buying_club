@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import './newsletterModal.css';
+import { UsersInfoForm } from './checkout/usersform'
 import { OrderDetailsTable } from './checkout/detailstable'
 
 function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick, handleConfirmation, handleError, updateCheckoutResponse }) {
@@ -101,29 +102,6 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick, ha
     }
   }
 
-  const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-  function handleEmailChange(event) {
-    if (event.target?.value && event.target.value.match(isValidEmail)) {
-      console.log('VALID EMAIL')
-      updatecustomerInfo({ ...customerInfo, email: event.target.value, validEmail: true })
-    } else {
-      console.log('EMAIL NOT VALID')
-      updatecustomerInfo({ ...customerInfo, validEmail: false })
-    }
-  }
-
-  const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
-  function handlePhoneChange(event) {
-    if (event.target?.value && event.target.value.match(isValidPhone)) {
-      updatecustomerInfo({ ...customerInfo, phone: event.target.value, validPhone: true })
-      console.log('VALID PHONE')
-    } else {
-      updatecustomerInfo({ ...customerInfo, validPhone: false })
-      console.log('PHONE NOT VALID')
-    }
-  }
-
-
   if (!show) {
     return null;
   }
@@ -208,36 +186,11 @@ function Checkout({ show, productsList, handleDeleteCart, onCloseButtonClick, ha
                         }
                       />
                     </div>
-                    <table className="w-full mb-6">
-                      <tbody>
-                        <tr>
-                          <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">First Name:</td>
-                          <td className="px-1 md:px-4">
-                            <textarea onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, firstName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Last Name:</td>
-                          <td className="px-1 md:px-4">
-                            <textarea onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, lastName: e.target.value })} rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
-                          </td>
-                        </tr>
-                        {!customerInfo.validEmail && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Email</p></td></tr> : <tr><td></td></tr>}
-                        <tr>
-                          <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Email:</td>
-                          <td className="px-1 md:px-4">
-                            <textarea onChange={handleEmailChange} type="text" placeholder="your@email.com" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
-                          </td>
-                        </tr>
-                        {!customerInfo.validPhone && showMissingInfo ? <tr><td></td><td><p className="px-4 font-bold text-red-500">!! Missing or Invalid Phone</p></td></tr> : <tr><td></td></tr>}
-                        <tr>
-                          <td className="md:py-1 px-1 md:px-4 font-semibold text-sm md:text-base">Phone:</td>
-                          <td className="px-1 md:px-4">
-                            <textarea onChange={handlePhoneChange} type="number" placeholder="(123)4567890" rows="1" required className="w-full px-1 py-3/4 border border-gray-300 rounded"></textarea>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <UsersInfoForm
+                      customerInfo={customerInfo}
+                      updatecustomerInfo={updatecustomerInfo}
+                      showMissingInfo={showMissingInfo}
+                    />
                     <div className="flex justify-end space-x-4">
                       <button className="bg-gray-500 text-white md:py-1 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
                       <button className="bg-blue-500 text-white md:py-1 px-4 rounded hover:bg-blue-700" onClick={clickPlaceOrder}>Place Order</button>
