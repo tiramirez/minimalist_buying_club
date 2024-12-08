@@ -35,7 +35,7 @@ export function DonationBox(props) {
             <div className="flex space-x-2 mt-4 pl-1 py-1 overflow-x-scroll">
                 {donationProps.donationOptions.map((item) =>  
                     <button
-                        id={item.label}
+                        key={item.label}
                         className={(donation === item.value && !isCustomDonation ? "ring bg-violet-300 ring-violet-700" : "bg-gray-200 hover:bg-gray-300") + " text-gray-700 md:py-1 px-4 rounded cursor-pointer"}
                         onClick={() => handleClickDonation(item.value)}
                     >{item.label}</button>

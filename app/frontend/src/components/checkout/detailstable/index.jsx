@@ -9,7 +9,7 @@ export function OrderDetailsTable(props) {
             <table className="w-full text-left border-collapse">
                 <tbody>
                     {orderDetails.map((item) =>
-                        <tr>
+                        <tr key={item.label}>
                             <td className="border-b md:py-1 font-semibold">
                                 {item.label}
                             </td>
