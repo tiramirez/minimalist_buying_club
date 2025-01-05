@@ -9,7 +9,7 @@ function AlertModal({ show, onCloseButtonClick, message }) {
   }
 
   return (
-    <LayoutComponent show={show} updateShow={updateShow}>
+    <LayoutComponent show={show} updateShow={onCloseButtonClick}>
       {isLoading ? (
         <h2 className="text-xl font-bold text-center">Loading ...</h2>
       ) : (
