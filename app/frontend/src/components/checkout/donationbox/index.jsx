@@ -39,7 +39,7 @@ export function DonationBox(props) {
     return (
         <div className="pb-4">
             <h4 className="text-lg font-semibold mb-2">{donationProps.title}</h4>
-            <p>{donationProps.description}</p>
+            <p className="font-sans">{donationProps.description}</p>
             <div className="flex space-x-2 mt-4 pl-1 py-1 overflow-x-scroll">
                 {donationProps.donationOptions.map((item) =>  
                     <button

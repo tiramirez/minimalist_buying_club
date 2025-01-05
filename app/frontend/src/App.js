@@ -165,7 +165,7 @@ function App() {
       <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse}/>
       <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse}/>
       
-      <header className="flex bg-white p-0 md:p-4 sticky top-0 md:relative">
+      <header className="flex flex-grow-0 bg-white p-0 md:p-4 sticky top-0 md:relative">
         <div className="container mx-auto felx flex-col md:flex md:flex-row justify-between md:items-center w-full md:w-3/4">
           <img src={logo250} alt="Logo" className="h-40 hidden md:inline"/>
           <Summary productsList={products} showMyCart={showMyCart} handleMyCart={filterMyCart} handleDeleteCart={deleteCart} clickOnCheckout={handleClickCheckout} />
@@ -190,7 +190,7 @@ function App() {
         </div>
       </header>
       
-      <div className="flex  flex-auto w-screen mx-0 md:mx-auto md:w-3/4 h-4/5">
+      <div className="flex  flex-auto w-screen mx-0 md:mx-auto md:w-3/4 flex-grow">
         <aside className="md:inline hidden w-80 p-4 bg-white rounded-lg shadow-md h-4/5 sticky top-0">
           <AislesNav Categories={categories} showMyCart={showMyCart} handleFilter={selectFilter} />
           <button onClick={handleClickNewsletter} className="md:inline hidden mt-4 w-full px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-700">Open Newsletter</button>
@@ -202,7 +202,7 @@ function App() {
             :
             <h2 className="text-xl font-semibold py-2 md:inline-flex hidden bg-gray-100 w-full sticky top-0">{filterOption}</h2>
           }
-          <div className="max-h-[600px] overflow-y-scroll" ref={divRef}>
+          <div className="" ref={divRef}>
             <ItemsGroup
               productsList={
                 products
