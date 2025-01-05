@@ -1,6 +1,4 @@
 import React from 'react';
-import './storeAisles.css';
-// import '../output.css';
 
 // https://react.dev/learn/rendering-lists 
 function AislesNav({ Categories, handleFilter }) {

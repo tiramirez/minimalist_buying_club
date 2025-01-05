@@ -1,8 +1,5 @@
 import axios from 'axios';
 import React, { useState } from "react";
-import './placeOrderBtn.css';
-
-
 
 // function retieveItems() {
 //     // Query all items which value is greater than 0
