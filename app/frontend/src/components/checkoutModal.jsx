@@ -30,6 +30,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
     email: "",
     validEmail: null,
   });
+  const [comment, updatecomment] = useState("");
 
   useEffect(() => {
     var newSubtotal = 0.00;
@@ -51,7 +52,8 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
     const content = JSON.stringify({
       ...customerInfo,
       'donation': selectedDonations,
-      'products': productsList.filter(item => item.product_quantity !== 0)
+      'products': productsList.filter(item => item.product_quantity !== 0),
+      'comments': comment
     })
 
     setIsLoading(true);
@@ -121,6 +123,21 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             updatecustomerInfo={updatecustomerInfo}
             showMissingInfo={showMissingInfo}
           />
+          <div className="w-full pb-4 felx-col">
+              <div className="md:py-1 font-semibold text-sm md:text-base">
+                Comments:
+              </div>
+              <div>
+                <textarea
+                  className="w-full px-1 py-3/4 border border-gray-300 rounded"
+                  onChange={(e) => updatecomment(e.target.value)}
+                  type="text"
+                  placeholder="Tell us what you think ..."
+                  rows="3"
+                  required
+                />
+              </div>
+          </div>
           <div className="flex justify-end space-x-4">
             <button className="bg-gray-500 text-white md:py-1 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
             <button className="bg-blue-500 text-white md:py-1 px-4 rounded hover:bg-blue-700" onClick={clickPlaceOrder}>Place Order</button>
