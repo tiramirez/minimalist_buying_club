@@ -1,4 +1,3 @@
-import React, { useEffect, useState, useMemo } from "react";
 
 export function UsersInfoForm(props) {
     const { customerInfo, updatecustomerInfo, showMissingInfo } = props
@@ -28,10 +27,11 @@ export function UsersInfoForm(props) {
                     <tr>
                         <td className="md:py-1 font-semibold text-sm md:text-base">First Name:</td>
                         <td>
-                            <textarea
+                            <input
                                 className="w-full px-1 py-3/4 border border-gray-300 rounded"
                                 onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, firstName: e.target.value })}
                                 rows="1"
+                                type="text"
                                 required
                             />
                         </td>
@@ -39,10 +39,11 @@ export function UsersInfoForm(props) {
                     <tr>
                         <td className="md:py-1 font-semibold text-sm md:text-base">Last Name:</td>
                         <td>
-                            <textarea
+                            <input
                                 className="w-full px-1 py-3/4 border border-gray-300 rounded"
                                 onChange={(e) => e.target?.value && updatecustomerInfo({ ...customerInfo, lastName: e.target.value })}
                                 rows="1"
+                                type="text"
                                 required
                             />
                         </td>
@@ -55,10 +56,10 @@ export function UsersInfoForm(props) {
                     <tr>
                         <td className="md:py-1 font-semibold text-sm md:text-base">Email:</td>
                         <td>
-                            <textarea
+                            <input
                                 className="w-full px-1 py-3/4 border border-gray-300 rounded"
                                 onChange={handleEmailChange}
-                                type="text"
+                                type="email"
                                 placeholder="your@email.com"
                                 rows="1"
                                 required
@@ -73,10 +74,10 @@ export function UsersInfoForm(props) {
                     <tr>
                         <td className="md:py-1 font-semibold text-sm md:text-base">Phone:</td>
                         <td>
-                            <textarea
+                            <input
                                 className="w-full px-1 py-3/4 border border-gray-300 rounded"
                                 onChange={handlePhoneChange}
-                                type="number"
+                                type="tel"
                                 placeholder="(123)4567890"
                                 rows="1"
                                 required
