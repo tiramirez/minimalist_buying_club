@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from 'axios';
-// import './newsletterModal.css';
+import { useEffect, useState } from "react";
 import { LayoutComponent } from './layout/modal'
 import { UsersInfoForm } from './checkout/usersform'
 import { OrderDetailsTable } from './checkout/detailstable'
 import { DonationBox } from './checkout/donationbox'
-
-const peoplesFridgeDonation = {
-  title: "People's Fridge Donation",
-  description: "The People’s Fridge is a community fridge located at 125 S 52nd Street that is open 24/7 and free to all. Your donations will allow Pan Pan to purchase high quality food from our suppliers to donate to the fridge and the community members it serves. Each dollar donated will allow us to donate a dollar’s worth of local produce, baked goods, dairy products, and pantry goods to the fridge every week.",
-  donationOptions: [
-    { label: "No donation", value: 0 },
-    { label: "$1", value: 1 },
-    { label: "$2", value: 2 },
-    { label: "$5", value: 5 },
-  ]
-}
+import { mainDonation } from '../assets/copy/donations'
 
 function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseButtonClick, handleConfirmation, handleError, updateCheckoutResponse }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +94,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
           <DonationBox
             selectedDonation={selectedDonations}
             updateSelectedDonation={updateSelectedDonation}
-            donationProps={peoplesFridgeDonation}
+            donationProps={mainDonation}
           />
           <OrderDetailsTable
             orderDetails={
@@ -124,19 +112,19 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             showMissingInfo={showMissingInfo}
           />
           <div className="w-full pb-4 felx-col">
-              <div className="md:py-1 font-semibold text-sm md:text-base">
-                Comments:
-              </div>
-              <div>
-                <textarea
-                  className="w-full px-1 py-3/4 border border-gray-300 rounded"
-                  onChange={(e) => updatecomment(e.target.value)}
-                  type="text"
-                  placeholder="Tell us what you think ..."
-                  rows="3"
-                  required
-                />
-              </div>
+            <div className="md:py-1 font-semibold text-sm md:text-base">
+              Comments:
+            </div>
+            <div>
+              <textarea
+                className="w-full px-1 py-3/4 border border-gray-300 rounded"
+                onChange={(e) => updatecomment(e.target.value)}
+                type="text"
+                placeholder="Tell us what you think ..."
+                rows="3"
+                required
+              />
+            </div>
           </div>
           <div className="flex justify-end space-x-4">
             <button className="bg-gray-500 text-white md:py-1 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
