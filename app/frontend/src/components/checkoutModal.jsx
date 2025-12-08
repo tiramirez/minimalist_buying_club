@@ -3,7 +3,7 @@ import { LayoutComponent } from './layout/modal'
 import { UsersInfoForm } from './checkout/usersform'
 import { OrderDetailsTable } from './checkout/detailstable'
 import { DonationBox } from './checkout/donationbox'
-import { mainDonation } from '../assets/copy/donations'
+import { mainDonation, endofyearDonation } from '../assets/copy/donations'
 import axios from 'axios';
 
 function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseButtonClick, handleConfirmation, handleError, updateCheckoutResponse }) {
@@ -11,6 +11,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
   const [showMissingInfo, setShowMissingInfo] = useState(false);
   const [orderSubtotal, updateSubtotal] = useState(0.00);
   const [selectedDonations, updateSelectedDonation] = useState(0.00);
+  const [selectedTip, updateSelectedTip] = useState(0.00);
   const [customerInfo, updatecustomerInfo] = useState({
     firstName: "",
     lastName: "",
@@ -31,7 +32,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
 
   const serviceFee = 4.00;
 
-  const orderTotal = orderSubtotal + serviceFee + selectedDonations;
+  const orderTotal = orderSubtotal + serviceFee + selectedDonations + selectedTip;
 
   function submitOrder() {
     const api = process.env.REACT_APP_API
@@ -41,6 +42,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
     const content = JSON.stringify({
       ...customerInfo,
       'donation': selectedDonations,
+      'tip':selectedTip,
       'products': productsList.filter(item => item.product_quantity !== 0),
       'comments': comment
     })
@@ -74,7 +76,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
   };
 
   function clickPlaceOrder() {
-    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0 && selectedDonations <= 500) {
+    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0 && selectedDonations <= 500 && selectedTip <= 999) {
       submitOrder()
     } else {
       setShowMissingInfo(true)
@@ -97,12 +99,18 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             updateSelectedDonation={updateSelectedDonation}
             donationProps={mainDonation}
           />
+          <DonationBox
+            selectedDonation={selectedTip}
+            updateSelectedDonation={updateSelectedTip}
+            donationProps={endofyearDonation}
+          />
           <OrderDetailsTable
             orderDetails={
               [
                 { "label": "Subtotal", "value": orderSubtotal },
                 { "label": "Service fee", "value": serviceFee },
                 { "label": "Donation", "value": selectedDonations },
+                { "label": "Tip", "value": selectedTip },
                 { "label": "Total", "value": orderTotal }
               ]
             }

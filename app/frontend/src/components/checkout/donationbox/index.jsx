@@ -7,6 +7,7 @@ export function DonationBox(props) {
     const [customDonation, updateCustomDonation] = useState(0.0);
     const [isCustomDonation, setIsCustomDonation] = useState(false)
     const [isValidCustomDonation, updateIsValidCustomDonation] = useState(true);
+    const DonationUpperBound = donationProps.upperBound ?? 500;
 
     const donation = useMemo(()=>{
         return isCustomDonation ? customDonation : selectedDonation;
@@ -62,7 +63,7 @@ export function DonationBox(props) {
                 />
             </div>
             {isCustomDonation && !isValidCustomDonation && !!customDonation ? <p className="font-bold text-red-500">You have to use a valid amount.</p> : <></>}
-            {isCustomDonation && isValidCustomDonation && customDonation > 500 ? <p className="font-bold text-red-500">You can donate up to $500</p> : <></>}
+            {isCustomDonation && isValidCustomDonation && customDonation > DonationUpperBound ? <p className="font-bold text-red-500">`You can donate up to ${DonationUpperBound}`</p> : <></>}
         </div>
     )
 }
