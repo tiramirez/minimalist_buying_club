@@ -3,7 +3,7 @@ import { LayoutComponent } from './layout/modal'
 import { UsersInfoForm } from './checkout/usersform'
 import { OrderDetailsTable } from './checkout/detailstable'
 import { DonationBox } from './checkout/donationbox'
-import { mainDonation, endofyearDonation } from '../assets/copy/donations'
+import { mainDonation } from '../assets/copy/donations'
 import axios from 'axios';
 
 function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseButtonClick, handleConfirmation, handleError, updateCheckoutResponse }) {
@@ -98,11 +98,6 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             selectedDonation={selectedDonations}
             updateSelectedDonation={updateSelectedDonation}
             donationProps={mainDonation}
-          />
-          <DonationBox
-            selectedDonation={selectedTip}
-            updateSelectedDonation={updateSelectedTip}
-            donationProps={endofyearDonation}
           />
           <OrderDetailsTable
             orderDetails={
