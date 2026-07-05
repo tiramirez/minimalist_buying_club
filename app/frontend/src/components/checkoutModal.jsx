@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { LayoutComponent } from './layout/modal'
-import { UsersInfoForm } from './checkout/usersform'
-import { OrderDetailsTable } from './checkout/detailstable'
-import { DonationBox } from './checkout/donationbox'
+import { UsersInfoForm } from './checkout/UsersForm'
+import { OrderDetailsTable } from './checkout/DetailsTable'
+import { DonationBox } from './checkout/DonationBox'
 import { mainDonation } from '../assets/copy/donations'
-import axios from 'axios';
+import { SERVICE_FEE } from '../config/constants'
 
 function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseButtonClick, handleConfirmation, handleError, updateCheckoutResponse }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showMissingInfo, setShowMissingInfo] = useState(false);
   const [orderSubtotal, updateSubtotal] = useState(0.00);
   const [selectedDonations, updateSelectedDonation] = useState(0.00);
-  const [selectedTip, updateSelectedTip] = useState(0.00);
+  const [selectedTip] = useState(0.00);
   const [customerInfo, updatecustomerInfo] = useState({
     firstName: "",
     lastName: "",
@@ -30,48 +30,41 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
     updateSubtotal(newSubtotal);
   }, [productsList]);
 
-  const serviceFee = 4.00;
-
-  const orderTotal = orderSubtotal + serviceFee + selectedDonations + selectedTip;
+  const orderTotal = orderSubtotal + SERVICE_FEE + selectedDonations + selectedTip;
 
   function submitOrder() {
-    const api = process.env.REACT_APP_API
-    const endpoint = process.env.REACT_APP_ENDPOINT_ANSWERS;
+    const api = import.meta.env.VITE_API
+    const endpoint = 'checkout';
     const api_url = api + endpoint
 
-    const content = JSON.stringify({
-      ...customerInfo,
-      'donation': selectedDonations,
-      'tip':selectedTip,
-      'products': productsList.filter(item => item.product_quantity !== 0),
-      'comments': comment
-    })
-
     setIsLoading(true);
-    axios.post(api_url, {
-        method: 'POST',
-        contentType: 'application/json',
-        body: content
-      })
-      .catch((error) => {
-        error && alert("There was an error with the order");
+    fetch(api_url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...customerInfo,
+        donation: selectedDonations,
+        tip: selectedTip,
+        products: productsList.filter(item => item.product_quantity !== 0),
+        comments: comment,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
         setIsLoading(false);
-      })
-      .then((response) => {
-        setIsLoading(false);
-        console.log(response);
-        if (response && response.data['statusCode'] === 200) {
-          const responseContent = JSON.parse(response.data.body)
-          console.log("Order received", responseContent);
-          updateCheckoutResponse(JSON.parse(response.data.body));
+        if (data.message === 'Successful POST Execution') {
+          updateCheckoutResponse(data);
           handleDeleteCart();
           onCloseButtonClick();
           handleConfirmation();
         } else {
-          console.log('Error');
-          updateCheckoutResponse(JSON.parse(response.data.body));
+          updateCheckoutResponse(data);
           handleError();
         }
+      })
+      .catch(() => {
+        setIsLoading(false);
+        alert("There was an error with the order");
       });
   };
 
@@ -103,7 +96,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             orderDetails={
               [
                 { "label": "Subtotal", "value": orderSubtotal },
-                { "label": "Service fee", "value": serviceFee },
+                { "label": "Service fee", "value": SERVICE_FEE },
                 { "label": "Donation", "value": selectedDonations },
                 { "label": "Tip", "value": selectedTip },
                 { "label": "Total", "value": orderTotal }
@@ -121,7 +114,7 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             </div>
             <div>
               <textarea
-                className="w-full px-1 py-3/4 border border-gray-300 rounded"
+                className="w-full px-1 py-3/4 border border-brand-border rounded"
                 onChange={(e) => updatecomment(e.target.value)}
                 type="text"
                 placeholder="Tell us what you think ..."
@@ -131,8 +124,8 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
             </div>
           </div>
           <div className="flex justify-end space-x-4">
-            <button className="bg-gray-500 text-white md:py-1 px-4 rounded hover:bg-gray-700" onClick={onCloseButtonClick}>Add more Products</button>
-            <button className="bg-blue-500 text-white md:py-1 px-4 rounded hover:bg-blue-700" onClick={clickPlaceOrder}>Place Order</button>
+            <button className="bg-white border border-brand-border text-brand-text-primary md:py-1 px-4 rounded hover:bg-brand-cream" onClick={onCloseButtonClick}>Add more Products</button>
+            <button className="bg-brand-rose text-white md:py-1 px-4 rounded hover:bg-brand-terracotta" onClick={clickPlaceOrder}>Place Order</button>
           </div>
         </div>
       )}
