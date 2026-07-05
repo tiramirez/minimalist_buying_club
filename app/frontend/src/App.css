@@ -1,5 +1,28 @@
-header{
-  background-image: url('./static/radishes+adobe+stock.jpg');
-  background-size: 100% auto;
-  background-position: center;
+header{}
+
+@keyframes bounce-top {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(-6px); }
+  60%  { transform: translateY(3px); }
+  100% { transform: translateY(0); }
+}
+@keyframes bounce-bottom {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(6px); }
+  60%  { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+.animate-bounce-top    { animation: bounce-top    0.35s ease-out; }
+.animate-bounce-bottom { animation: bounce-bottom 0.35s ease-out; }
+
+@keyframes cart-pop {
+  0%   { transform: scale(1)    translateY(0);    color: inherit; }
+  20%  { transform: scale(1.22) translateY(-6px); color: #C4705E; }
+  70%  { transform: scale(1.45) translateY(2px);  color: #C4705E; }
+  100% { transform: scale(1)    translateY(0);    color: inherit; }
+}
+.animate-cart-pop {
+  animation: cart-pop 0.4s ease-out;
+  display: inline-block;
+  transform-origin: left center;
 }

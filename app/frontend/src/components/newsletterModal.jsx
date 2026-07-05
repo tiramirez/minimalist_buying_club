@@ -1,34 +1,23 @@
 import React, { useEffect, useState } from "react";
-import fetchData from '../api/fetchITems';
+import { fetchNewsletter } from '../api/fetchItems';
 import parse from 'html-react-parser';
 import { LayoutComponent } from './layout/modal'
-
-
-
 
 function Newsletter({ show, onCloseButtonClick }) {
     const [newsletterContent, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        fetchNewsletter();
+        async function loadNewsletter() {
+            setIsLoading(true);
+            const data = await fetchNewsletter();
+            if (data) setContent(JSON.parse(data).Body);
+            setIsLoading(false);
+        }
+        loadNewsletter();
     }, []);
 
-    function fetchNewsletter() {
-        setIsLoading(true);
-        fetchData('newsletter.json')
-            .then((data) => {
-                data && setContent(JSON.parse(data).Body);
-                setIsLoading(false);
-            })
-            // .catch((error) => {
-            //     error && setContent("Place Holder");
-            //     setIsLoading(false);
-            // })
-            ;
-    }
-
-    if (!show | !newsletterContent) {
+    if (!show || !newsletterContent) {
         return null;
     }
 

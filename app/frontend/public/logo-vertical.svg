@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 338 308" width="338" height="308">
+
+  <!-- Background -->
+  <rect width="338" height="308" fill="#f15047ff"/>
+
+  <!--
+    Cap-height = 120, baseline group translate y=28.
+    Letter local coords: origin = top-left of bounding box.
+
+    P  w=78  stem-width=22  bowl: semi-ellipse cx=22 cy=34 rx=56 ry=34
+             counter oval centered at (50,34) rx=24 ry=20
+    A  w=86  stroke=22  legs overlap at apex, crossbar y=82-96
+    N  w=80  stem=22
+
+    Advances (letter-width + 4 gap): P→82  A→90  N→80
+    PAN total: 82+90+80 = 252
+    First  PAN: translate(8, 28)
+    Second PAN: translate(8+252+4, 28) = translate(264, 28)
+    Right edge: 264+252 = 516  (fits in 520)
+
+    Corner rounding r=10 using circular arcs (sweep=1 for all outer corners).
+  -->
+
+  <!-- ── First PAN — light pink ─────────────────────────── -->
+  <g fill="#E8B9B3" transform="translate(25,28)">
+    <!-- P -->
+    <path fill-rule="evenodd" d="
+      M 0,0
+	  L 46,0
+      A 10,10 0 0,1 46,83
+      L 46,120
+      L 0,120
+      Z
+      M 42,30
+      A 10,10 0 1,1 42,55
+      A 10,10 0 0,1 42,30
+      Z
+    "/>
+
+    <!-- A -->
+      <path transform="translate(95,0)" fill-rule="evenodd" d="
+        M 0,40
+        A 10,10 0 0,1 82,40
+        L 82,120
+        L 48,120
+        L 48,78
+        L 34,78
+        L 34,120
+        L 0,120
+      	Z
+        M 42,30
+        A 10,10 0 1,1 42,55
+        A 10,10 0 0,1 42,30
+        Z
+      "/>
+
+    <!-- N -->
+      <path transform="translate(185,0)" d="
+        M 0,0
+        L 33,0
+        L 64,40
+        L 64,0
+		L 103,0
+		L 103,120
+		L 86,120
+		L 38,60
+        L 38,120
+        L 0,120
+        Z
+      "/>
+  </g>
+
+  <!-- ── Second PAN — near-black ────────────────────────── -->
+  <g fill="#413d3e" transform="translate(25,160)">
+
+    <!-- P -->
+    <path fill-rule="evenodd" d="
+      M 0,0
+	  L 46,0
+      A 10,10 0 0,1 46,83
+      L 46,120
+      L 0,120
+      Z
+      M 42,30
+      A 10,10 0 1,1 42,55
+      A 10,10 0 0,1 42,30
+      Z
+    "/>
+
+    <!-- A -->
+      <path transform="translate(95,0)" fill-rule="evenodd" d="
+        M 0,40
+        A 10,10 0 0,1 82,40
+        L 82,120
+        L 48,120
+        L 48,78
+        L 34,78
+        L 34,120
+        L 0,120
+      	Z
+        M 42,30
+        A 10,10 0 1,1 42,55
+        A 10,10 0 0,1 42,30
+        Z
+      "/>
+
+    <!-- N -->
+      <path transform="translate(185,0)" d="
+        M 0,0
+        L 33,0
+        L 64,40
+        L 64,0
+		L 103,0
+		L 103,120
+		L 86,120
+		L 38,60
+        L 38,120
+        L 0,120
+        Z
+      "/>
+  </g>
+
+</svg>

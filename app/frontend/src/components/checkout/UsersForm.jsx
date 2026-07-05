@@ -1,8 +1,8 @@
+import { isValidEmail, isValidPhone } from '../../utils/validation';
 
 export function UsersInfoForm(props) {
     const { customerInfo, updatecustomerInfo, showMissingInfo } = props
 
-    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     function handleEmailChange(event) {
         if (event.target?.value && event.target.value.match(isValidEmail)) {
             updatecustomerInfo({ ...customerInfo, email: event.target.value, validEmail: true })
@@ -11,7 +11,6 @@ export function UsersInfoForm(props) {
         }
     }
 
-    const isValidPhone = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/g;
     function handlePhoneChange(event) {
         if (event.target?.value && event.target.value.match(isValidPhone)) {
             updatecustomerInfo({ ...customerInfo, phone: event.target.value, validPhone: true })
