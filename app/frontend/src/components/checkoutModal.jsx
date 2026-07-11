@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getActiveVariant, getDeviceId } from '../utils/abVariant';
 import { LayoutComponent } from './layout/modal'
 import { UsersInfoForm } from './checkout/UsersForm'
 import { OrderDetailsTable } from './checkout/DetailsTable'
@@ -47,6 +48,8 @@ function Checkout({ show, updateShow, productsList, handleDeleteCart, onCloseBut
         tip: selectedTip,
         products: productsList.filter(item => item.product_quantity !== 0),
         comments: comment,
+        variant: getActiveVariant() ?? 'unknown',
+        device_id: getDeviceId(),
       }),
     })
       .then((res) => res.json())

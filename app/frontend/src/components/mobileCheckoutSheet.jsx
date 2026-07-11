@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getActiveVariant, getDeviceId } from '../utils/abVariant';
 import { UsersInfoForm } from './checkout/UsersForm';
 import { OrderDetailsTable } from './checkout/DetailsTable';
 import { DonationBox } from './checkout/DonationBox';
@@ -45,6 +46,8 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
         tip: selectedTip,
         products: productsList.filter(item => item.product_quantity !== 0),
         comments: comment,
+        variant: getActiveVariant() ?? 'unknown',
+        device_id: getDeviceId(),
       }),
     })
       .then(res => res.json())

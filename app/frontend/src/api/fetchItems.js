@@ -27,8 +27,11 @@ export class ItemObject {
     }
 }
 
+import { getDeviceId, setActiveExperiment } from '../utils/abVariant';
+
 async function fetchData() {
-    const api_url = import.meta.env.VITE_API + 'products';
+    const did = getDeviceId();
+    const api_url = import.meta.env.VITE_API + `products?did=${did}`;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     try {
@@ -36,6 +39,9 @@ async function fetchData() {
         clearTimeout(timeout);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const json = await response.json();
+        if (json.experiment) {
+            setActiveExperiment(json.experiment.id, json.experiment.variant, json.experiment.expires_at);
+        }
         return JSON.stringify(json?.data ?? json);
     } catch (error) {
         clearTimeout(timeout);
