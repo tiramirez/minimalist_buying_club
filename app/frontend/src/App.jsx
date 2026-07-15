@@ -160,7 +160,7 @@ function App() {
   }, [cartCount]);
 
   return (
-    <div className="flex flex-col h-screen overflow-y-hidden bg-brand-cream">
+    <div className="flex flex-col h-[100dvh] overflow-y-hidden bg-brand-cream">
       <Newsletter show={showNewsletter && !isMobile} onCloseButtonClick={handleClickNewsletter} />
       <Checkout show={showCheckout && !isMobile} updateShow={handleClickCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} handleConfirmation={handleShowConfirmation} handleError={handleshowCheckoutError} updateCheckoutResponse={setCheckoutResponse} />
       <MobileNewsletterSheet show={showNewsletter && isMobile} onClose={handleClickNewsletter} />

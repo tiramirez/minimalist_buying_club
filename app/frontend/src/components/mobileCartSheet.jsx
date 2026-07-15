@@ -32,7 +32,7 @@ export default function MobileCartSheet({ productsList, handleIncrement, handleR
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-t-2xl w-full max-w-[480px] max-h-[88vh] overflow-hidden flex flex-col"
+        className="bg-white rounded-t-2xl w-full max-w-[480px] max-h-[88dvh] overflow-hidden flex flex-col"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
