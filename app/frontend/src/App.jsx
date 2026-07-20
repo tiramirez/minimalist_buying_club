@@ -15,6 +15,8 @@ import { SERVICE_FEE } from './config/constants';
 import fetchData, { ItemObject } from './api/fetchItems';
 import Checkout from './components/checkoutModal';
 import AlertModal from "./components/confirmationModal";
+import ConsentBanner from './components/ConsentBanner';
+import { isTrackingEnabled, getConsent, setConsent } from './utils/consent';
 import './output.css';
 
 const logo = "" + '/logo.svg';
@@ -34,6 +36,9 @@ function App() {
   const [showMobileCart, setShowMobileCart] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [searchQuery, setSearchQuery] = useState('');
+  const needsConsent = isTrackingEnabled() && getConsent() === null;
+  const [consentResolved, setConsentResolved] = useState(!needsConsent);
+  const [showConsentBanner, setShowConsentBanner] = useState(needsConsent);
   const [cartPop, setCartPop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [bounceClass, setBounceClass] = useState('');
@@ -50,6 +55,7 @@ function App() {
   refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
 
   useEffect(() => {
+    if (!consentResolved) return;
     let retryCount = 0;
     async function loadProducts() {
       try {
@@ -76,7 +82,7 @@ function App() {
       }
     }
     loadProducts();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [consentResolved]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const categoriesArray = [];
@@ -100,6 +106,12 @@ function App() {
   }
   function handleClickCheckout() {
     setShowCheckout(!showCheckout);
+  }
+
+  function handleConsentResolved(choice) {
+    setConsent(choice);
+    setShowConsentBanner(false);
+    setConsentResolved(true);
   }
 
   function updateProductQuantity(productId, operation) {
@@ -160,7 +172,7 @@ function App() {
   }, [cartCount]);
 
   return (
-    <div className="flex flex-col h-screen overflow-y-hidden bg-brand-cream">
+    <div className="flex flex-col h-[100dvh] overflow-y-hidden bg-brand-cream">
       <Newsletter show={showNewsletter && !isMobile} onCloseButtonClick={handleClickNewsletter} />
       <Checkout show={showCheckout && !isMobile} updateShow={handleClickCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} handleConfirmation={handleShowConfirmation} handleError={handleshowCheckoutError} updateCheckoutResponse={setCheckoutResponse} />
       <MobileNewsletterSheet show={showNewsletter && isMobile} onClose={handleClickNewsletter} />
@@ -287,6 +299,14 @@ function App() {
           handleDeleteCart={deleteCart}
           clickOnCheckout={handleClickCheckout}
           onClose={() => setShowMobileCart(false)}
+        />
+      )}
+
+      {showConsentBanner && (
+        <ConsentBanner
+          isMobile={isMobile}
+          onAccept={() => handleConsentResolved('accepted')}
+          onDecline={() => handleConsentResolved('declined')}
         />
       )}
     </div>

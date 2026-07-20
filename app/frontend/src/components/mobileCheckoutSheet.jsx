@@ -1,24 +1,49 @@
 import { useEffect, useState } from "react";
+import { getActiveVariant, getDeviceId } from '../utils/abVariant';
 import { UsersInfoForm } from './checkout/UsersForm';
 import { OrderDetailsTable } from './checkout/DetailsTable';
 import { DonationBox } from './checkout/DonationBox';
 import { mainDonation } from '../assets/copy/donations';
 import { SERVICE_FEE } from '../config/constants';
 
-export default function MobileCheckoutSheet({ show, onClose, productsList, handleDeleteCart, handleConfirmation, handleError, updateCheckoutResponse }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [showMissingInfo, setShowMissingInfo] = useState(false);
-  const [orderSubtotal, updateSubtotal] = useState(0.00);
-  const [selectedDonations, updateSelectedDonation] = useState(0.00);
-  const [selectedTip] = useState(0.00);
-  const [customerInfo, updatecustomerInfo] = useState({
+const CUSTOMER_INFO_KEY = 'panpan-customer-info';
+
+function loadSavedCustomerInfo() {
+  try {
+    const saved = localStorage.getItem(CUSTOMER_INFO_KEY);
+    if (saved) {
+      const p = JSON.parse(saved);
+      return {
+        firstName: p.firstName || "",
+        lastName: p.lastName || "",
+        phone: p.phone || "",
+        validPhone: !!p.phone,
+        email: p.email || "",
+        validEmail: !!p.email,
+        additionalEmails: [],
+        additionalEmailsValid: [],
+      };
+    }
+  } catch {}
+  return {
     firstName: "",
     lastName: "",
     phone: "",
     validPhone: null,
     email: "",
     validEmail: null,
-  });
+    additionalEmails: [],
+    additionalEmailsValid: [],
+  };
+}
+
+export default function MobileCheckoutSheet({ show, onClose, productsList, handleDeleteCart, handleConfirmation, handleError, updateCheckoutResponse }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showMissingInfo, setShowMissingInfo] = useState(false);
+  const [orderSubtotal, updateSubtotal] = useState(0.00);
+  const [selectedDonations, updateSelectedDonation] = useState(0.00);
+  const [saveInfo, setSaveInfo] = useState(false);
+  const [customerInfo, updatecustomerInfo] = useState(loadSavedCustomerInfo);
   const [comment, updatecomment] = useState("");
 
   useEffect(() => {
@@ -29,7 +54,7 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
     updateSubtotal(newSubtotal);
   }, [productsList]);
 
-  const orderTotal = orderSubtotal + SERVICE_FEE + selectedDonations + selectedTip;
+  const orderTotal = orderSubtotal + SERVICE_FEE + selectedDonations;
 
   function submitOrder() {
     const api = import.meta.env.VITE_API;
@@ -40,17 +65,30 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        ...customerInfo,
+        firstName: customerInfo.firstName,
+        lastName: customerInfo.lastName,
+        email: customerInfo.email,
+        phone: customerInfo.phone,
+        additionalEmails: (customerInfo.additionalEmails || []).filter(Boolean),
         donation: selectedDonations,
-        tip: selectedTip,
         products: productsList.filter(item => item.product_quantity !== 0),
         comments: comment,
+        variant: getActiveVariant() ?? 'unknown',
+        device_id: getDeviceId(),
       }),
     })
       .then(res => res.json())
       .then(data => {
         setIsLoading(false);
         if (data.message === 'Successful POST Execution') {
+          if (saveInfo) {
+            localStorage.setItem(CUSTOMER_INFO_KEY, JSON.stringify({
+              firstName: customerInfo.firstName,
+              lastName: customerInfo.lastName,
+              phone: customerInfo.phone,
+              email: customerInfo.email,
+            }));
+          }
           updateCheckoutResponse(data);
           handleDeleteCart();
           onClose();
@@ -67,7 +105,17 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
   }
 
   function clickPlaceOrder() {
-    if (customerInfo.validEmail && customerInfo.validPhone && orderSubtotal > 0.0 && selectedDonations <= 500 && selectedTip <= 999) {
+    const additionalEmailsAllValid = (customerInfo.additionalEmails || []).every(
+      (e, i) => !e || customerInfo.additionalEmailsValid?.[i]
+    );
+    if (
+      customerInfo.validEmail &&
+      customerInfo.validPhone &&
+      customerInfo.lastName &&
+      orderSubtotal > 0.0 &&
+      selectedDonations <= 500 &&
+      additionalEmailsAllValid
+    ) {
       submitOrder();
     } else {
       setShowMissingInfo(true);
@@ -83,7 +131,7 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-t-2xl w-full max-w-[480px] max-h-[88vh] overflow-hidden flex flex-col"
+        className="bg-white rounded-t-2xl w-full max-w-[480px] max-h-[88dvh] overflow-hidden flex flex-col"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -112,7 +160,6 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
                   { label: "Subtotal", value: orderSubtotal },
                   { label: "Service fee", value: SERVICE_FEE },
                   { label: "Donation", value: selectedDonations },
-                  { label: "Tip", value: selectedTip },
                   { label: "Total", value: orderTotal },
                 ]}
               />
@@ -120,6 +167,8 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
                 customerInfo={customerInfo}
                 updatecustomerInfo={updatecustomerInfo}
                 showMissingInfo={showMissingInfo}
+                saveInfo={saveInfo}
+                setSaveInfo={setSaveInfo}
               />
               <div className="w-full pb-4">
                 <div className="font-semibold text-sm mb-1">Comments:</div>
