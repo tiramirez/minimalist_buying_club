@@ -1,7 +1,11 @@
+import { isTrackingEnabled, getConsent } from './consent';
+
 const DEVICE_ID_KEY = 'panpan-device-id';
 const ACTIVE_EXP_KEY = 'panpan-active-experiment';
 
 export function getDeviceId() {
+  if (!isTrackingEnabled()) return null;
+  if (getConsent() !== 'accepted') return null;
   let id = localStorage.getItem(DEVICE_ID_KEY);
   if (!id) {
     id = crypto.randomUUID();
