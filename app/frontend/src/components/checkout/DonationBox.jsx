@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react"
-
-const isNumeric = /^\$?([1-9]?\d{1,4}(\.\d{1,2})?)$/g;
+import { isNumeric } from '../../utils/validation';
 
 export function DonationBox(props) {
     const { selectedDonation, updateSelectedDonation, donationProps } = props
@@ -45,13 +44,13 @@ export function DonationBox(props) {
                 {donationProps.donationOptions.map((item) =>  
                     <button
                         key={item.label}
-                        className={(donation === item.value && !isCustomDonation ? "ring bg-violet-300 ring-violet-700" : "bg-gray-200 hover:bg-gray-300") + " text-gray-700 md:py-1 px-4 rounded cursor-pointer"}
+                        className={(donation === item.value && !isCustomDonation ? "ring bg-brand-rose-light ring-brand-rose" : "bg-gray-200 hover:bg-gray-300") + " text-gray-700 md:py-1 px-4 rounded cursor-pointer"}
                         onClick={() => handleClickDonation(item.value)}
                     >{item.label}</button>
                 )}
                 <button
                     id="donation-other"
-                    className={(isCustomDonation ? "ring bg-violet-300 ring-violet-700" : "bg-gray-200 hover:bg-gray-300") + " text-gray-700 md:py-1 px-4 rounded cursor-pointer"}
+                    className={(isCustomDonation ? "ring bg-brand-rose-light ring-brand-rose" : "bg-gray-200 hover:bg-gray-300") + " text-gray-700 md:py-1 px-4 rounded cursor-pointer"}
                     onClick={handleClickOther}
                 >Other</button>
                 <input

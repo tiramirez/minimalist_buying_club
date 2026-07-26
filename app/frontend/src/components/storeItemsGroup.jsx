@@ -1,54 +1,46 @@
 import React from 'react';
 import { NumericFormat } from 'react-number-format';
 
-function ItemBox({ Item, showMyCart, onIncrement, onReduction }) {
-    const unitFormatted = Item.product_unit === 'each' ? ' ' : ' per ';
-    return (
-      <div>
-      {!showMyCart?
-        <div className="flex bg-white p-2 mb-4 shadow-md justify-between rounded-lg" key={Item.id}>
-          {/* // ITEM NAME AND UNIT PRICE */}
-          <div className='w-full pl-2'>
-            <div className="font-medium text-gray-900">{Item.product_name}</div>
-            <div className="text-sm text-gray-500">
-              <NumericFormat value={Number(Item.unit_price).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-              {unitFormatted}{Item.product_unit}
-            </div>
-          </div>
-          {/* // BUTTONS */}
-                    <div className="flex flex-col h-full items-center w-24">
-            <div className="flex flex-row items-center">
-              <button className="w-8 h-8 flex items-center justify-center bg-red-400 text-white text-xl font-bold rounded-xl md:rounded-full hover:bg-red-700" onClick={() => onReduction(Item.id)}>-</button>
-              <p className="w-4 mx-2 text-lg text-center ">{Item.product_quantity}</p>
-              <button className="w-8 h-8 flex justify-center bg-green-400 text-white text-xl font-black rounded-xl md:rounded-full hover:bg-green-700" onClick={() => onIncrement(Item.id)}>+</button>
-            </div>
-          {/* // ITEM TOTAL */}
-            <NumericFormat className="inline-flex items-center text-lg text-gray-900" value={(Item.unit_price * Item.product_quantity).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-          </div>
+function ItemBox({ Item, onIncrement, onReduction }) {
+  const unitFormatted = Item.product_unit === 'each' ? ' ' : ' per ';
+  return (
+    <div className="flex items-center px-5 py-4 border-b border-[#F0EBE7] last:border-b-0 justify-between">
+      <div className="flex-1 min-w-0 pr-5">
+        <div className="text-[15px] font-medium text-brand-text-primary leading-snug">{Item.product_name}</div>
+        <div className="text-[13px] text-brand-warm-gray mt-0.5">
+          <NumericFormat value={Number(Item.unit_price).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+          {unitFormatted}{Item.product_unit}
         </div>
-        :
-        <div className="flex h-auto w-wv border-t border-gray-500">
-          <NumericFormat className="w-20 pl-2 text-sm md:text-base text-right" value={(Item.unit_price * Item.product_quantity).toFixed(2)} minimumIntegerDigits={2} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-          <p className="w-16 pl-4 text-base text-sm md:text-base text-left">{Item.product_quantity}x {Item.product_unit} </p>
-          <p className="w-80 md:w-80 pl-6 text-sm md:text-base text-left">{Item.product_name}</p>
-        </div>
-        }
       </div>
-    );
+      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+        <div className="flex items-center gap-2.5">
+          <button
+            className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 text-lg font-bold rounded-full border border-gray-300 hover:bg-gray-200"
+            onClick={() => onReduction(Item.id)}
+          >−</button>
+          <span className="text-base font-semibold min-w-[20px] text-center tabular-nums text-brand-text-primary">{Item.product_quantity}</span>
+          <button
+            className={`w-8 h-8 flex items-center justify-center text-lg font-bold rounded-full ${Item.product_quantity > 0 ? 'bg-brand-rose text-white' : 'border border-brand-rose text-brand-rose bg-brand-off-white'}`}
+            onClick={() => onIncrement(Item.id)}
+          >+</button>
+        </div>
+        <NumericFormat
+          className="text-[13px] font-semibold text-brand-rose tabular-nums"
+          value={(Item.unit_price * Item.product_quantity).toFixed(2)}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={'$'}
+        />
+      </div>
+    </div>
+  );
 }
 
-function ItemsGroup({ productsList, showMyCart, handleIncrement, handleReduction }) {
+function ItemsGroup({ productsList, handleIncrement, handleReduction }) {
   return (
-    <div>
-      {!showMyCart?<div></div>:
-        <div className="flex h-auto w-wv">
-          <p className="w-20 pl-2 font-bold text-right">Total</p>
-          <p className="w-16 pl-4 font-bold text-base text-left"> Units </p>
-          <p className="w-80 md:w-80 font-bold pl-6 text-left">Item</p>
-        </div>
-      }
+    <div className="bg-white rounded-xl border border-brand-border overflow-hidden shadow-[0_1px_6px_rgba(26,21,20,0.04)]">
       {productsList.map((singleItem) => (
-        <ItemBox key={singleItem.id} Item={singleItem} showMyCart={showMyCart} onIncrement={handleIncrement} onReduction={handleReduction} />
+        <ItemBox key={singleItem.id} Item={singleItem} onIncrement={handleIncrement} onReduction={handleReduction} />
       ))}
     </div>
   );
