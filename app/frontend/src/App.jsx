@@ -139,10 +139,19 @@ function App() {
   function selectFilter(aisleId) {
     setFilterOption(aisleId);
     setSearchQuery('');
-    if (listRef.current) {
+    if (isMobile) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (listRef.current) {
       listRef.current.scrollTop = 0;
     }
   }
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const onWindowScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onWindowScroll);
+  }, [isMobile]);
 
   const lastScrollTop = useRef(0);
 
@@ -172,7 +181,7 @@ function App() {
   }, [cartCount]);
 
   return (
-    <div className="flex flex-col h-[100dvh] overflow-y-hidden bg-brand-cream">
+    <div className="flex flex-col md:h-[100dvh] md:overflow-y-hidden bg-brand-cream">
       <Newsletter show={showNewsletter && !isMobile} onCloseButtonClick={handleClickNewsletter} />
       <Checkout show={showCheckout && !isMobile} updateShow={handleClickCheckout} productsList={products} handleDeleteCart={deleteCart} onCloseButtonClick={handleClickCheckout} handleConfirmation={handleShowConfirmation} handleError={handleshowCheckoutError} updateCheckoutResponse={setCheckoutResponse} />
       <MobileNewsletterSheet show={showNewsletter && isMobile} onClose={handleClickNewsletter} />
@@ -180,7 +189,7 @@ function App() {
       <AlertModal show={showConfirmation} onCloseButtonClick={handleShowConfirmation} message={checkoutResponse} />
       <AlertModal show={showCheckoutError} onCloseButtonClick={handleshowCheckoutError} message={checkoutResponse} />
 
-      <header className={`flex flex-grow-0 bg-white border-b border-brand-border px-4 md:px-8 items-center z-10 transition-all duration-300 ${scrolled ? 'h-[48px]' : 'h-[76px]'}`}>
+      <header className={`sticky top-0 flex flex-grow-0 bg-white border-b border-brand-border px-4 md:px-8 items-center z-10 transition-all duration-300 ${scrolled ? 'h-[48px]' : 'h-[76px]'}`}>
         {/* Desktop header */}
         <div className="hidden md:flex flex-auto w-full  max-w-[1200px] mx-auto px-4 md:px-8 gap-0 md:gap-7 overflow-hidden">
           <div className="hidden md:flex items-center gap-[18px] flex-shrink-0">
@@ -205,9 +214,9 @@ function App() {
       </header>
 
       {/* Mobile category select */}
-      <MobileAislesNav categories={categories} activeFilter={filterOption} onSelect={selectFilter} />
+      <MobileAislesNav categories={categories} activeFilter={filterOption} onSelect={selectFilter} searchQuery={searchQuery} onSearch={setSearchQuery} scrolled={scrolled} />
 
-      <div className="flex flex-auto w-full  max-w-[1200px] mx-auto px-4 md:px-8 gap-0 md:gap-7 overflow-hidden">
+      <div className="flex flex-auto w-full  max-w-[1200px] mx-auto px-4 md:px-8 gap-0 md:gap-7 md:overflow-hidden">
         {/* Left sidebar – aisles */}
         <aside className="hidden md:flex flex-col w-48 flex-shrink-0 overflow-y-auto py-6" style={{ marginRight: 28 }}>
           <AislesNav Categories={categories} showMyCart={false} handleFilter={selectFilter} activeFilter={filterOption} />
@@ -219,7 +228,7 @@ function App() {
         </aside>
 
         {/* Center – product list */}
-        <main ref={listRef} onScroll={handleListScroll} className="flex-1 min-w-0 overflow-y-auto pt-4 pb-24 md:py-8">
+        <main ref={listRef} onScroll={handleListScroll} className="flex-1 min-w-0 md:overflow-y-auto pt-4 pb-24 md:py-8">
           <div className={bounceClass} onAnimationEnd={() => setBounceClass('')}>
             {/* Week label + heading (desktop) */}
             <div className="mb-5 hidden md:block">
