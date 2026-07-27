@@ -20,28 +20,26 @@ export function LayoutComponent(props) {
                         >
                             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                 <div className="sm:flex-col sm:items-end">
-                                    <div className="w-full">
+                                    <div className="w-full flex justify-end">
                                         <button
-                                            className="absolute right-4 h-8 max-h-[32px] w-8 max-w-[32px] rounded-lg text-right bg-blue-500 transition-all hover:bg-blue-800"
+                                            className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 bg-gray-100 hover:bg-gray-200 transition-colors"
                                             type="button"
                                             onClick={updateShow}
                                         >
-                                            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform hover:bg-blue-gray-500">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="white"
-                                                    strokeWidth="2"
-                                                    className="h-5 w-5"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        d="M6 18L18 6M6 6l12 12"
-                                                    ></path>
-                                                </svg>
-                                            </span>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                className="h-5 w-5"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                ></path>
+                                            </svg>
                                         </button>
                                     </div>
                                     {children}

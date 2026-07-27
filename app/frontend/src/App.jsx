@@ -52,7 +52,7 @@ function App() {
   }, []);
 
   var refDate = new Date();
-  refDate.setDate(refDate.getDate() + (7 - refDate.getDay()));
+  refDate.setDate(refDate.getDate() - refDate.getDay());
 
   useEffect(() => {
     if (!consentResolved) return;
