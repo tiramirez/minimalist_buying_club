@@ -6,8 +6,8 @@ function ItemBox({ Item, onIncrement, onReduction }) {
   return (
     <div className="flex items-center px-5 py-4 border-b border-[#F0EBE7] last:border-b-0 justify-between">
       <div className="flex-1 min-w-0 pr-5">
-        <div className="text-[15px] font-medium text-brand-text-primary leading-snug">{Item.product_name}</div>
-        <div className="text-[13px] text-brand-warm-gray mt-0.5">
+        <div className="text-[16px] font-medium text-brand-text-primary leading-snug">{Item.product_name}</div>
+        <div className="text-[14px] text-brand-warm-gray mt-0.5">
           <NumericFormat value={Number(Item.unit_price).toFixed(2)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
           {unitFormatted}{Item.product_unit}
         </div>
