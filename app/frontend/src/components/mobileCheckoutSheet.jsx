@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getActiveVariant, getDeviceId } from '../utils/abVariant';
 import { UsersInfoForm } from './checkout/UsersForm';
 import { OrderDetailsTable } from './checkout/DetailsTable';
@@ -42,9 +42,14 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
   const [showMissingInfo, setShowMissingInfo] = useState(false);
   const [orderSubtotal, updateSubtotal] = useState(0.00);
   const [selectedDonations, updateSelectedDonation] = useState(0.00);
-  const [saveInfo, setSaveInfo] = useState(false);
+  // Stays checked once the customer opted in (their info is already saved)
+  const [saveInfo, setSaveInfo] = useState(() => !!localStorage.getItem(CUSTOMER_INFO_KEY));
   const [customerInfo, updatecustomerInfo] = useState(loadSavedCustomerInfo);
   const [comment, updatecomment] = useState("");
+  // Synchronous guard: state updates are async, so a fast double click/tap could submit twice
+  const submittingRef = useRef(false);
+  // Idempotency key for this checkout attempt; reused on retry, reset after success
+  const checkoutIdRef = useRef(null);
 
   useEffect(() => {
     let newSubtotal = 0.00;
@@ -59,6 +64,10 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
   function submitOrder() {
     const api = import.meta.env.VITE_API;
     const api_url = api + 'checkout';
+
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    checkoutIdRef.current ??= crypto.randomUUID();
 
     setIsLoading(true);
     fetch(api_url, {
@@ -75,12 +84,15 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
         comments: comment,
         variant: getActiveVariant() ?? 'unknown',
         device_id: getDeviceId(),
+        checkout_id: checkoutIdRef.current,
       }),
     })
       .then(res => res.json())
       .then(data => {
         setIsLoading(false);
         if (data.message === 'Successful POST Execution') {
+          checkoutIdRef.current = null;
+          submittingRef.current = false;
           if (saveInfo) {
             localStorage.setItem(CUSTOMER_INFO_KEY, JSON.stringify({
               firstName: customerInfo.firstName,
@@ -88,6 +100,8 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
               phone: customerInfo.phone,
               email: customerInfo.email,
             }));
+          } else {
+            localStorage.removeItem(CUSTOMER_INFO_KEY);
           }
           updateCheckoutResponse(data);
           handleDeleteCart();
@@ -96,10 +110,12 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
         } else {
           updateCheckoutResponse(data);
           handleError();
+          submittingRef.current = false;
         }
       })
       .catch(() => {
         setIsLoading(false);
+        submittingRef.current = false;
         alert("There was an error with the order");
       });
   }
@@ -190,9 +206,10 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
             onClick={onClose}
           >Add more items</button>
           <button
-            className="flex-1 py-3 bg-brand-rose text-white border-none rounded-lg text-[15px] font-semibold hover:bg-brand-terracotta"
+            className="flex-1 py-3 bg-brand-rose text-white border-none rounded-lg text-[15px] font-semibold hover:bg-brand-terracotta disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={clickPlaceOrder}
-          >Place Order →</button>
+            disabled={isLoading}
+          >{isLoading ? 'Placing order…' : 'Place Order →'}</button>
         </div>
       </div>
     </div>
