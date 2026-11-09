@@ -5,37 +5,7 @@ import { OrderDetailsTable } from './checkout/DetailsTable';
 import { DonationBox } from './checkout/DonationBox';
 import { mainDonation } from '../assets/copy/donations';
 import { SERVICE_FEE } from '../config/constants';
-
-const CUSTOMER_INFO_KEY = 'panpan-customer-info';
-
-function loadSavedCustomerInfo() {
-  try {
-    const saved = localStorage.getItem(CUSTOMER_INFO_KEY);
-    if (saved) {
-      const p = JSON.parse(saved);
-      return {
-        firstName: p.firstName || "",
-        lastName: p.lastName || "",
-        phone: p.phone || "",
-        validPhone: !!p.phone,
-        email: p.email || "",
-        validEmail: !!p.email,
-        additionalEmails: [],
-        additionalEmailsValid: [],
-      };
-    }
-  } catch {}
-  return {
-    firstName: "",
-    lastName: "",
-    phone: "",
-    validPhone: null,
-    email: "",
-    validEmail: null,
-    additionalEmails: [],
-    additionalEmailsValid: [],
-  };
-}
+import { loadSavedCustomerInfo, hasSavedCustomerInfo, saveCustomerInfo, clearCustomerInfo, getNameProblem, normalizeName } from '../utils/customerInfo';
 
 export default function MobileCheckoutSheet({ show, onClose, productsList, handleDeleteCart, handleConfirmation, handleError, updateCheckoutResponse }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +13,11 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
   const [orderSubtotal, updateSubtotal] = useState(0.00);
   const [selectedDonations, updateSelectedDonation] = useState(0.00);
   // Stays checked once the customer opted in (their info is already saved)
-  const [saveInfo, setSaveInfo] = useState(() => !!localStorage.getItem(CUSTOMER_INFO_KEY));
+  const [saveInfo, setSaveInfo] = useState(hasSavedCustomerInfo);
   const [customerInfo, updatecustomerInfo] = useState(loadSavedCustomerInfo);
+  // Saved info had a bad name: customer re-enters it and decides whether to overwrite what's saved
+  const [needsReentry] = useState(() => customerInfo.needsReentry);
+  const [overwriteSaved, setOverwriteSaved] = useState(null);
   const [comment, updatecomment] = useState("");
   // Synchronous guard: state updates are async, so a fast double click/tap could submit twice
   const submittingRef = useRef(false);
@@ -74,8 +47,8 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        firstName: customerInfo.firstName,
-        lastName: customerInfo.lastName,
+        firstName: normalizeName(customerInfo.firstName),
+        lastName: normalizeName(customerInfo.lastName),
         email: customerInfo.email,
         phone: customerInfo.phone,
         additionalEmails: (customerInfo.additionalEmails || []).filter(Boolean),
@@ -93,15 +66,13 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
         if (data.message === 'Successful POST Execution') {
           checkoutIdRef.current = null;
           submittingRef.current = false;
-          if (saveInfo) {
-            localStorage.setItem(CUSTOMER_INFO_KEY, JSON.stringify({
-              firstName: customerInfo.firstName,
-              lastName: customerInfo.lastName,
-              phone: customerInfo.phone,
-              email: customerInfo.email,
-            }));
+          if (needsReentry) {
+            // "No, only for this order" leaves the saved info as-is (they'll be asked again next time)
+            if (overwriteSaved) saveCustomerInfo(customerInfo);
+          } else if (saveInfo) {
+            saveCustomerInfo(customerInfo);
           } else {
-            localStorage.removeItem(CUSTOMER_INFO_KEY);
+            clearCustomerInfo();
           }
           updateCheckoutResponse(data);
           handleDeleteCart();
@@ -127,7 +98,8 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
     if (
       customerInfo.validEmail &&
       customerInfo.validPhone &&
-      customerInfo.lastName &&
+      getNameProblem(customerInfo) === null &&
+      (!needsReentry || overwriteSaved !== null) &&
       orderSubtotal > 0.0 &&
       selectedDonations <= 500 &&
       additionalEmailsAllValid
@@ -185,6 +157,9 @@ export default function MobileCheckoutSheet({ show, onClose, productsList, handl
                 showMissingInfo={showMissingInfo}
                 saveInfo={saveInfo}
                 setSaveInfo={setSaveInfo}
+                needsReentry={needsReentry}
+                overwriteSaved={overwriteSaved}
+                setOverwriteSaved={setOverwriteSaved}
               />
               <div className="w-full pb-4">
                 <div className="font-semibold text-sm mb-1">Comments:</div>
